@@ -75,4 +75,7 @@ dependencies {
 
     // Only in debug builds: renders @Preview and the layout inspector.
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Unit tests (app/src/test): run on the computer's JVM, no phone needed.
+    testImplementation(libs.junit)
 }

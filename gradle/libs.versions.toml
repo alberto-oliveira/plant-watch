@@ -11,6 +11,7 @@ lifecycle = "2.11.0"
 composeBom = "2026.09.00"      # BOM = "bill of materials": pins all Compose libs to compatible versions
 room = "2.8.5"                 # Room database (runtime, compiler and Gradle plugin share this version)
 ksp = "2.3.13"                 # Kotlin Symbol Processing: runs code generators such as Room's compiler
+junit = "4.13.2"               # unit test framework (tests only, not shipped in the app)
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -31,6 +32,9 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 # Room: the runtime goes into the app; the compiler only runs at build time (via KSP).
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+# Testing
+junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
