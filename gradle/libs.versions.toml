@@ -1,0 +1,28 @@
+# Version catalog: the single place where dependency versions live.
+# Build scripts reference entries as `libs.<name>` (dashes become dots),
+# e.g. `androidx-core-ktx` -> `libs.androidx.core.ktx`.
+
+[versions]
+agp = "9.5.0"                  # Android Gradle Plugin
+kotlin = "2.4.21"              # Kotlin compiler (also the Compose compiler plugin version)
+coreKtx = "1.19.1"
+activityCompose = "1.13.0"
+lifecycle = "2.11.0"
+composeBom = "2026.09.00"      # BOM = "bill of materials": pins all Compose libs to compatible versions
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+
+# Compose libraries take their version from the BOM, so they have no version here.
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+# AGP 9 compiles Kotlin by itself ("built-in Kotlin"); Compose still needs this compiler plugin.
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Plant Watch</string>
+    <string name="placeholder_no_plants">No plants yet</string>
+</resources>

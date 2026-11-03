@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- XML theme for the activity window only (shown before Compose draws).
+         Inherits from the platform theme, so no extra library is needed.
+         All real styling is done in Compose (ui/theme/Theme.kt). -->
+    <style name="Theme.PlantWatch" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
