@@ -1,5 +1,6 @@
 package com.alberto.plantwatch.plants.ui
 
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
@@ -9,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import com.alberto.plantwatch.R
@@ -39,8 +41,17 @@ fun AddPlantDialog(
                 onValueChange = onNameChange,
                 label = { Text(stringResource(R.string.add_plant_name_label)) },
                 singleLine = true,
-                // Start each word with a capital letter ("Snake Plant").
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
+                keyboardOptions = KeyboardOptions(
+                    // Start each word with a capital letter ("Snake Plant").
+                    capitalization = KeyboardCapitalization.Words,
+                    // Show a "Done" (✓) key instead of Enter...
+                    imeAction = ImeAction.Done,
+                ),
+                // ...and make it add the plant, same as the Add button. Useful in
+                // landscape, where the keyboard covers the dialog's buttons.
+                keyboardActions = KeyboardActions(
+                    onDone = { if (name.isNotBlank()) onConfirm() },
+                ),
             )
         },
         confirmButton = {
