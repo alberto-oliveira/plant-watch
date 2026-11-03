@@ -7,4 +7,17 @@
     <string name="plants_add">Add plant</string>
     <!-- %1$s = plant name. Read by screen readers for the trash icon. -->
     <string name="plants_delete_description">Delete %1$s</string>
+
+    <!-- Add plant dialog -->
+    <string name="add_plant_title">Add plant</string>
+    <string name="add_plant_name_label">Name</string>
+    <string name="add_plant_confirm">Add</string>
+
+    <!-- Delete plant dialog. %1$s = plant name. -->
+    <string name="delete_plant_title">Delete %1$s?</string>
+    <string name="delete_plant_message">Its care tasks and history will be deleted too. This can\'t be undone.</string>
+    <string name="delete_plant_confirm">Delete</string>
+
+    <!-- Shared -->
+    <string name="cancel">Cancel</string>
 </resources>
