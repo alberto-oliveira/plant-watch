@@ -120,7 +120,10 @@ Before every development stage, I will start with planning the next development 
   1. You (Claude) open/refer to the issue(s), create the branch from `dev`, implement, build and test, and give me the step report.
   2. I stage and commit (you never stage or commit).
   3. You push the branch and open a PR into `dev`, with `Closes #<id>` for every issue it resolves.
-  4. I review the PR (on GitHub or in chat). GitHub shows me as the PR author, so I can't formally "Approve": my approval is an explicit message in chat (e.g. "merge it").
+  4. I review the PR (on GitHub or in chat). GitHub shows me as the PR author, so I can't formally "Approve". My approval is either:
+     - a review or comment from me on the PR saying "lgtm" or "approved" (check with `gh api repos/alberto-oliveira/plant-watch/pulls/<pr>/reviews` and `.../issues/<pr>/comments`), or
+     - an explicit message in chat (e.g. "merge it").
+     The approval must be newer than the PR's latest pushed commit. If the PR also has unresolved change requests or questions from me, address those first and don't merge.
   5. Only after that approval, you merge with a **merge commit** (`gh pr merge --merge --delete-branch`), then update the local `dev`.
   6. GitHub only auto-closes issues from `Closes #<id>` when the PR targets the default branch (`main`), so after merging into `dev`, close the resolved issues yourself (`gh issue close <id> --comment "Done in #<pr>"`).
 - Merging `dev` into `main` happens only when I ask for it, via a PR from `dev` to `main`.
