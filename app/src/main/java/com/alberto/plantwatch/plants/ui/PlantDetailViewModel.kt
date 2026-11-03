@@ -10,11 +10,17 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.toRoute
 import com.alberto.plantwatch.PlantDetail
 import com.alberto.plantwatch.PlantWatchApplication
+import com.alberto.plantwatch.plants.data.CareLog
+import com.alberto.plantwatch.plants.data.CareTask
+import com.alberto.plantwatch.plants.data.CareTaskDao
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
+import com.alberto.plantwatch.plants.markedDone
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 /**
  * State and actions for one plant's detail screen.
@@ -27,6 +33,7 @@ import kotlinx.coroutines.flow.stateIn
 class PlantDetailViewModel(
     savedStateHandle: SavedStateHandle,
     plantDao: PlantDao,
+    private val careTaskDao: CareTaskDao,
 ) : ViewModel() {
 
     // `toRoute<PlantDetail>()`: `<PlantDetail>` is a type argument, telling the
@@ -37,6 +44,32 @@ class PlantDetailViewModel(
     val plant: StateFlow<Plant?> = plantDao.observeById(plantId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
 
+    /** The plant's care tasks, most urgent first. */
+    val tasks: StateFlow<List<CareTask>> = careTaskDao.observeForPlant(plantId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
+
+    /**
+     * Marks the task done today: the scheduling rule ([markedDone], unit-tested)
+     * computes the new dates, and the DAO saves the task and the log entry in
+     * one transaction.
+     */
+    fun markDone(task: CareTask) {
+        val today = LocalDate.now()
+        viewModelScope.launch {
+            careTaskDao.markDone(
+                updatedTask = markedDone(task, today),
+                log = CareLog(taskId = task.id, doneOn = today),
+            )
+        }
+    }
+
+    /** Deletes the task; its log entries go with it (CASCADE). */
+    fun deleteTask(task: CareTask) {
+        viewModelScope.launch {
+            careTaskDao.delete(task)
+        }
+    }
+
     companion object {
         val Factory = viewModelFactory {
             initializer {
@@ -46,6 +79,7 @@ class PlantDetailViewModel(
                     // the navigation arguments.
                     savedStateHandle = createSavedStateHandle(),
                     plantDao = app.container.database.plantDao(),
+                    careTaskDao = app.container.database.careTaskDao(),
                 )
             }
         }
