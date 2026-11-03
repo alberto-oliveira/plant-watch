@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.alberto.plantwatch.plants.ui.PlantListRoute
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
 
 // `class X : Y()` = X extends Y, calling Y's no-arg constructor.
@@ -20,9 +19,8 @@ class MainActivity : ComponentActivity() {
         // setContent { ... } takes a lambda: the UI is described by composable functions.
         setContent {
             PlantWatchTheme {
-                // The only screen for now. Navigation between screens comes with
-                // the plant detail screen in the next stage.
-                PlantListRoute()
+                // All screens and the navigation between them (PlantWatchNavHost.kt).
+                PlantWatchNavHost()
             }
         }
     }

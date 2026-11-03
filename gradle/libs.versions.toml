@@ -11,6 +11,7 @@ lifecycle = "2.11.0"
 composeBom = "2026.09.00"      # BOM = "bill of materials": pins all Compose libs to compatible versions
 room = "2.8.5"                 # Room database (runtime, compiler and Gradle plugin share this version)
 ksp = "2.3.13"                 # Kotlin Symbol Processing: runs code generators such as Room's compiler
+navigation = "2.10.2"          # Navigation Compose: screens and back stack
 junit = "4.13.2"               # unit test framework (tests only, not shipped in the app)
 
 [libraries]
@@ -33,6 +34,8 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 
@@ -40,6 +43,9 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 # AGP 9 compiles Kotlin by itself ("built-in Kotlin"); Compose still needs this compiler plugin.
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+# kotlinx.serialization compiler plugin: generates serializers for @Serializable
+# classes (used for type-safe navigation routes; later for JSON).
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 # Room's Gradle plugin: configures where the exported database schema is written.
 room = { id = "androidx.room", version.ref = "room" }
