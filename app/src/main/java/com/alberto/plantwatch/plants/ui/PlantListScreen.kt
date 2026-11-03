@@ -15,15 +15,95 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alberto.plantwatch.R
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
+
+/**
+ * The plant list screen as the app shows it: connects the [PlantListViewModel]
+ * (data and actions) to the stateless [PlantListScreen] and the dialogs.
+ *
+ * "Route" composables are the only ones that know about ViewModels; everything
+ * they call stays stateless and previewable.
+ *
+ * Kotlin/Compose notes:
+ * - `viewModel(factory = ...)` returns the existing ViewModel if there is one
+ *   (e.g. after a rotation) and only creates a new one the first time.
+ * - `val plants by ...collectAsStateWithLifecycle()`: reads the StateFlow as
+ *   Compose state, so this function re-runs ("recomposes") whenever the list
+ *   changes. `by` is a delegated property: `plants` reads the state's value.
+ * - `var x by rememberSaveable { mutableStateOf(...) }`: state owned by this
+ *   composable. `mutableStateOf` makes changes trigger recomposition;
+ *   `rememberSaveable` keeps the value across recompositions *and* across
+ *   rotation (plain `remember` would lose it on rotation).
+ */
+@Composable
+fun PlantListRoute(
+    viewModel: PlantListViewModel = viewModel(factory = PlantListViewModel.Factory),
+) {
+    val plants by viewModel.plants.collectAsStateWithLifecycle()
+
+    // UI-only state: is the add dialog open, and what has been typed so far.
+    var showAddDialog by rememberSaveable { mutableStateOf(false) }
+    var newPlantName by rememberSaveable { mutableStateOf("") }
+
+    // Which plant is waiting for delete confirmation (null = no dialog). We keep
+    // just its id: a Long can be saved across rotation, a whole Plant can't
+    // without extra code. `mutableStateOf<Long?>(null)`: the explicit type says
+    // "Long or null"; from `null` alone Kotlin couldn't infer it.
+    var plantIdToDelete by rememberSaveable { mutableStateOf<Long?>(null) }
+
+    PlantListScreen(
+        plants = plants,
+        onAddClick = { showAddDialog = true },
+        onDeleteClick = { plant -> plantIdToDelete = plant.id },
+    )
+
+    if (showAddDialog) {
+        // Local function: closes the dialog and clears the field for next time.
+        fun close() {
+            newPlantName = ""
+            showAddDialog = false
+        }
+        AddPlantDialog(
+            name = newPlantName,
+            onNameChange = { newPlantName = it },
+            onConfirm = {
+                viewModel.addPlant(newPlantName)
+                close()
+            },
+            onDismiss = { close() },
+        )
+    }
+
+    // `find` returns the first matching plant, or null. If the plant is gone
+    // (already deleted), there's nothing to confirm and no dialog is shown.
+    val plantToDelete = plants.find { it.id == plantIdToDelete }
+    if (plantToDelete != null) {
+        // Inside this `if`, Kotlin knows plantToDelete isn't null ("smart cast"),
+        // so `.name` needs no `?.`.
+        DeletePlantDialog(
+            plantName = plantToDelete.name,
+            onConfirm = {
+                viewModel.deletePlant(plantToDelete)
+                plantIdToDelete = null
+            },
+            onDismiss = { plantIdToDelete = null },
+        )
+    }
+}
 
 /**
  * The plant list, as a **stateless** composable: it receives the data to show

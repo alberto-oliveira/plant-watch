@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Plant Watch</string>
-    <string name="placeholder_no_plants">No plants yet</string>
 
     <!-- Plant list -->
     <string name="plants_empty">No plants yet. Tap + to add one.</string>
