@@ -85,7 +85,7 @@ Personal-use Android app to remind me to water and fertilize my plants. Not for 
 - Always run `./gradlew assembleDebug` and the unit tests before telling me a task is done.
 - The first build is slow (dependency downloads); later builds are much faster.
 ## Working agreement
-- Make small, focused commits with clear messages; work on a branch per feature.
+- Make small, focused commits with clear messages; work on a branch per feature, named after its GitHub issue (see Git/GitHub workflow).
 - Before adding a new dependency, tell me what it's for and whether the platform already covers it.
 - Prefer the simplest solution that works. If a requirement is ambiguous, ask instead of guessing.
 - Don't add telemetry, crash reporting, ads, login, or cloud sync.
@@ -102,7 +102,7 @@ Personal-use Android app to remind me to water and fertilize my plants. Not for 
 
 # Ground-rules
 Before every development stage, I will start with planning the next development step. Please consider the following ground-rules when planning:
-- You can create git issues and git branches, but leave staging and commiting to me. If you need to perform other git writing operations, you can ask me; git reading is fine.
+- You can create GitHub issues and git branches, but leave staging and commiting to me. Pushing, opening PRs and merging follow the Git/GitHub workflow below; for any other git writing operation, ask me first. Git reading is fine.
 - Break-down development on  small, commitable steps, as the working agreement says. After every step, give me:
     - What are the new files, and their purpose
     - What changed, and why each file has been changed
@@ -111,3 +111,16 @@ Before every development stage, I will start with planning the next development 
     - Git staging command
     - Suggested git message
 - Try to be didactic with your commits. Although I know programming, I don't know Kotlin and intend to use your work to learn it
+
+## Git/GitHub workflow
+- Remote: `origin` on GitHub (`alberto-oliveira/plant-watch`). Use the `gh` CLI (already authenticated) for issues and PRs.
+- Branches: `main` (stable) and `dev` (integration). Both are protected by a ruleset: no deletion, no force-push, changes only via PR (0 approvals required). Feature work branches off `dev`.
+- **Issues:** open a GitHub issue for the work you do, before starting it. Name the branch `<issue-id>-short-description` (e.g. `3-room-schema`). One branch may also carry work for other related issues when appropriate; don't create a branch per issue just for the sake of it.
+- **Flow for each piece of work:**
+  1. You (Claude) open/refer to the issue(s), create the branch from `dev`, implement, build and test, and give me the step report.
+  2. I stage and commit (you never stage or commit).
+  3. You push the branch and open a PR into `dev`, with `Closes #<id>` for every issue it resolves.
+  4. I review the PR (on GitHub or in chat). GitHub shows me as the PR author, so I can't formally "Approve": my approval is an explicit message in chat (e.g. "merge it").
+  5. Only after that approval, you merge with a **merge commit** (`gh pr merge --merge --delete-branch`), then update the local `dev`.
+  6. GitHub only auto-closes issues from `Closes #<id>` when the PR targets the default branch (`main`), so after merging into `dev`, close the resolved issues yourself (`gh issue close <id> --comment "Done in #<pr>"`).
+- Merging `dev` into `main` happens only when I ask for it, via a PR from `dev` to `main`.
