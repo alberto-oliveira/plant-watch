@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Plant Watch</string>
     <string name="placeholder_no_plants">No plants yet</string>
+
+    <!-- Plant list -->
+    <string name="plants_empty">No plants yet. Tap + to add one.</string>
+    <string name="plants_add">Add plant</string>
+    <!-- %1$s = plant name. Read by screen readers for the trash icon. -->
+    <string name="plants_delete_description">Delete %1$s</string>
 </resources>
