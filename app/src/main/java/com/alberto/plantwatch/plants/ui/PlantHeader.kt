@@ -45,6 +45,8 @@ fun PlantHeaderCard(
     onPickPhoto: () -> Unit,
     onRemovePhoto: () -> Unit,
     onEditNotes: () -> Unit,
+    roomName: String?,
+    onRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -71,6 +73,15 @@ fun PlantHeaderCard(
                     TextButton(onClick = onRemovePhoto) { Text(stringResource(R.string.plant_photo_remove)) }
                 }
             }
+            // The plant's room; tapping it opens the room picker.
+            Text(
+                text = stringResource(R.string.plant_room, roomName ?: stringResource(R.string.room_none)),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onRoomClick)
+                    .padding(vertical = 4.dp),
+            )
             // Notes, or an invitation to add some; tapping edits them.
             Text(
                 text = notes ?: stringResource(R.string.plant_notes_empty),
@@ -122,6 +133,7 @@ private fun PlantHeaderCardPreview() {
         PlantHeaderCard(
             photo = null, notes = "Gift from Ana. Repotted in March.",
             onPickPhoto = {}, onRemovePhoto = {}, onEditNotes = {},
+            roomName = "Sala", onRoomClick = {},
         )
     }
 }

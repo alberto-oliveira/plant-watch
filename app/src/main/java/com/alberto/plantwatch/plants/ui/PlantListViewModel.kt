@@ -13,6 +13,7 @@ import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.CareTaskDao
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
+import com.alberto.plantwatch.plants.data.RoomDao
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.plants.fertilizingPausedUntil
 import com.alberto.plantwatch.plants.PhotoStore
@@ -38,6 +39,8 @@ data class PlantSummary(
     val scientificName: String? = null,
     /** The plant's photo file, shown as its avatar; null if none. */
     val photo: File? = null,
+    /** The name of the plant's room; null if it has none. */
+    val roomName: String? = null,
 )
 
 /**
@@ -56,6 +59,7 @@ class PlantListViewModel(
     private val careGuide: CareGuide,
     settingsStore: SettingsStore,
     private val photoStore: PhotoStore,
+    roomDao: RoomDao,
 ) : ViewModel() {
 
     /**
@@ -80,7 +84,9 @@ class PlantListViewModel(
         careTaskDao.observeAll(),
         settingsStore.location,
         settingsStore.pauseFertilizingInWinter,
-    ) { plants, tasks, location, pauseEnabled ->
+        roomDao.observeAll(),
+    ) { plants, tasks, location, pauseEnabled, rooms ->
+        val roomNames = rooms.associate { it.id to it.name }
         // Fertilizer tasks paused for winter aren't the plant's next care.
         val paused = fertilizingPausedUntil(LocalDate.now(), location?.latitude, pauseEnabled) != null
         val tasksByPlant = tasks.filterNot { paused && it.type == TaskType.FERTILIZE }.groupBy { it.plantId }
@@ -90,6 +96,7 @@ class PlantListViewModel(
                 nextTasks = mostUrgentTasks(tasksByPlant[plant.id].orEmpty()),
                 scientificName = plant.speciesId?.let(careGuide::byId)?.scientificName,
                 photo = plant.photoFile?.let(photoStore::fileFor),
+                roomName = plant.roomId?.let(roomNames::get),
             )
         }
     }
@@ -147,6 +154,7 @@ class PlantListViewModel(
                     careGuide = app.container.careGuide,
                     settingsStore = app.container.settingsStore,
                     photoStore = app.container.photoStore,
+                    roomDao = app.container.database.roomDao(),
                 )
             }
         }

@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,7 +37,11 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alberto.plantwatch.R
+import com.alberto.plantwatch.plants.data.HomeRoom
+import com.alberto.plantwatch.plants.ui.RoomEditDialog
+import com.alberto.plantwatch.plants.ui.compassName
 import com.alberto.plantwatch.settings.Location
+import com.alberto.plantwatch.weather.Compass
 import com.alberto.plantwatch.settings.appDetailsIntent
 import com.alberto.plantwatch.settings.ignoresBatteryOptimizations
 import com.alberto.plantwatch.settings.notificationSettingsIntent
@@ -58,6 +63,14 @@ fun SettingsRoute(
     val location by viewModel.location.collectAsStateWithLifecycle()
     val pauseFertilizing by viewModel.pauseFertilizingInWinter.collectAsStateWithLifecycle()
     val adjustWatering by viewModel.adjustWatering.collectAsStateWithLifecycle()
+    val rooms by viewModel.rooms.collectAsStateWithLifecycle()
+
+    // Room dialog: open or not, which room (0 = a new one) and the draft values.
+    var showRoomDialog by rememberSaveable { mutableStateOf(false) }
+    // `mutableLongStateOf`: state specialised for Long, avoiding boxing the number.
+    var roomDraftId by rememberSaveable { mutableLongStateOf(0L) }
+    var roomDraftName by rememberSaveable { mutableStateOf("") }
+    var roomDraftWindow by rememberSaveable { mutableStateOf<Compass?>(null) }
     val wateringFactor by viewModel.wateringFactor.collectAsStateWithLifecycle()
     var showTimePicker by rememberSaveable { mutableStateOf(false) }
 
@@ -88,6 +101,14 @@ fun SettingsRoute(
         adjustWatering = adjustWatering,
         wateringFactor = wateringFactor,
         onAdjustWateringChange = viewModel::setAdjustWatering,
+        rooms = rooms,
+        onRoomClick = { room ->
+            // null = "Add room".
+            roomDraftId = room?.id ?: 0L
+            roomDraftName = room?.name ?: ""
+            roomDraftWindow = room?.windowDirection
+            showRoomDialog = true
+        },
         notificationsOn = notificationsOn,
         batteryUnrestricted = batteryUnrestricted,
         onBack = onBack,
@@ -114,6 +135,29 @@ fun SettingsRoute(
                 showTimePicker = false
             },
             onDismiss = { showTimePicker = false },
+        )
+    }
+
+    if (showRoomDialog) {
+        val existing = rooms.find { it.id == roomDraftId }
+        RoomEditDialog(
+            isNew = roomDraftId == 0L,
+            name = roomDraftName,
+            onNameChange = { roomDraftName = it },
+            windowDirection = roomDraftWindow,
+            onWindowDirectionChange = { roomDraftWindow = it },
+            onSave = {
+                viewModel.saveRoom(HomeRoom(id = roomDraftId, name = roomDraftName, windowDirection = roomDraftWindow))
+                showRoomDialog = false
+            },
+            // `?.let { }`: a delete action only for a room that already exists.
+            onDelete = existing?.let { room ->
+                {
+                    viewModel.deleteRoom(room)
+                    showRoomDialog = false
+                }
+            },
+            onDismiss = { showRoomDialog = false },
         )
     }
 
@@ -146,6 +190,8 @@ fun SettingsScreen(
     adjustWatering: Boolean,
     wateringFactor: Double,
     onAdjustWateringChange: (Boolean) -> Unit,
+    rooms: List<HomeRoom>,
+    onRoomClick: (HomeRoom?) -> Unit,
     notificationsOn: Boolean,
     batteryUnrestricted: Boolean,
     onBack: () -> Unit,
@@ -246,6 +292,31 @@ fun SettingsScreen(
                 },
                 trailingContent = { Switch(checked = adjustWatering, onCheckedChange = onAdjustWateringChange) },
             )
+
+            SectionTitle(stringResource(R.string.settings_section_rooms))
+            if (rooms.isEmpty()) {
+                Text(
+                    stringResource(R.string.settings_rooms_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                )
+            }
+            rooms.forEach { room ->
+                ListItem(
+                    modifier = Modifier.clickable { onRoomClick(room) },
+                    headlineContent = { Text(room.name) },
+                    supportingContent = {
+                        Text(
+                            room.windowDirection?.let { stringResource(R.string.settings_room_window, compassName(it)) }
+                                ?: stringResource(R.string.settings_room_no_window),
+                        )
+                    },
+                )
+            }
+            TextButton(onClick = { onRoomClick(null) }, modifier = Modifier.padding(horizontal = 8.dp)) {
+                Text(stringResource(R.string.settings_add_room))
+            }
 
             SectionTitle(stringResource(R.string.settings_section_sunlight))
             ListItem(
@@ -363,6 +434,7 @@ private fun SettingsScreenPreview() {
         SettingsScreen(
             reminderTime = LocalTime.of(9, 0), location = Location(-23.5505, -46.6333), pauseFertilizing = true, onPauseFertilizingChange = {},
             adjustWatering = true, wateringFactor = 1.07, onAdjustWateringChange = {},
+            rooms = listOf(HomeRoom(1, "Sala", Compass.N), HomeRoom(2, "Varanda")), onRoomClick = {},
             notificationsOn = true, batteryUnrestricted = true,
             onBack = {}, onReminderTimeClick = {}, onLocationClick = {},
             onOpenNotificationSettings = {}, onOpenAppDetails = {},
@@ -377,6 +449,7 @@ private fun SettingsScreenProblemsPreview() {
         SettingsScreen(
             reminderTime = LocalTime.of(9, 0), location = null, pauseFertilizing = false, onPauseFertilizingChange = {},
             adjustWatering = false, wateringFactor = 1.0, onAdjustWateringChange = {},
+            rooms = emptyList(), onRoomClick = {},
             notificationsOn = false, batteryUnrestricted = false,
             onBack = {}, onReminderTimeClick = {}, onLocationClick = {},
             onOpenNotificationSettings = {}, onOpenAppDetails = {},

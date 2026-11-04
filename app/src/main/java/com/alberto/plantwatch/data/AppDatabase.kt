@@ -7,8 +7,10 @@ import androidx.room.TypeConverters
 import com.alberto.plantwatch.plants.data.CareLog
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.CareTaskDao
+import com.alberto.plantwatch.plants.data.HomeRoom
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
+import com.alberto.plantwatch.plants.data.RoomDao
 import com.alberto.plantwatch.weather.data.SunDaily
 import com.alberto.plantwatch.weather.data.SunDao
 
@@ -27,22 +29,24 @@ import com.alberto.plantwatch.weather.data.SunDao
  * - The instance is created once, in AppContainer (next step), not here.
  */
 @Database(
-    entities = [Plant::class, CareTask::class, CareLog::class, SunDaily::class],
-    version = 5,
+    entities = [Plant::class, CareTask::class, CareLog::class, SunDaily::class, HomeRoom::class],
+    version = 6,
     exportSchema = true,
     // How to upgrade an existing database, one version at a time. An
     // *auto* migration: Room compares the exported schemas 1.json and 2.json
     // and generates the SQL (here: 3 new nullable columns on plants, and the
     // new sun_daily table; v3: 3 nullable window columns on plants; v4: the
-    // nullable speciesId column on plants; v5: nullable notes and photoFile).
-    // Complex
+    // nullable speciesId column on plants; v5: nullable notes and photoFile;
+    // v6: the rooms table and plants.roomId with a foreign key, for which Room
+    // rebuilds the plants table and copies its rows). Complex
     // changes (renames, splits) need a hand-written Migration instead.
-    // Room chains them: a v1 database is upgraded 1 -> 2 -> 3 -> 4 -> 5.
+    // Room chains them: a v1 database is upgraded 1 -> 2 -> ... -> 6.
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
+        AutoMigration(from = 5, to = 6),
     ],
 )
 @TypeConverters(Converters::class)
@@ -50,4 +54,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun plantDao(): PlantDao
     abstract fun careTaskDao(): CareTaskDao
     abstract fun sunDao(): SunDao
+    abstract fun roomDao(): RoomDao
 }
