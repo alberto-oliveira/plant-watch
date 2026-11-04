@@ -68,6 +68,16 @@ class CareScheduleTest {
     }
 
     @Test
+    fun `snooze moves an overdue task to tomorrow and keeps lastDone`() {
+        val overdue = task(intervalDays = 7, lastDone = today.minusDays(10), nextDue = today.minusDays(3))
+
+        val result = snoozed(overdue, today)
+
+        assertEquals(today.plusDays(1), result.nextDue)
+        assertEquals(today.minusDays(10), result.lastDone)
+    }
+
+    @Test
     fun `daysUntilDue is negative when overdue, zero today, positive ahead`() {
         assertEquals(-2L, daysUntilDue(task(nextDue = today.minusDays(2)), today))
         assertEquals(0L, daysUntilDue(task(nextDue = today), today))

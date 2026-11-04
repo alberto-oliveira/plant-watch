@@ -47,3 +47,11 @@ fun withNewInterval(task: CareTask, intervalDays: Int): CareTask {
  */
 fun daysUntilDue(task: CareTask, today: LocalDate): Long =
     ChronoUnit.DAYS.between(today, task.nextDue)
+
+/**
+ * The task snoozed from the reminder: due again tomorrow, counted from [today]
+ * (not from the old due date, which may be days in the past). It wasn't done,
+ * so `lastDone` stays the same and no log entry is written.
+ */
+fun snoozed(task: CareTask, today: LocalDate): CareTask =
+    task.copy(nextDue = today.plusDays(1))
