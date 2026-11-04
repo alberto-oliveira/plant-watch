@@ -82,6 +82,14 @@
     <string name="settings_battery_unrestricted">Unrestricted</string>
     <string name="settings_battery_optimized">Optimized: reminders may arrive late. In App info, set Battery to Unrestricted.</string>
     <string name="settings_open_system">Open settings</string>
+    <string name="settings_section_sunlight">Sunlight</string>
+    <string name="settings_location">Location</string>
+    <string name="settings_location_not_set">Not set</string>
+    <string name="location_dialog_title">Location for sunlight data</string>
+    <string name="location_latitude">Latitude</string>
+    <string name="location_longitude">Longitude</string>
+    <string name="location_hint">Only used to fetch sunshine data from Open-Meteo. To find it, long-press a spot in a map app.</string>
+    <string name="location_invalid">Latitude from -90 to 90, longitude from -180 to 180</string>
 
     <!-- Shared -->
     <string name="cancel">Cancel</string>

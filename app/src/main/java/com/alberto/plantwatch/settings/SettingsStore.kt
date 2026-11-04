@@ -3,6 +3,7 @@ package com.alberto.plantwatch.settings
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -21,6 +22,9 @@ import java.time.LocalTime
  * (two instances on the same file would corrupt it). `private` keeps it to this file.
  */
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
+/** A place on Earth in decimal degrees, used to fetch its sunshine data. */
+data class Location(val latitude: Double, val longitude: Double)
 
 /**
  * The app's settings, stored with DataStore (Preferences): a small key-value
@@ -52,8 +56,27 @@ class SettingsStore(context: Context) {
         }
     }
 
+    /**
+     * The location for sunlight data, or null until the user enters one (sun
+     * tracking does nothing without it). Both keys must be present.
+     */
+    val location: Flow<Location?> = dataStore.data.map { prefs ->
+        val lat = prefs[LATITUDE]
+        val lon = prefs[LONGITUDE]
+        if (lat != null && lon != null) Location(lat, lon) else null
+    }
+
+    suspend fun setLocation(location: Location) {
+        dataStore.edit { prefs ->
+            prefs[LATITUDE] = location.latitude
+            prefs[LONGITUDE] = location.longitude
+        }
+    }
+
     private companion object {
-        // Typed key: the compiler knows this setting is an Int.
+        // Typed keys: the compiler knows each setting's type.
         val REMINDER_MINUTES = intPreferencesKey("reminder_minutes")
+        val LATITUDE = doublePreferencesKey("latitude")
+        val LONGITUDE = doublePreferencesKey("longitude")
     }
 }

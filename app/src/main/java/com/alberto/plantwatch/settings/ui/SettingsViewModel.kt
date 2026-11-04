@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.alberto.plantwatch.PlantWatchApplication
 import com.alberto.plantwatch.reminders.scheduleDailyReminder
+import com.alberto.plantwatch.settings.Location
 import com.alberto.plantwatch.settings.SettingsStore
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +31,16 @@ class SettingsViewModel(
     /** The stored reminder time; null until DataStore has been read (a few ms). */
     val reminderTime: StateFlow<LocalTime?> = settingsStore.reminderTime
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
+
+    /** The location for sunlight data; null if not set (or still loading). */
+    val location: StateFlow<Location?> = settingsStore.location
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
+
+    fun setLocation(location: Location) {
+        viewModelScope.launch {
+            settingsStore.setLocation(location)
+        }
+    }
 
     /** Saves the new time, then moves the daily reminder job to it. */
     fun setReminderTime(time: LocalTime) {
