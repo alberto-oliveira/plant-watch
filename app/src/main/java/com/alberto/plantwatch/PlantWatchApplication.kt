@@ -2,6 +2,7 @@ package com.alberto.plantwatch
 
 import android.app.Application
 import com.alberto.plantwatch.reminders.ReminderNotifications
+import com.alberto.plantwatch.reminders.scheduleDailyReminder
 
 /**
  * Custom Application class: Android creates exactly one instance when the app
@@ -30,5 +31,7 @@ class PlantWatchApplication : Application() {
         container = AppContainer(this)
         // The reminder notification's channel must exist before anything posts to it.
         ReminderNotifications.createChannel(this)
+        // Schedule the daily reminder job (does nothing if it's already scheduled).
+        scheduleDailyReminder(this)
     }
 }
