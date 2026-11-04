@@ -94,6 +94,14 @@ room {
     schemaDirectory("$projectDir/schemas")
 }
 
+// Some unit tests read data files directly (the care guide JSON, the string
+// resources). Declaring them as inputs makes Gradle re-run the tests when only
+// those files change, instead of reusing the previous (cached) result.
+tasks.withType<Test>().configureEach {
+    inputs.dir("src/main/assets")
+    inputs.files("src/main/res/values/strings.xml", "src/main/res/values-pt/strings.xml")
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

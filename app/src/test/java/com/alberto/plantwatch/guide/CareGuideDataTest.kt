@@ -73,7 +73,7 @@ class CareGuideDataTest {
      */
     @Test
     fun `every UI string has a Portuguese translation`() {
-        fun keys(path: String) = Regex("""<(?:string|plurals) name="([^"]+)"""")
+        fun keys(path: String) = Regex("""<(?:string|plurals)\b[^>]*?\bname="([^"]+)"""")
             .findAll(File(path).readText()).map { it.groupValues[1] }.toSet()
         val english = keys("src/main/res/values/strings.xml")
         val portuguese = keys("src/main/res/values-pt/strings.xml")

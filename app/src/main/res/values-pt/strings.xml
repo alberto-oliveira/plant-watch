@@ -12,7 +12,7 @@
     <string name="plants_empty_message">Toque em + para adicionar sua primeira planta.</string>
     <string name="plants_no_tasks">Sem cuidados</string>
     <string name="next_care_today">%1$s hoje</string>
-    <plurals tools:ignore="ImpliedQuantity" name="next_care_in">
+    <plurals name="next_care_in" tools:ignore="ImpliedQuantity">
         <item quantity="one">%1$s amanhã</item>
         <item quantity="other">%1$s em %2$d dias</item>
         <item quantity="many">%1$s em %2$d dias</item>
@@ -45,7 +45,7 @@
     <string name="tasks_empty_title">Nenhum cuidado ainda</string>
     <string name="tasks_empty_message">Toque em + para adicionar rega, adubação ou o que mais esta planta precisar.</string>
     <string name="tasks_add">Adicionar cuidado</string>
-    <plurals tools:ignore="ImpliedQuantity" name="task_interval">
+    <plurals name="task_interval" tools:ignore="ImpliedQuantity">
         <item quantity="one">Todo dia</item>
         <item quantity="other">A cada %1$d dias</item>
         <item quantity="many">A cada %1$d dias</item>
@@ -54,12 +54,12 @@
     <string name="task_interval_adjusted_drier">%1$s (agora %2$d: semana mais quente e seca)</string>
     <string name="task_interval_adjusted_wetter">%1$s (agora %2$d: semana mais fria e úmida)</string>
     <string name="task_paused_winter">Pausado no inverno · até %1$s</string>
-    <plurals tools:ignore="ImpliedQuantity" name="task_due_in">
+    <plurals name="task_due_in" tools:ignore="ImpliedQuantity">
         <item quantity="one">Para amanhã</item>
         <item quantity="other">Em %1$d dias</item>
         <item quantity="many">Em %1$d dias</item>
     </plurals>
-    <plurals tools:ignore="ImpliedQuantity" name="task_habit">
+    <plurals name="task_habit" tools:ignore="ImpliedQuantity">
         <item quantity="one">Ultimamente você faz isso todo dia</item>
         <item quantity="other">Ultimamente você faz isso a cada %d dias</item>
         <item quantity="many">Ultimamente você faz isso a cada %d dias</item>
@@ -199,12 +199,12 @@
     <string name="guide_menu_description">Opções do guia de cuidados</string>
     <string name="guide_change_species">Trocar espécie</string>
     <string name="guide_unlink">Desvincular espécie</string>
-    <plurals tools:ignore="ImpliedQuantity" name="guide_water_every">
+    <plurals name="guide_water_every" tools:ignore="ImpliedQuantity">
         <item quantity="one">Rega · cerca de todo dia</item>
         <item quantity="other">Rega · cerca de a cada %1$d dias</item>
         <item quantity="many">Rega · cerca de a cada %1$d dias</item>
     </plurals>
-    <plurals tools:ignore="ImpliedQuantity" name="guide_fertilize_every">
+    <plurals name="guide_fertilize_every" tools:ignore="ImpliedQuantity">
         <item quantity="one">Adubo · cerca de todo dia</item>
         <item quantity="other">Adubo · cerca de a cada %1$d dias</item>
         <item quantity="many">Adubo · cerca de a cada %1$d dias</item>
@@ -216,12 +216,12 @@
     <string name="guide_toxic">Tóxica para cães e gatos</string>
     <string name="guide_show_hints">Mostrar dicas</string>
     <string name="guide_hide_hints">Esconder dicas</string>
-    <plurals tools:ignore="ImpliedQuantity" name="guide_summary_water">
+    <plurals name="guide_summary_water" tools:ignore="ImpliedQuantity">
         <item quantity="one">Regar todo dia</item>
         <item quantity="other">Regar ~%1$d dias</item>
         <item quantity="many">Regar ~%1$d dias</item>
     </plurals>
-    <plurals tools:ignore="ImpliedQuantity" name="guide_summary_fertilize">
+    <plurals name="guide_summary_fertilize" tools:ignore="ImpliedQuantity">
         <item quantity="one">Adubar todo dia</item>
         <item quantity="other">Adubar ~%1$d dias</item>
         <item quantity="many">Adubar ~%1$d dias</item>
@@ -232,7 +232,7 @@
     <string name="sun_short_bright_indirect">Luz indireta forte</string>
     <string name="sun_short_low_light">Pouca luz</string>
     <string name="guide_add_suggested">Adicionar cuidados sugeridos</string>
-    <plurals tools:ignore="ImpliedQuantity" name="guide_suggested_task">
+    <plurals name="guide_suggested_task" tools:ignore="ImpliedQuantity">
         <item quantity="one">%1$s todo dia</item>
         <item quantity="other">%1$s a cada %2$d dias</item>
         <item quantity="many">%1$s a cada %2$d dias</item>
