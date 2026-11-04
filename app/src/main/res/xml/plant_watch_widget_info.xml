@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The "Due today" widget's description for the launcher.
+     - targetCellWidth/Height: its default size in home-screen cells (3x2);
+       minWidth/minHeight: the same in dp, for launchers that don't use cells.
+     - updatePeriodMillis="0": no periodic wake-ups; the app refreshes it.
+     - initialLayout: Glance's built-in "loading" layout, shown until the first draw. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/widget_description"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:minWidth="180dp"
+    android:minHeight="110dp"
+    android:targetCellWidth="3"
+    android:targetCellHeight="2"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen" />

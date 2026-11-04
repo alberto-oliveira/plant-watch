@@ -16,6 +16,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import com.alberto.plantwatch.widget.refreshWidget
+import kotlinx.coroutines.launch
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
 
 // `class X : Y()` = X extends Y, calling Y's no-arg constructor.
@@ -36,6 +39,16 @@ class MainActivity : ComponentActivity() {
                 PlantWatchNavHost()
             }
         }
+    }
+
+    /**
+     * Called when the app goes to the background: tasks may have been done,
+     * so the home-screen widget is redrawn. `lifecycleScope` runs a coroutine
+     * tied to this activity (cancelled if it's destroyed).
+     */
+    override fun onStop() {
+        super.onStop()
+        lifecycleScope.launch { refreshWidget(applicationContext) }
     }
 }
 

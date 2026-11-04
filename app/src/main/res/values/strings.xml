@@ -282,6 +282,15 @@
         <item quantity="other">%d photos</item>
     </plurals>
 
+    <!-- Home-screen widget -->
+    <string name="widget_title">Due today</string>
+    <string name="widget_description">The plants that need care today</string>
+    <string name="widget_all_done">All done for today</string>
+    <plurals name="widget_more">
+        <item quantity="one">+%d more plant</item>
+        <item quantity="other">+%d more plants</item>
+    </plurals>
+
     <!-- Shared -->
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>

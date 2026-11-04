@@ -163,9 +163,10 @@ object ReminderNotifications {
 
     /**
      * The task's display name, outside Compose (no stringResource here, so the
-     * strings come from the Context). Mirrors taskName() in the UI.
+     * strings come from the Context). Mirrors taskName() in the UI; also used
+     * by the widget.
      */
-    private fun taskName(context: Context, type: TaskType, customLabel: String?): String = when (type) {
+    fun taskName(context: Context, type: TaskType, customLabel: String?): String = when (type) {
         TaskType.WATER -> context.getString(R.string.task_type_water)
         TaskType.FERTILIZE -> context.getString(R.string.task_type_fertilize)
         TaskType.OTHER -> customLabel ?: context.getString(R.string.task_type_other)

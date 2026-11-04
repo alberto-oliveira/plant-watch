@@ -9,6 +9,7 @@ import com.alberto.plantwatch.plants.data.CareLog
 import com.alberto.plantwatch.plants.markedDone
 import com.alberto.plantwatch.plants.snoozed
 import com.alberto.plantwatch.weather.intervalWhenDone
+import com.alberto.plantwatch.widget.refreshWidget
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,6 +71,7 @@ class ReminderActionReceiver : BroadcastReceiver() {
                 val due = loadReminderTasks(app, today)
                 if (due.isEmpty()) ReminderNotifications.cancel(context)
                 else ReminderNotifications.show(context, due, silent = true)
+                refreshWidget(context)
             } finally {
                 // `finally` runs even if something above throws, so the system is
                 // always told we're done.
