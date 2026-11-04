@@ -9,6 +9,7 @@ import com.alberto.plantwatch.PlantWatchApplication
 import com.alberto.plantwatch.reminders.scheduleDailyReminder
 import com.alberto.plantwatch.settings.Location
 import com.alberto.plantwatch.settings.SettingsStore
+import com.alberto.plantwatch.weather.fetchSunNow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -26,6 +27,7 @@ import java.time.LocalTime
 class SettingsViewModel(
     private val settingsStore: SettingsStore,
     private val reschedule: (LocalTime) -> Unit,
+    private val fetchSun: () -> Unit,
 ) : ViewModel() {
 
     /** The stored reminder time; null until DataStore has been read (a few ms). */
@@ -39,6 +41,8 @@ class SettingsViewModel(
     fun setLocation(location: Location) {
         viewModelScope.launch {
             settingsStore.setLocation(location)
+            // Fetch for the new place right away instead of waiting for the daily run.
+            fetchSun()
         }
     }
 
@@ -57,6 +61,7 @@ class SettingsViewModel(
                 SettingsViewModel(
                     settingsStore = app.container.settingsStore,
                     reschedule = { time -> scheduleDailyReminder(app, time, replace = true) },
+                    fetchSun = { fetchSunNow(app) },
                 )
             }
         }

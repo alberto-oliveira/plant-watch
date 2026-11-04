@@ -4,10 +4,11 @@ import android.content.Context
 import androidx.room.Room
 import com.alberto.plantwatch.data.AppDatabase
 import com.alberto.plantwatch.settings.SettingsStore
+import com.alberto.plantwatch.weather.OpenMeteoApi
 
 /**
  * Manual dependency injection: the one place that creates the app's shared
- * objects (the database and the settings). ViewModels and workers get what they
+ * objects (the database, the settings and the Open-Meteo client). ViewModels and workers get what they
  * need from here instead of creating their own instances.
  *
  * There's a single AppContainer per app process, owned by [PlantWatchApplication].
@@ -30,4 +31,6 @@ class AppContainer(private val context: Context) {
     }
 
     val settingsStore: SettingsStore by lazy { SettingsStore(context) }
+
+    val openMeteoApi: OpenMeteoApi by lazy { OpenMeteoApi.create() }
 }
