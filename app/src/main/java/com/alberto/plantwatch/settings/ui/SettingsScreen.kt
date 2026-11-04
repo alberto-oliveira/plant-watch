@@ -21,16 +21,23 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alberto.plantwatch.R
+import com.alberto.plantwatch.settings.appDetailsIntent
+import com.alberto.plantwatch.settings.ignoresBatteryOptimizations
+import com.alberto.plantwatch.settings.notificationSettingsIntent
+import com.alberto.plantwatch.settings.notificationsEnabled
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -45,10 +52,29 @@ fun SettingsRoute(
     val reminderTime by viewModel.reminderTime.collectAsStateWithLifecycle()
     var showTimePicker by rememberSaveable { mutableStateOf(false) }
 
+    // System statuses: owned by Android, not by the app, so they're read here
+    // (not stored in the ViewModel) and refreshed every time the screen resumes,
+    // e.g. when coming back from Android's settings after changing them.
+    val context = LocalContext.current
+    var notificationsOn by remember { mutableStateOf(notificationsEnabled(context)) }
+    var batteryUnrestricted by remember { mutableStateOf(ignoresBatteryOptimizations(context)) }
+    // `LifecycleResumeEffect`: the block runs on every ON_RESUME of the screen;
+    // `onPauseOrDispose { }` is the required cleanup part (nothing to clean here).
+    LifecycleResumeEffect(Unit) {
+        notificationsOn = notificationsEnabled(context)
+        batteryUnrestricted = ignoresBatteryOptimizations(context)
+        onPauseOrDispose { }
+    }
+
     SettingsScreen(
         reminderTime = reminderTime,
+        notificationsOn = notificationsOn,
+        batteryUnrestricted = batteryUnrestricted,
         onBack = onBack,
         onReminderTimeClick = { showTimePicker = true },
+        // `startActivity` opens another app's screen (here, Android's Settings).
+        onOpenNotificationSettings = { context.startActivity(notificationSettingsIntent(context)) },
+        onOpenAppDetails = { context.startActivity(appDetailsIntent(context)) },
     )
 
     // `val time = reminderTime` copies the property into a local value, so the
@@ -71,8 +97,12 @@ fun SettingsRoute(
 @Composable
 fun SettingsScreen(
     reminderTime: LocalTime?,
+    notificationsOn: Boolean,
+    batteryUnrestricted: Boolean,
     onBack: () -> Unit,
     onReminderTimeClick: () -> Unit,
+    onOpenNotificationSettings: () -> Unit,
+    onOpenAppDetails: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -108,8 +138,51 @@ fun SettingsScreen(
                     )
                 },
             )
+            StatusRow(
+                title = stringResource(R.string.settings_notifications),
+                status = stringResource(
+                    if (notificationsOn) R.string.settings_notifications_on else R.string.settings_notifications_off,
+                ),
+                isProblem = !notificationsOn,
+                onOpenSettings = onOpenNotificationSettings,
+            )
+            StatusRow(
+                title = stringResource(R.string.settings_battery),
+                status = stringResource(
+                    if (batteryUnrestricted) R.string.settings_battery_unrestricted else R.string.settings_battery_optimized,
+                ),
+                isProblem = !batteryUnrestricted,
+                onOpenSettings = onOpenAppDetails,
+            )
         }
     }
+}
+
+/**
+ * A system setting's status with a shortcut to Android's settings. Problems are
+ * shown in the error color so they stand out.
+ */
+@Composable
+private fun StatusRow(
+    title: String,
+    status: String,
+    isProblem: Boolean,
+    onOpenSettings: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(title) },
+        supportingContent = {
+            Text(
+                text = status,
+                color = if (isProblem) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        },
+        trailingContent = {
+            TextButton(onClick = onOpenSettings) {
+                Text(stringResource(R.string.settings_open_system))
+            }
+        },
+    )
 }
 
 @Composable
@@ -167,6 +240,20 @@ private fun formatTime(time: LocalTime): String =
 @Composable
 private fun SettingsScreenPreview() {
     PlantWatchTheme {
-        SettingsScreen(reminderTime = LocalTime.of(9, 0), onBack = {}, onReminderTimeClick = {})
+        SettingsScreen(
+            reminderTime = LocalTime.of(9, 0), notificationsOn = true, batteryUnrestricted = true,
+            onBack = {}, onReminderTimeClick = {}, onOpenNotificationSettings = {}, onOpenAppDetails = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SettingsScreenProblemsPreview() {
+    PlantWatchTheme {
+        SettingsScreen(
+            reminderTime = LocalTime.of(9, 0), notificationsOn = false, batteryUnrestricted = false,
+            onBack = {}, onReminderTimeClick = {}, onOpenNotificationSettings = {}, onOpenAppDetails = {},
+        )
     }
 }
