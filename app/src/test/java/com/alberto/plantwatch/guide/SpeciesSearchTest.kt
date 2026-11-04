@@ -12,16 +12,16 @@ class SpeciesSearchTest {
         [
           {"id":"epipremnum-aureum","scientificName":"Epipremnum aureum",
            "namesPt":["jiboia","jibóia"],"namesEn":["pothos","golden pothos"],
-           "waterEveryDays":7,"water":"w","sun":"BRIGHT_INDIRECT","sunHint":"s",
-           "fertilizeEveryDays":30,"fertilizer":"f","problems":[{"title":"t","hint":"h"}]},
+           "waterEveryDays":7,"water":{"en":"w","pt":"w"},"sun":"BRIGHT_INDIRECT","sunHint":{"en":"s","pt":"s"},
+           "fertilizeEveryDays":30,"fertilizer":{"en":"f","pt":"f"},"problems":[{"title":{"en":"t","pt":"t"},"hint":{"en":"h","pt":"h"}}]},
           {"id":"monstera-deliciosa","scientificName":"Monstera deliciosa",
            "namesPt":["costela-de-adão"],"namesEn":["monstera","swiss cheese plant"],
-           "waterEveryDays":7,"water":"w","sun":"BRIGHT_INDIRECT","sunHint":"s",
-           "fertilizer":"f","problems":[{"title":"t","hint":"h"}]},
+           "waterEveryDays":7,"water":{"en":"w","pt":"w"},"sun":"BRIGHT_INDIRECT","sunHint":{"en":"s","pt":"s"},
+           "fertilizer":{"en":"f","pt":"f"},"problems":[{"title":{"en":"t","pt":"t"},"hint":{"en":"h","pt":"h"}}]},
           {"id":"dracaena-trifasciata","scientificName":"Dracaena trifasciata",
            "namesPt":["espada-de-são-jorge"],"namesEn":["snake plant"],
-           "waterEveryDays":21,"water":"w","sun":"PART_SUN","sunHint":"s",
-           "fertilizer":"f","problems":[{"title":"t","hint":"h"}],"toxicToPets":true}
+           "waterEveryDays":21,"water":{"en":"w","pt":"w"},"sun":"PART_SUN","sunHint":{"en":"s","pt":"s"},
+           "fertilizer":{"en":"f","pt":"f"},"problems":[{"title":{"en":"t","pt":"t"},"hint":{"en":"h","pt":"h"}}],"toxicToPets":true}
         ]
         """,
     )

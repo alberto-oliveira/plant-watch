@@ -33,6 +33,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -41,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alberto.plantwatch.R
 import com.alberto.plantwatch.guide.CareGuideEntry
+import com.alberto.plantwatch.guide.LocalizedText
 import com.alberto.plantwatch.guide.Problem
 import com.alberto.plantwatch.guide.SpeciesMatch
 import com.alberto.plantwatch.guide.SunNeed
@@ -233,15 +235,15 @@ private fun GuideDetails(entry: CareGuideEntry, showAllProblems: Boolean, onTogg
         GuideSection(
             icon = R.drawable.ic_water_drop,
             title = pluralStringResource(R.plurals.guide_water_every, entry.waterEveryDays, entry.waterEveryDays),
-            body = entry.water,
+            body = localized(entry.water),
         )
-        GuideSection(icon = R.drawable.ic_sunny, title = sunNeedLabel(entry.sun), body = entry.sunHint)
+        GuideSection(icon = R.drawable.ic_sunny, title = sunNeedLabel(entry.sun), body = localized(entry.sunHint))
         GuideSection(
             icon = R.drawable.ic_compost,
             // `?.let { } ?: ...`: one text when there's an interval, another when not.
             title = entry.fertilizeEveryDays?.let { pluralStringResource(R.plurals.guide_fertilize_every, it, it) }
                 ?: stringResource(R.string.guide_fertilize_rarely),
-            body = entry.fertilizer,
+            body = localized(entry.fertilizer),
         )
 
         HorizontalDivider()
@@ -296,8 +298,8 @@ private fun GuideSection(@DrawableRes icon: Int, title: String, body: String) {
 @Composable
 private fun ProblemRow(problem: Problem) {
     Column {
-        Text(problem.title, style = MaterialTheme.typography.bodyLarge)
-        Text(problem.hint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(localized(problem.title), style = MaterialTheme.typography.bodyLarge)
+        Text(localized(problem.hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
@@ -376,18 +378,28 @@ fun SpeciesPickerDialog(
     )
 }
 
+/**
+ * A guide text in the app's current language: the per-app language if one is
+ * chosen in Android's settings, otherwise the phone's. `LocalConfiguration`
+ * holds the configuration the screen is drawn with; `locales[0]` is the
+ * language actually in use.
+ */
+@Composable
+private fun localized(text: LocalizedText): String =
+    text.forLanguage(LocalConfiguration.current.locales[0].language)
+
 // --- Previews ---
 
 private val previewEntry = CareGuideEntry(
     id = "epipremnum-aureum", scientificName = "Epipremnum aureum",
     namesPt = listOf("jiboia"), namesEn = listOf("pothos"),
-    waterEveryDays = 7, water = "Water when the top 2-3 cm of soil is dry.",
-    sun = SunNeed.BRIGHT_INDIRECT, sunHint = "Bright indirect light; tolerates low light.",
-    fertilizeEveryDays = 30, fertilizer = "Balanced liquid fertilizer at half strength, spring to summer.",
+    waterEveryDays = 7, water = LocalizedText("Water when the top 2-3 cm of soil is dry.", "Regue quando os 2-3 cm de cima estiverem secos."),
+    sun = SunNeed.BRIGHT_INDIRECT, sunHint = LocalizedText("Bright indirect light; tolerates low light.", "Luz indireta forte; tolera pouca luz."),
+    fertilizeEveryDays = 30, fertilizer = LocalizedText("Balanced liquid fertilizer at half strength, spring to summer.", "Adubo líquido equilibrado em meia dose, da primavera ao verão."),
     problems = listOf(
-        Problem("Yellow leaves", "Usually overwatering."),
-        Problem("Brown edges", "Dry air or underwatering."),
-        Problem("Mealybugs", "Wipe off with alcohol."),
+        Problem(LocalizedText("Yellow leaves", "Folhas amarelas"), LocalizedText("Usually overwatering.", "Geralmente excesso de água.")),
+        Problem(LocalizedText("Brown edges", "Bordas marrons"), LocalizedText("Dry air or underwatering.", "Ar seco ou falta de água.")),
+        Problem(LocalizedText("Mealybugs", "Cochonilhas"), LocalizedText("Wipe off with alcohol.", "Limpe com álcool.")),
     ),
     toxicToPets = true,
 )
