@@ -70,6 +70,19 @@
     <string name="reminder_line">%1$s: %2$s</string>
     <string name="reminder_action_snooze">Snooze 1 day</string>
 
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_reminders">Reminders</string>
+    <string name="settings_reminder_time">Daily reminder time</string>
+    <string name="settings_reminder_time_dialog_title">Reminder time</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_on">On</string>
+    <string name="settings_notifications_off">Off: reminders won\'t be shown</string>
+    <string name="settings_battery">Battery optimization</string>
+    <string name="settings_battery_unrestricted">Unrestricted</string>
+    <string name="settings_battery_optimized">Optimized: reminders may arrive late. In App info, set Battery to Unrestricted.</string>
+    <string name="settings_open_system">Open settings</string>
+
     <!-- Shared -->
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>

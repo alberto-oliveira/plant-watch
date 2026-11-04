@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alberto.plantwatch.plants.ui.PlantDetailRoute
 import com.alberto.plantwatch.plants.ui.PlantListRoute
+import com.alberto.plantwatch.settings.ui.SettingsRoute
 import kotlinx.serialization.Serializable
 
 /*
@@ -28,6 +29,9 @@ data object PlantList
 @Serializable
 data class PlantDetail(val plantId: Long)
 
+@Serializable
+data object Settings
+
 /**
  * The app's screens and how to move between them.
  *
@@ -44,12 +48,16 @@ fun PlantWatchNavHost() {
         composable<PlantList> {
             PlantListRoute(
                 onPlantClick = { plant -> navController.navigate(PlantDetail(plantId = plant.id)) },
+                onSettingsClick = { navController.navigate(Settings) },
             )
         }
         composable<PlantDetail> {
             // The plantId argument isn't read here: PlantDetailViewModel gets it
             // from its SavedStateHandle (see there).
             PlantDetailRoute(onBack = { navController.popBackStack() })
+        }
+        composable<Settings> {
+            SettingsRoute(onBack = { navController.popBackStack() })
         }
     }
 }

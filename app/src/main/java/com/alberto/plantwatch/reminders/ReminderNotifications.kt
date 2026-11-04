@@ -32,7 +32,7 @@ import com.alberto.plantwatch.plants.data.TaskType
  */
 object ReminderNotifications {
 
-    private const val CHANNEL_ID = "reminders"
+    const val CHANNEL_ID = "reminders"
     const val NOTIFICATION_ID = 1
 
     fun createChannel(context: Context) {
