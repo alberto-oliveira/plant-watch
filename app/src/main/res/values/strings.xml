@@ -22,6 +22,7 @@
     <!-- Add plant dialog -->
     <string name="add_plant_title">Add plant</string>
     <string name="add_plant_name_label">Name</string>
+    <string name="add_plant_species_hint">Is it one of these? (optional)</string>
     <string name="add_plant_confirm">Add</string>
 
     <!-- Delete plant dialog. %1$s = plant name. -->
@@ -169,6 +170,12 @@
     <string name="guide_show_all">Show all (%1$d)</string>
     <string name="guide_show_less">Show less</string>
     <string name="guide_toxic">Toxic to cats and dogs</string>
+    <string name="guide_add_suggested">Add suggested tasks</string>
+    <!-- %1$s = task name, %2$d = days, e.g. "Water every 7 days" -->
+    <plurals name="guide_suggested_task">
+        <item quantity="one">%1$s every day</item>
+        <item quantity="other">%1$s every %2$d days</item>
+    </plurals>
     <string name="guide_generic_note">General guidance for this group: care varies by species.</string>
     <string name="sun_need_full_sun">Sun · full sun</string>
     <string name="sun_need_part_sun">Sun · part sun</string>

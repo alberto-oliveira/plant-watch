@@ -27,6 +27,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,6 +36,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -79,6 +81,8 @@ fun PlantListRoute(
     // UI-only state: is the add dialog open, and what has been typed so far.
     var showAddDialog by rememberSaveable { mutableStateOf(false) }
     var newPlantName by rememberSaveable { mutableStateOf("") }
+    // The species chip chosen in the add dialog (null = none).
+    var newPlantSpeciesId by rememberSaveable { mutableStateOf<String?>(null) }
 
     // Which plant is waiting for delete confirmation (null = no dialog). We keep
     // just its id: a Long can be saved across rotation, a whole Plant can't
@@ -100,16 +104,22 @@ fun PlantListRoute(
         // Local function: closes the dialog and clears the field for next time.
         fun close() {
             newPlantName = ""
+            newPlantSpeciesId = null
             showAddDialog = false
         }
+        // Re-search only when the typed name changes.
+        val suggestions = remember(newPlantName) { viewModel.speciesSuggestions(newPlantName) }
         AddPlantDialog(
             name = newPlantName,
             onNameChange = { newPlantName = it },
             onConfirm = {
-                viewModel.addPlant(newPlantName)
+                viewModel.addPlant(newPlantName, newPlantSpeciesId)
                 close()
             },
             onDismiss = { close() },
+            speciesSuggestions = suggestions,
+            selectedSpeciesId = newPlantSpeciesId,
+            onSpeciesSelect = { newPlantSpeciesId = it },
         )
     }
 
@@ -274,6 +284,15 @@ private fun PlantCard(
             // avatar and the trash icon.
             Column(modifier = Modifier.weight(1f)) {
                 Text(plant.name, style = MaterialTheme.typography.titleMedium)
+                // The linked species, if any, in small italics.
+                summary.scientificName?.let {
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontStyle = FontStyle.Italic,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
                 Text(
                     text = nextCare,
                     style = MaterialTheme.typography.bodyMedium,
@@ -341,11 +360,12 @@ private val previewToday = LocalDate.of(2026, 11, 4)
 
 private val samplePlants = listOf(
     PlantSummary(
-        Plant(id = 1, name = "Basil"),
+        Plant(id = 1, name = "Manjericão", speciesId = "ocimum-basilicum"),
         listOf(
             CareTask(id = 1, plantId = 1, type = TaskType.WATER, intervalDays = 3, nextDue = previewToday.minusDays(1)),
             CareTask(id = 2, plantId = 1, type = TaskType.FERTILIZE, intervalDays = 30, nextDue = previewToday.plusDays(12)),
         ),
+        scientificName = "Ocimum basilicum",
     ),
     PlantSummary(
         Plant(id = 2, name = "Fern"),

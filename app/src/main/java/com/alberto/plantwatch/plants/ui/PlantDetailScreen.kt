@@ -72,6 +72,7 @@ fun PlantDetailRoute(
     val sunYesterday by viewModel.sunYesterday.collectAsStateWithLifecycle()
     val sunLastWeek by viewModel.sunLastWeek.collectAsStateWithLifecycle()
     val guideEntry by viewModel.guideEntry.collectAsStateWithLifecycle()
+    val suggestedTasks by viewModel.suggestedTasks.collectAsStateWithLifecycle()
 
     // Species picker: open or not, and the search text.
     var showSpeciesPicker by rememberSaveable { mutableStateOf(false) }
@@ -157,6 +158,8 @@ fun PlantDetailRoute(
         isSpeciesLinked = plant?.speciesId != null,
         onLinkSpeciesClick = ::openSpeciesPicker,
         onUnlinkSpecies = { viewModel.setSpecies(null) },
+        suggestedTasks = suggestedTasks,
+        onAddSuggestedTasks = viewModel::addSuggestedTasks,
         sunSettings = sunSettings,
         windowSettings = windowSettings,
         sunYesterday = sunYesterday,
@@ -284,6 +287,8 @@ fun PlantDetailScreen(
     isSpeciesLinked: Boolean,
     onLinkSpeciesClick: () -> Unit,
     onUnlinkSpecies: () -> Unit,
+    suggestedTasks: List<CareTask>,
+    onAddSuggestedTasks: () -> Unit,
     sunSettings: SunSettings?,
     windowSettings: WindowSettings?,
     sunYesterday: Double?,
@@ -341,8 +346,10 @@ fun PlantDetailScreen(
                 CareGuideCard(
                     entry = guideEntry,
                     isLinked = isSpeciesLinked,
+                    suggestedTasks = suggestedTasks,
                     onLinkClick = onLinkSpeciesClick,
                     onUnlinkClick = onUnlinkSpecies,
+                    onAddSuggestedTasks = onAddSuggestedTasks,
                 )
             }
 
@@ -663,7 +670,8 @@ private fun PlantDetailScreenPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
             plantName = "Monstera", guideEntry = null, isSpeciesLinked = false,
-            onLinkSpeciesClick = {}, onUnlinkSpecies = {}, sunSettings = null,
+            onLinkSpeciesClick = {}, onUnlinkSpecies = {},
+            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, sunSettings = null,
             windowSettings = WindowSettings(Compass.N, WindowDistance.FROM_1_TO_2M, WindowPlacement.IN_FRONT),
             sunYesterday = 135.0, sunLastWeek = 870.0,
             onSunClick = {}, tasks = sampleTasks, history = sampleHistory, today = previewToday,
@@ -678,7 +686,8 @@ private fun PlantDetailScreenEmptyPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
             plantName = "Monstera", guideEntry = null, isSpeciesLinked = false,
-            onLinkSpeciesClick = {}, onUnlinkSpecies = {}, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
+            onLinkSpeciesClick = {}, onUnlinkSpecies = {},
+            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
             onSunClick = {}, tasks = emptyList(), history = emptyList(), today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )

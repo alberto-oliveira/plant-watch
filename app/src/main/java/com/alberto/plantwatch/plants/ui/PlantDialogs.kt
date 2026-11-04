@@ -1,9 +1,13 @@
 package com.alberto.plantwatch.plants.ui
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -13,7 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.alberto.plantwatch.R
+import com.alberto.plantwatch.guide.SpeciesMatch
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
 
 /**
@@ -30,29 +36,50 @@ fun AddPlantDialog(
     onNameChange: (String) -> Unit,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
+    // Optional species suggestions for the typed name (empty = none shown).
+    speciesSuggestions: List<SpeciesMatch> = emptyList(),
+    selectedSpeciesId: String? = null,
+    onSpeciesSelect: (String?) -> Unit = {},
 ) {
     AlertDialog(
         // Called when tapping outside the dialog or pressing Back.
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.add_plant_title)) },
         text = {
-            OutlinedTextField(
-                value = name,
-                onValueChange = onNameChange,
-                label = { Text(stringResource(R.string.add_plant_name_label)) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    // Start each word with a capital letter ("Snake Plant").
-                    capitalization = KeyboardCapitalization.Words,
-                    // Show a "Done" (✓) key instead of Enter...
-                    imeAction = ImeAction.Done,
-                ),
-                // ...and make it add the plant, same as the Add button. Useful in
-                // landscape, where the keyboard covers the dialog's buttons.
-                keyboardActions = KeyboardActions(
-                    onDone = { if (name.isNotBlank()) onConfirm() },
-                ),
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = onNameChange,
+                    label = { Text(stringResource(R.string.add_plant_name_label)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        // Start each word with a capital letter ("Snake Plant").
+                        capitalization = KeyboardCapitalization.Words,
+                        // Show a "Done" (✓) key instead of Enter...
+                        imeAction = ImeAction.Done,
+                    ),
+                    // ...and make it add the plant, same as the Add button. Useful in
+                    // landscape, where the keyboard covers the dialog's buttons.
+                    keyboardActions = KeyboardActions(
+                        onDone = { if (name.isNotBlank()) onConfirm() },
+                    ),
+                )
+                // Species suggestions as chips; tapping the selected one again clears it.
+                // Picking a species is optional: the plant can always be added without.
+                if (speciesSuggestions.isNotEmpty()) {
+                    Text(stringResource(R.string.add_plant_species_hint), style = MaterialTheme.typography.labelLarge)
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        speciesSuggestions.forEach { match ->
+                            val selected = match.entry.id == selectedSpeciesId
+                            FilterChip(
+                                selected = selected,
+                                onClick = { onSpeciesSelect(if (selected) null else match.entry.id) },
+                                label = { Text("${displayName(match.entry)} · ${match.entry.scientificName}") },
+                            )
+                        }
+                    }
+                }
+            }
         },
         confirmButton = {
             // `isNotBlank()` is false for "" and for whitespace-only text, so the

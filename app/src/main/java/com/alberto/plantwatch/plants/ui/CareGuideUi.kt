@@ -17,6 +17,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,6 +43,7 @@ import com.alberto.plantwatch.guide.CareGuideEntry
 import com.alberto.plantwatch.guide.Problem
 import com.alberto.plantwatch.guide.SpeciesMatch
 import com.alberto.plantwatch.guide.SunNeed
+import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.ui.IconBadge
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
 
@@ -64,8 +66,10 @@ fun displayName(entry: CareGuideEntry): String =
 fun CareGuideCard(
     entry: CareGuideEntry?,
     isLinked: Boolean,
+    suggestedTasks: List<CareTask>,
     onLinkClick: () -> Unit,
     onUnlinkClick: () -> Unit,
+    onAddSuggestedTasks: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -93,7 +97,7 @@ fun CareGuideCard(
                 }
             }
         } else {
-            LinkedGuide(entry, onChangeClick = onLinkClick, onUnlinkClick = onUnlinkClick)
+            LinkedGuide(entry, suggestedTasks, onChangeClick = onLinkClick, onUnlinkClick = onUnlinkClick, onAddSuggestedTasks)
         }
     }
 }
@@ -109,7 +113,13 @@ private fun GuideBadge() {
 
 /** The card's content for a linked species. */
 @Composable
-private fun LinkedGuide(entry: CareGuideEntry, onChangeClick: () -> Unit, onUnlinkClick: () -> Unit) {
+private fun LinkedGuide(
+    entry: CareGuideEntry,
+    suggestedTasks: List<CareTask>,
+    onChangeClick: () -> Unit,
+    onUnlinkClick: () -> Unit,
+    onAddSuggestedTasks: () -> Unit,
+) {
     // UI-only state kept across rotation: is the overflow menu open, are all
     // problems shown.
     var menuOpen by rememberSaveable { mutableStateOf(false) }
@@ -168,6 +178,22 @@ private fun LinkedGuide(entry: CareGuideEntry, onChangeClick: () -> Unit, onUnli
                 ?: stringResource(R.string.guide_fertilize_rarely),
             body = entry.fertilizer,
         )
+
+        // Only when the guide suggests tasks the plant doesn't have yet.
+        if (suggestedTasks.isNotEmpty()) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                FilledTonalButton(onClick = onAddSuggestedTasks) {
+                    Text(stringResource(R.string.guide_add_suggested))
+                }
+                Text(
+                    text = suggestedTasks.map { task ->
+                        pluralStringResource(R.plurals.guide_suggested_task, task.intervalDays, taskName(task), task.intervalDays)
+                    }.joinToString(" · "),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
 
         HorizontalDivider()
         Text(stringResource(R.string.guide_problems), style = MaterialTheme.typography.titleSmall)
@@ -312,7 +338,11 @@ private val previewEntry = CareGuideEntry(
 @Composable
 private fun CareGuideCardPreview() {
     PlantWatchTheme {
-        CareGuideCard(entry = previewEntry, isLinked = true, onLinkClick = {}, onUnlinkClick = {})
+        CareGuideCard(
+            entry = previewEntry, isLinked = true,
+            suggestedTasks = listOf(CareTask(plantId = 1, type = com.alberto.plantwatch.plants.data.TaskType.WATER, intervalDays = 7, nextDue = java.time.LocalDate.of(2026, 11, 4))),
+            onLinkClick = {}, onUnlinkClick = {}, onAddSuggestedTasks = {},
+        )
     }
 }
 
@@ -320,7 +350,10 @@ private fun CareGuideCardPreview() {
 @Composable
 private fun CareGuideCardNotLinkedPreview() {
     PlantWatchTheme {
-        CareGuideCard(entry = null, isLinked = false, onLinkClick = {}, onUnlinkClick = {})
+        CareGuideCard(
+            entry = null, isLinked = false, suggestedTasks = emptyList(),
+            onLinkClick = {}, onUnlinkClick = {}, onAddSuggestedTasks = {},
+        )
     }
 }
 
