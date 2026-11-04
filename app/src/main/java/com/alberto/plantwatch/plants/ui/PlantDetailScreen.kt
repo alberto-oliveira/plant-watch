@@ -1,5 +1,8 @@
 package com.alberto.plantwatch.plants.ui
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -57,6 +60,7 @@ import com.alberto.plantwatch.weather.WindowSettings
 import com.alberto.plantwatch.weather.adjustedInterval
 import com.alberto.plantwatch.weather.parseSunSettings
 import kotlin.math.roundToInt
+import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -76,6 +80,16 @@ fun PlantDetailRoute(
     val suggestedTasks by viewModel.suggestedTasks.collectAsStateWithLifecycle()
     val fertilizingPausedUntil by viewModel.fertilizingPausedUntil.collectAsStateWithLifecycle()
     val wateringFactor by viewModel.wateringFactor.collectAsStateWithLifecycle()
+    val photo by viewModel.photo.collectAsStateWithLifecycle()
+
+    // Android's photo picker: no storage permission needed, the user picks one
+    // image and only that image is shared with the app. The lambda receives its
+    // Uri, or null if the user backed out.
+    val pickPhoto = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) viewModel.setPhoto(uri)
+    }
+    var showNotesDialog by rememberSaveable { mutableStateOf(false) }
+    var notesText by rememberSaveable { mutableStateOf("") }
 
     // Species picker: open or not, and the search text.
     var showSpeciesPicker by rememberSaveable { mutableStateOf(false) }
@@ -157,6 +171,16 @@ fun PlantDetailRoute(
     PlantDetailScreen(
         // `?.name ?: ""`: the name if the plant is loaded, empty text otherwise.
         plantName = plant?.name ?: "",
+        photo = photo,
+        notes = plant?.notes,
+        onPickPhoto = {
+            pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        },
+        onRemovePhoto = viewModel::removePhoto,
+        onEditNotes = {
+            notesText = plant?.notes ?: ""
+            showNotesDialog = true
+        },
         guideEntry = guideEntry,
         isSpeciesLinked = plant?.speciesId != null,
         onLinkSpeciesClick = ::openSpeciesPicker,
@@ -208,6 +232,18 @@ fun PlantDetailRoute(
                 showTaskDialog = false
             },
             onDismiss = { showTaskDialog = false },
+        )
+    }
+
+    if (showNotesDialog) {
+        NotesDialog(
+            text = notesText,
+            onTextChange = { notesText = it },
+            onConfirm = {
+                viewModel.setNotes(notesText)
+                showNotesDialog = false
+            },
+            onDismiss = { showNotesDialog = false },
         )
     }
 
@@ -288,6 +324,11 @@ fun PlantDetailRoute(
 @Composable
 fun PlantDetailScreen(
     plantName: String,
+    photo: File?,
+    notes: String?,
+    onPickPhoto: () -> Unit,
+    onRemovePhoto: () -> Unit,
+    onEditNotes: () -> Unit,
     guideEntry: CareGuideEntry?,
     isSpeciesLinked: Boolean,
     onLinkSpeciesClick: () -> Unit,
@@ -346,6 +387,15 @@ fun PlantDetailScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
+            item(key = "header") {
+                PlantHeaderCard(
+                    photo = photo,
+                    notes = notes,
+                    onPickPhoto = onPickPhoto,
+                    onRemovePhoto = onRemovePhoto,
+                    onEditNotes = onEditNotes,
+                )
+            }
             item(key = "sun") {
                 SunCard(sunSettings, windowSettings, sunYesterday, sunLastWeek, onClick = onSunClick)
             }
@@ -692,7 +742,8 @@ private val sampleHistory = listOf(
 private fun PlantDetailScreenPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", guideEntry = null, isSpeciesLinked = false,
+            plantName = "Monstera", photo = null, notes = "Gift from Ana.",
+            onPickPhoto = {}, onRemovePhoto = {}, onEditNotes = {}, guideEntry = null, isSpeciesLinked = false,
             onLinkSpeciesClick = {}, onUnlinkSpecies = {},
             suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, wateringFactor = null, sunSettings = null,
             windowSettings = WindowSettings(Compass.N, WindowDistance.FROM_1_TO_2M, WindowPlacement.IN_FRONT),
@@ -708,7 +759,8 @@ private fun PlantDetailScreenPreview() {
 private fun PlantDetailScreenEmptyPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", guideEntry = null, isSpeciesLinked = false,
+            plantName = "Monstera", photo = null, notes = "Gift from Ana.",
+            onPickPhoto = {}, onRemovePhoto = {}, onEditNotes = {}, guideEntry = null, isSpeciesLinked = false,
             onLinkSpeciesClick = {}, onUnlinkSpecies = {},
             suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, wateringFactor = null, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
             onSunClick = {}, tasks = emptyList(), history = emptyList(), today = previewToday,

@@ -165,6 +165,14 @@
     <string name="location_hint">Only used to fetch sunshine data from Open-Meteo. To find it, long-press a spot in a map app.</string>
     <string name="location_invalid">Latitude from -90 to 90, longitude from -180 to 180</string>
 
+    <!-- Plant photo and notes -->
+    <string name="plant_photo_description">Photo of the plant</string>
+    <string name="plant_photo_add">Add photo</string>
+    <string name="plant_photo_change">Change photo</string>
+    <string name="plant_photo_remove">Remove photo</string>
+    <string name="plant_notes_empty">Add notes (where it came from, when it was repotted…)</string>
+    <string name="plant_notes_title">Notes</string>
+
     <!-- Care guide -->
     <string name="guide_title">Care guide</string>
     <string name="guide_not_linked">Link a species to see care hints</string>

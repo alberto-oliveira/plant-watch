@@ -1,5 +1,7 @@
 package com.alberto.plantwatch.plants.ui
 
+import android.content.ContentResolver
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -22,6 +24,7 @@ import com.alberto.plantwatch.plants.data.CareTaskDao
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
 import com.alberto.plantwatch.plants.data.TaskType
+import com.alberto.plantwatch.plants.PhotoStore
 import com.alberto.plantwatch.plants.fertilizingPausedUntil
 import com.alberto.plantwatch.settings.SettingsStore
 import com.alberto.plantwatch.weather.intervalWhenDone
@@ -36,7 +39,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import java.time.LocalDate
 
 /**
@@ -55,6 +61,8 @@ class PlantDetailViewModel(
     private val fetchSun: () -> Unit,
     private val careGuide: CareGuide,
     settingsStore: SettingsStore,
+    private val photoStore: PhotoStore,
+    private val contentResolver: ContentResolver,
 ) : ViewModel() {
 
     // `toRoute<PlantDetail>()`: `<PlantDetail>` is a type argument, telling the
@@ -126,6 +134,47 @@ class PlantDetailViewModel(
         combine(settingsStore.adjustWateringToWeather, settingsStore.wateringFactor) { enabled, factor ->
             if (enabled) factor else null
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
+
+    /** The plant's photo file, or null if it has none. */
+    val photo: StateFlow<File?> = plant
+        .map { p -> p?.photoFile?.let(photoStore::fileFor) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
+
+    /** Saves the notes; blank text removes them. */
+    fun setNotes(text: String) {
+        val current = plant.value ?: return
+        viewModelScope.launch {
+            plantDao.update(current.copy(notes = text.trim().ifBlank { null }))
+        }
+    }
+
+    /**
+     * Stores a resized copy of the picked image and makes it the plant's photo,
+     * then deletes the previous one. `withContext(Dispatchers.IO)` runs the file
+     * work on a background thread meant for disk access.
+     */
+    fun setPhoto(uri: Uri) {
+        val current = plant.value ?: return
+        viewModelScope.launch {
+            val name = try {
+                withContext(Dispatchers.IO) { photoStore.save(contentResolver, uri, current.id) }
+            } catch (e: Exception) {
+                // Unreadable or unsupported image: keep the current photo.
+                return@launch
+            }
+            plantDao.update(current.copy(photoFile = name))
+            withContext(Dispatchers.IO) { photoStore.delete(current.photoFile) }
+        }
+    }
+
+    /** Removes the plant's photo (and its file). */
+    fun removePhoto() {
+        val current = plant.value ?: return
+        viewModelScope.launch {
+            plantDao.update(current.copy(photoFile = null))
+            withContext(Dispatchers.IO) { photoStore.delete(current.photoFile) }
+        }
+    }
 
     // The day the screen was opened; "yesterday" and "last 7 days" count from it.
     private val today = LocalDate.now()
@@ -255,6 +304,8 @@ class PlantDetailViewModel(
                     fetchSun = { fetchSunNow(app) },
                     careGuide = app.container.careGuide,
                     settingsStore = app.container.settingsStore,
+                    photoStore = app.container.photoStore,
+                    contentResolver = app.contentResolver,
                 )
             }
         }

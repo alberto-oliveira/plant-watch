@@ -32,6 +32,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -42,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
 import com.alberto.plantwatch.R
 import com.alberto.plantwatch.plants.daysUntilDue
 import com.alberto.plantwatch.plants.data.CareTask
@@ -49,6 +52,7 @@ import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.ui.EmptyState
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
+import java.io.File
 import java.time.LocalDate
 import kotlin.math.absoluteValue
 
@@ -279,7 +283,7 @@ private fun PlantCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            PlantAvatar(plant.name)
+            PlantAvatar(plant.name, summary.photo)
             // `weight(1f)`: the text column takes all the width left over by the
             // avatar and the trash icon.
             Column(modifier = Modifier.weight(1f)) {
@@ -319,7 +323,19 @@ private fun PlantCard(
  * usually differ.
  */
 @Composable
-private fun PlantAvatar(name: String) {
+private fun PlantAvatar(name: String, photo: File?) {
+    if (photo != null) {
+        // The photo, cropped into the same circle as the letter avatar.
+        AsyncImage(
+            model = photo,
+            contentDescription = null, // decorative: the name is right next to it
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(48.dp)
+                .clip(CircleShape),
+        )
+        return
+    }
     val colors = MaterialTheme.colorScheme
     // Pairs of (background, text colour); `%` = remainder, `absoluteValue`
     // because hash codes can be negative.
