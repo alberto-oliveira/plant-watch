@@ -17,6 +17,7 @@ import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.plants.markedDone
+import com.alberto.plantwatch.plants.withNewInterval
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -63,6 +64,21 @@ class PlantDetailViewModel(
         )
         viewModelScope.launch {
             careTaskDao.insert(task)
+        }
+    }
+
+    /**
+     * Saves changes to a task. A new interval recalculates the due date from the
+     * last time it was done ([withNewInterval], unit-tested). The history is
+     * kept, even if the type changes.
+     */
+    fun editTask(task: CareTask, type: TaskType, label: String, intervalDays: Int) {
+        val updated = withNewInterval(task, intervalDays).copy(
+            type = type,
+            customLabel = if (type == TaskType.OTHER) label.trim() else null,
+        )
+        viewModelScope.launch {
+            careTaskDao.update(updated)
         }
     }
 

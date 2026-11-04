@@ -1,5 +1,6 @@
 package com.alberto.plantwatch.plants.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -53,13 +54,32 @@ fun PlantDetailRoute(
     // as the plant list.
     var taskIdToDelete by rememberSaveable { mutableStateOf<Long?>(null) }
 
-    // Add-task dialog: open or not, and what has been entered so far. All three
-    // values survive rotation. (An enum can be saved because Kotlin enums are
-    // Serializable in the Java sense.)
-    var showAddDialog by rememberSaveable { mutableStateOf(false) }
-    var newType by rememberSaveable { mutableStateOf(TaskType.WATER) }
-    var newLabel by rememberSaveable { mutableStateOf("") }
-    var newInterval by rememberSaveable { mutableStateOf("7") }
+    // Task dialog, shared by "add" and "edit": open or not, which task is being
+    // edited (null = adding a new one), and the "draft" values in its fields.
+    // All of it survives rotation. (An enum can be saved because Kotlin enums
+    // are Serializable in the Java sense.)
+    var showTaskDialog by rememberSaveable { mutableStateOf(false) }
+    var editingTaskId by rememberSaveable { mutableStateOf<Long?>(null) }
+    var draftType by rememberSaveable { mutableStateOf(TaskType.WATER) }
+    var draftLabel by rememberSaveable { mutableStateOf("") }
+    var draftInterval by rememberSaveable { mutableStateOf("7") }
+
+    // Local functions: they can read and change the state variables above.
+    fun openAddDialog() {
+        editingTaskId = null
+        draftType = TaskType.WATER
+        draftLabel = ""
+        draftInterval = "7"
+        showTaskDialog = true
+    }
+
+    fun openEditDialog(task: CareTask) {
+        editingTaskId = task.id
+        draftType = task.type
+        draftLabel = task.customLabel ?: ""
+        draftInterval = task.intervalDays.toString()
+        showTaskDialog = true
+    }
 
     PlantDetailScreen(
         // `?.name ?: ""`: the name if the plant is loaded, empty text otherwise.
@@ -68,39 +88,39 @@ fun PlantDetailRoute(
         // Read on every recomposition, e.g. after marking a task done.
         today = LocalDate.now(),
         onBack = onBack,
-        onAddClick = { showAddDialog = true },
+        onAddClick = ::openAddDialog,
+        onTaskClick = ::openEditDialog,
         onDoneClick = viewModel::markDone,
         onDeleteClick = { task -> taskIdToDelete = task.id },
     )
 
-    if (showAddDialog) {
-        fun close() {
-            showAddDialog = false
-            // Reset for the next time the dialog opens.
-            newType = TaskType.WATER
-            newLabel = ""
-            newInterval = "7"
-        }
+    if (showTaskDialog) {
+        val isEditing = editingTaskId != null
         TaskDialog(
-            title = stringResource(R.string.add_task_title),
-            confirmText = stringResource(R.string.add_plant_confirm),
-            type = newType,
-            onTypeChange = { newType = it },
-            label = newLabel,
-            onLabelChange = { newLabel = it },
-            intervalText = newInterval,
-            onIntervalTextChange = { newInterval = it },
+            title = stringResource(if (isEditing) R.string.edit_task_title else R.string.add_task_title),
+            confirmText = stringResource(if (isEditing) R.string.save else R.string.add_plant_confirm),
+            type = draftType,
+            onTypeChange = { draftType = it },
+            label = draftLabel,
+            onLabelChange = { draftLabel = it },
+            intervalText = draftInterval,
+            onIntervalTextChange = { draftInterval = it },
             onConfirm = {
                 // The dialog only enables confirm for a valid interval, but the
                 // type system doesn't know that: parseIntervalDays returns Int?.
                 // `?.let { days -> ... }` runs only for a non-null value. (The
                 // alternative `!!` asserts non-null and crashes if wrong.)
-                parseIntervalDays(newInterval)?.let { days ->
-                    viewModel.addTask(newType, newLabel, days)
+                parseIntervalDays(draftInterval)?.let { days ->
+                    val editing = tasks.find { it.id == editingTaskId }
+                    if (editing == null) {
+                        viewModel.addTask(draftType, draftLabel, days)
+                    } else {
+                        viewModel.editTask(editing, draftType, draftLabel, days)
+                    }
                 }
-                close()
+                showTaskDialog = false
             },
-            onDismiss = { close() },
+            onDismiss = { showTaskDialog = false },
         )
     }
 
@@ -121,9 +141,12 @@ fun PlantDetailRoute(
  * One plant's screen: top bar with a back arrow and the plant's name, and the
  * list of its care tasks (or a message when there are none).
  *
+ * Tapping a task opens it for editing.
+ *
  * Kotlin note: `onDoneClick = viewModel::markDone` (in the route above) is a
  * *function reference*: it passes the ViewModel's method itself as the
  * `(CareTask) -> Unit` callback, short for `{ task -> viewModel.markDone(task) }`.
+ * `::openEditDialog` does the same with a local function.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -133,6 +156,7 @@ fun PlantDetailScreen(
     today: LocalDate,
     onBack: () -> Unit,
     onAddClick: () -> Unit,
+    onTaskClick: (CareTask) -> Unit,
     onDoneClick: (CareTask) -> Unit,
     onDeleteClick: (CareTask) -> Unit,
     modifier: Modifier = Modifier,
@@ -182,6 +206,7 @@ fun PlantDetailScreen(
                     TaskRow(
                         task = task,
                         today = today,
+                        onClick = { onTaskClick(task) },
                         onDoneClick = { onDoneClick(task) },
                         onDeleteClick = { onDeleteClick(task) },
                     )
@@ -201,6 +226,7 @@ fun PlantDetailScreen(
 private fun TaskRow(
     task: CareTask,
     today: LocalDate,
+    onClick: () -> Unit,
     onDoneClick: () -> Unit,
     onDeleteClick: () -> Unit,
 ) {
@@ -219,6 +245,8 @@ private fun TaskRow(
         ?: stringResource(R.string.task_never_done)
 
     ListItem(
+        // Tapping the row (outside the buttons) edits the task.
+        modifier = Modifier.clickable(onClick = onClick),
         headlineContent = { Text(name) },
         supportingContent = {
             Text(
@@ -288,7 +316,7 @@ private fun PlantDetailScreenPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
             plantName = "Monstera", tasks = sampleTasks, today = previewToday,
-            onBack = {}, onAddClick = {}, onDoneClick = {}, onDeleteClick = {},
+            onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
     }
 }
@@ -299,7 +327,7 @@ private fun PlantDetailScreenEmptyPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
             plantName = "Monstera", tasks = emptyList(), today = previewToday,
-            onBack = {}, onAddClick = {}, onDoneClick = {}, onDeleteClick = {},
+            onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
     }
 }
