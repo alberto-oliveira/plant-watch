@@ -45,8 +45,17 @@ interface PlantDao {
     @Update
     suspend fun update(plant: Plant)
 
-    /** Plants with sun tracking on, for the daily sun job (one-shot read). */
-    @Query("SELECT * FROM plants WHERE sunExposurePercent IS NOT NULL AND sunStartHour IS NOT NULL AND sunEndHour IS NOT NULL")
+    /**
+     * Plants with sun tracking on (window mode or custom hours), for the daily
+     * sun job (one-shot read).
+     */
+    @Query(
+        """
+        SELECT * FROM plants
+        WHERE (windowDirection IS NOT NULL AND windowDistance IS NOT NULL AND windowPlacement IS NOT NULL)
+           OR (sunExposurePercent IS NOT NULL AND sunStartHour IS NOT NULL AND sunEndHour IS NOT NULL)
+        """,
+    )
     suspend fun getSunTracked(): List<Plant>
 
     /** Deletes the plant (matched by id); its tasks and logs go with it (CASCADE). */

@@ -23,6 +23,13 @@ import java.time.LocalDateTime
  */
 @Serializable
 data class OpenMeteoResponse(
+    /**
+     * Offset of the location's local time from UTC, in seconds (e.g. -10800 for
+     * UTC-3); used to turn the local hours into UTC for the sun's position.
+     * `= 0` is a default used if the field is ever missing from the JSON.
+     */
+    @SerialName("utc_offset_seconds")
+    val utcOffsetSeconds: Int = 0,
     val hourly: Hourly,
 ) {
     @Serializable

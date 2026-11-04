@@ -57,13 +57,16 @@ class SunCalculationTest {
     fun `Open-Meteo response is parsed into hours starting one hour before the label, missing values count as no sun`() {
         // Shaped like a real response (trimmed), including fields we don't use.
         val json = """
-            {"latitude":-23.5,"longitude":-46.625,"timezone":"America/Sao_Paulo",
+            {"latitude":-23.5,"longitude":-46.625,"timezone":"America/Sao_Paulo","utc_offset_seconds":-10800,
              "hourly_units":{"time":"iso8601","sunshine_duration":"s"},
              "hourly":{"time":["2026-11-03T09:00","2026-11-03T10:00"],
                        "sunshine_duration":[3600.0,null]}}
         """.trimIndent()
 
-        val hours = OpenMeteoJson.decodeFromString<OpenMeteoResponse>(json).toHourlySun()
+        val response = OpenMeteoJson.decodeFromString<OpenMeteoResponse>(json)
+        val hours = response.toHourlySun()
+
+        assertEquals(-10800, response.utcOffsetSeconds)
 
         // "09:00" covers 08:00-09:00 and "10:00" covers 09:00-10:00.
         assertEquals(

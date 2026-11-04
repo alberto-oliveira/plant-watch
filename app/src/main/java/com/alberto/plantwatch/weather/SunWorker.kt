@@ -30,8 +30,8 @@ class SunWorker(
         val plants = container.database.plantDao().getSunTracked()
         if (plants.isEmpty()) return Result.success()
 
-        val hours = try {
-            container.openMeteoApi.hourlySunshine(location.latitude, location.longitude).toHourlySun()
+        val response = try {
+            container.openMeteoApi.hourlySunshine(location.latitude, location.longitude)
         } catch (e: IOException) {
             // No network, timeout...: try again later (WorkManager waits longer each time).
             return Result.retry()
@@ -40,22 +40,28 @@ class SunWorker(
             return Result.retry()
         }
 
+        val hours = response.toHourlySun()
         val today = LocalDate.now()
         val completeDays = completeDays(hours, today)
 
         // `flatMap`: for each plant, a list of rows (one per day), all joined into one list.
         val rows = plants.flatMap { plant ->
-            // The query only returns tracked plants, but the type system doesn't know
-            // that; `?: return@flatMap emptyList()` skips a plant with a missing value.
-            val start = plant.sunStartHour ?: return@flatMap emptyList()
-            val end = plant.sunEndHour ?: return@flatMap emptyList()
-            val exposure = plant.sunExposurePercent ?: return@flatMap emptyList()
-            completeDays.map { day ->
-                SunDaily(
-                    plantId = plant.id,
-                    date = day,
-                    sunMinutes = sunMinutesInWindow(hours, day, start, end, exposure),
-                )
+            val window = plant.windowSettings
+            // A local function: how many minutes this plant got on one day, by mode.
+            fun minutesOn(day: LocalDate): Double? = if (window != null) {
+                // Window mode: estimated from the sun's position (see WindowSun.kt).
+                windowSunMinutes(hours, day, response.utcOffsetSeconds, location.latitude, location.longitude, window)
+            } else {
+                // Custom hours. The query only returns tracked plants, but the type
+                // system doesn't know that: `?: return null` skips missing values.
+                val start = plant.sunStartHour ?: return null
+                val end = plant.sunEndHour ?: return null
+                val exposure = plant.sunExposurePercent ?: return null
+                sunMinutesInWindow(hours, day, start, end, exposure)
+            }
+            // `mapNotNull`: like `map`, but drops the nulls.
+            completeDays.mapNotNull { day ->
+                minutesOn(day)?.let { minutes -> SunDaily(plantId = plant.id, date = day, sunMinutes = minutes) }
             }
         }
         container.database.sunDao().upsert(rows)
