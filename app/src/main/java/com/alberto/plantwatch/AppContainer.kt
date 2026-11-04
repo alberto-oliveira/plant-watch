@@ -3,10 +3,11 @@ package com.alberto.plantwatch
 import android.content.Context
 import androidx.room.Room
 import com.alberto.plantwatch.data.AppDatabase
+import com.alberto.plantwatch.settings.SettingsStore
 
 /**
  * Manual dependency injection: the one place that creates the app's shared
- * objects (for now, just the database). ViewModels and workers get what they
+ * objects (the database and the settings). ViewModels and workers get what they
  * need from here instead of creating their own instances.
  *
  * There's a single AppContainer per app process, owned by [PlantWatchApplication].
@@ -27,4 +28,6 @@ class AppContainer(private val context: Context) {
         // migration, the app crashes instead of silently wiping my plants.
         Room.databaseBuilder(context, AppDatabase::class.java, "plant-watch.db").build()
     }
+
+    val settingsStore: SettingsStore by lazy { SettingsStore(context) }
 }
