@@ -2,17 +2,14 @@ package com.alberto.plantwatch.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 
 /**
- * App-wide Material 3 theme.
+ * App-wide Material 3 theme with the app's own green palette (see Color.kt),
+ * in a light and a dark version that follows the phone's dark-mode setting.
  *
- * Uses "dynamic color" (colors derived from the phone's wallpaper). It exists
- * since Android 12 (API 31) and our minSdk is 34, so no version check is needed
- * and no custom palette has to be maintained.
+ * (Until v0.1 the colours came from the wallpaper, "dynamic color"; a fixed
+ * palette gives the app its own look.)
  *
  * `content: @Composable () -> Unit` is a parameter whose type is "a composable
  * function with no arguments returning nothing". Because it is the last parameter,
@@ -23,13 +20,9 @@ fun PlantWatchTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    val context = LocalContext.current
-    // `if` is an expression in Kotlin: it returns a value.
-    val colorScheme = if (darkTheme) {
-        dynamicDarkColorScheme(context)
-    } else {
-        dynamicLightColorScheme(context)
-    }
-
-    MaterialTheme(colorScheme = colorScheme, content = content)
+    MaterialTheme(
+        // `if` is an expression in Kotlin: it returns a value.
+        colorScheme = if (darkTheme) DarkColors else LightColors,
+        content = content,
+    )
 }
