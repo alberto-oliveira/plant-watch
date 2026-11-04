@@ -46,6 +46,8 @@
         <item quantity="other">Every %1$d days</item>
     </plurals>
     <string name="task_due_today">Due today</string>
+    <!-- %1$s = date, e.g. "Paused for winter · until 1 Sep 2027" -->
+    <string name="task_paused_winter">Paused for winter · until %1$s</string>
     <plurals name="task_due_in">
         <item quantity="one">Due tomorrow</item>
         <item quantity="other">Due in %1$d days</item>
@@ -140,6 +142,11 @@
     <string name="settings_battery_unrestricted">Unrestricted</string>
     <string name="settings_battery_optimized">Optimized: reminders may arrive late. In App info, set Battery to Unrestricted.</string>
     <string name="settings_open_system">Open settings</string>
+    <string name="settings_section_care">Care</string>
+    <string name="settings_pause_fertilizing">Pause fertilizing in winter</string>
+    <string name="settings_pause_fertilizing_south">No fertilizer reminders June to August (southern hemisphere)</string>
+    <string name="settings_pause_fertilizing_north">No fertilizer reminders December to February (northern hemisphere)</string>
+    <string name="settings_pause_fertilizing_needs_location">Needs a location (below) to know when it\'s winter</string>
     <string name="settings_section_sunlight">Sunlight</string>
     <string name="settings_location">Location</string>
     <string name="settings_location_not_set">Not set</string>

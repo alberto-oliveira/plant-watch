@@ -73,6 +73,7 @@ fun PlantDetailRoute(
     val sunLastWeek by viewModel.sunLastWeek.collectAsStateWithLifecycle()
     val guideEntry by viewModel.guideEntry.collectAsStateWithLifecycle()
     val suggestedTasks by viewModel.suggestedTasks.collectAsStateWithLifecycle()
+    val fertilizingPausedUntil by viewModel.fertilizingPausedUntil.collectAsStateWithLifecycle()
 
     // Species picker: open or not, and the search text.
     var showSpeciesPicker by rememberSaveable { mutableStateOf(false) }
@@ -160,6 +161,7 @@ fun PlantDetailRoute(
         onUnlinkSpecies = { viewModel.setSpecies(null) },
         suggestedTasks = suggestedTasks,
         onAddSuggestedTasks = viewModel::addSuggestedTasks,
+        fertilizingPausedUntil = fertilizingPausedUntil,
         sunSettings = sunSettings,
         windowSettings = windowSettings,
         sunYesterday = sunYesterday,
@@ -289,6 +291,7 @@ fun PlantDetailScreen(
     onUnlinkSpecies: () -> Unit,
     suggestedTasks: List<CareTask>,
     onAddSuggestedTasks: () -> Unit,
+    fertilizingPausedUntil: LocalDate?,
     sunSettings: SunSettings?,
     windowSettings: WindowSettings?,
     sunYesterday: Double?,
@@ -368,6 +371,8 @@ fun PlantDetailScreen(
                     TaskCard(
                         task = task,
                         today = today,
+                        // Only fertilizer tasks are paused in winter.
+                        pausedUntil = fertilizingPausedUntil.takeIf { task.type == TaskType.FERTILIZE },
                         onClick = { onTaskClick(task) },
                         onDoneClick = { onDoneClick(task) },
                         onDeleteClick = { onDeleteClick(task) },
@@ -488,6 +493,7 @@ private fun formatSunMinutes(minutes: Double): String {
 private fun TaskCard(
     task: CareTask,
     today: LocalDate,
+    pausedUntil: LocalDate?,
     onClick: () -> Unit,
     onDoneClick: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -498,6 +504,7 @@ private fun TaskCard(
     // `when` is Kotlin's (much more capable) switch, and an expression: each
     // branch yields a value. Branch conditions can be any boolean expression.
     val dueText = when {
+        pausedUntil != null -> stringResource(R.string.task_paused_winter, formatDate(pausedUntil))
         days < 0 -> pluralStringResource(R.plurals.task_overdue, (-days).toInt(), -days)
         days == 0L -> stringResource(R.string.task_due_today)
         else -> pluralStringResource(R.plurals.task_due_in, days.toInt(), days)
@@ -506,6 +513,7 @@ private fun TaskCard(
     // upcoming = neutral. `Pair(a, b)` / `to` hold the background and text colours.
     val colors = MaterialTheme.colorScheme
     val (chipBackground, chipText) = when {
+        pausedUntil != null -> colors.surfaceContainerHighest to colors.onSurfaceVariant
         days < 0 -> colors.errorContainer to colors.onErrorContainer
         days == 0L -> colors.tertiaryContainer to colors.onTertiaryContainer
         else -> colors.surfaceContainerHighest to colors.onSurfaceVariant
@@ -671,7 +679,7 @@ private fun PlantDetailScreenPreview() {
         PlantDetailScreen(
             plantName = "Monstera", guideEntry = null, isSpeciesLinked = false,
             onLinkSpeciesClick = {}, onUnlinkSpecies = {},
-            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, sunSettings = null,
+            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, sunSettings = null,
             windowSettings = WindowSettings(Compass.N, WindowDistance.FROM_1_TO_2M, WindowPlacement.IN_FRONT),
             sunYesterday = 135.0, sunLastWeek = 870.0,
             onSunClick = {}, tasks = sampleTasks, history = sampleHistory, today = previewToday,
@@ -687,7 +695,7 @@ private fun PlantDetailScreenEmptyPreview() {
         PlantDetailScreen(
             plantName = "Monstera", guideEntry = null, isSpeciesLinked = false,
             onLinkSpeciesClick = {}, onUnlinkSpecies = {},
-            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
+            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
             onSunClick = {}, tasks = emptyList(), history = emptyList(), today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )

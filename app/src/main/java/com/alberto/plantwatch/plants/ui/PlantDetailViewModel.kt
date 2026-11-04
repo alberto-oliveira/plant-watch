@@ -22,6 +22,8 @@ import com.alberto.plantwatch.plants.data.CareTaskDao
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
 import com.alberto.plantwatch.plants.data.TaskType
+import com.alberto.plantwatch.plants.fertilizingPausedUntil
+import com.alberto.plantwatch.settings.SettingsStore
 import com.alberto.plantwatch.plants.markedDone
 import com.alberto.plantwatch.plants.withNewInterval
 import com.alberto.plantwatch.weather.SunSettings
@@ -51,6 +53,7 @@ class PlantDetailViewModel(
     private val sunDao: SunDao,
     private val fetchSun: () -> Unit,
     private val careGuide: CareGuide,
+    settingsStore: SettingsStore,
 ) : ViewModel() {
 
     // `toRoute<PlantDetail>()`: `<PlantDetail>` is a type argument, telling the
@@ -104,6 +107,15 @@ class PlantDetailViewModel(
             plantDao.update(current.copy(speciesId = speciesId))
         }
     }
+
+    /**
+     * Until when fertilizer tasks are paused for winter, or null if they aren't
+     * (setting off, no location, or not winter). Recomputed when either setting changes.
+     */
+    val fertilizingPausedUntil: StateFlow<LocalDate?> =
+        combine(settingsStore.location, settingsStore.pauseFertilizingInWinter) { location, enabled ->
+            fertilizingPausedUntil(LocalDate.now(), location?.latitude, enabled)
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
 
     // The day the screen was opened; "yesterday" and "last 7 days" count from it.
     private val today = LocalDate.now()
@@ -231,6 +243,7 @@ class PlantDetailViewModel(
                     sunDao = app.container.database.sunDao(),
                     fetchSun = { fetchSunNow(app) },
                     careGuide = app.container.careGuide,
+                    settingsStore = app.container.settingsStore,
                 )
             }
         }

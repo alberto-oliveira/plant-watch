@@ -14,6 +14,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -55,6 +56,7 @@ fun SettingsRoute(
 ) {
     val reminderTime by viewModel.reminderTime.collectAsStateWithLifecycle()
     val location by viewModel.location.collectAsStateWithLifecycle()
+    val pauseFertilizing by viewModel.pauseFertilizingInWinter.collectAsStateWithLifecycle()
     var showTimePicker by rememberSaveable { mutableStateOf(false) }
 
     // Location dialog: open or not, and the two texts being typed.
@@ -79,6 +81,8 @@ fun SettingsRoute(
     SettingsScreen(
         reminderTime = reminderTime,
         location = location,
+        pauseFertilizing = pauseFertilizing,
+        onPauseFertilizingChange = viewModel::setPauseFertilizingInWinter,
         notificationsOn = notificationsOn,
         batteryUnrestricted = batteryUnrestricted,
         onBack = onBack,
@@ -132,6 +136,8 @@ fun SettingsRoute(
 fun SettingsScreen(
     reminderTime: LocalTime?,
     location: Location?,
+    pauseFertilizing: Boolean,
+    onPauseFertilizingChange: (Boolean) -> Unit,
     notificationsOn: Boolean,
     batteryUnrestricted: Boolean,
     onBack: () -> Unit,
@@ -192,6 +198,26 @@ fun SettingsScreen(
                 ),
                 isProblem = !batteryUnrestricted,
                 onOpenSettings = onOpenAppDetails,
+            )
+
+            SectionTitle(stringResource(R.string.settings_section_care))
+            ListItem(
+                // Tapping the whole row toggles the switch, like Android's own settings.
+                modifier = Modifier.clickable { onPauseFertilizingChange(!pauseFertilizing) },
+                leadingContent = { SettingIcon(R.drawable.ic_compost) },
+                headlineContent = { Text(stringResource(R.string.settings_pause_fertilizing)) },
+                supportingContent = {
+                    Text(
+                        stringResource(
+                            when {
+                                location == null -> R.string.settings_pause_fertilizing_needs_location
+                                location.latitude < 0 -> R.string.settings_pause_fertilizing_south
+                                else -> R.string.settings_pause_fertilizing_north
+                            },
+                        ),
+                    )
+                },
+                trailingContent = { Switch(checked = pauseFertilizing, onCheckedChange = onPauseFertilizingChange) },
             )
 
             SectionTitle(stringResource(R.string.settings_section_sunlight))
@@ -308,7 +334,7 @@ private fun formatTime(time: LocalTime): String =
 private fun SettingsScreenPreview() {
     PlantWatchTheme {
         SettingsScreen(
-            reminderTime = LocalTime.of(9, 0), location = Location(-23.5505, -46.6333),
+            reminderTime = LocalTime.of(9, 0), location = Location(-23.5505, -46.6333), pauseFertilizing = true, onPauseFertilizingChange = {},
             notificationsOn = true, batteryUnrestricted = true,
             onBack = {}, onReminderTimeClick = {}, onLocationClick = {},
             onOpenNotificationSettings = {}, onOpenAppDetails = {},
@@ -321,7 +347,7 @@ private fun SettingsScreenPreview() {
 private fun SettingsScreenProblemsPreview() {
     PlantWatchTheme {
         SettingsScreen(
-            reminderTime = LocalTime.of(9, 0), location = null,
+            reminderTime = LocalTime.of(9, 0), location = null, pauseFertilizing = false, onPauseFertilizingChange = {},
             notificationsOn = false, batteryUnrestricted = false,
             onBack = {}, onReminderTimeClick = {}, onLocationClick = {},
             onOpenNotificationSettings = {}, onOpenAppDetails = {},

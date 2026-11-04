@@ -3,6 +3,7 @@ package com.alberto.plantwatch.settings
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -73,10 +74,18 @@ class SettingsStore(context: Context) {
         }
     }
 
+    /** Pause fertilizer reminders in winter (on unless turned off). */
+    val pauseFertilizingInWinter: Flow<Boolean> = dataStore.data.map { it[PAUSE_FERTILIZING] ?: true }
+
+    suspend fun setPauseFertilizingInWinter(enabled: Boolean) {
+        dataStore.edit { it[PAUSE_FERTILIZING] = enabled }
+    }
+
     private companion object {
         // Typed keys: the compiler knows each setting's type.
         val REMINDER_MINUTES = intPreferencesKey("reminder_minutes")
         val LATITUDE = doublePreferencesKey("latitude")
         val LONGITUDE = doublePreferencesKey("longitude")
+        val PAUSE_FERTILIZING = booleanPreferencesKey("pause_fertilizing_in_winter")
     }
 }
