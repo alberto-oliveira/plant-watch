@@ -23,10 +23,12 @@ import java.time.temporal.ChronoUnit
  * counts from today (not from the old due date), so doing it late or early
  * doesn't shift the schedule unfairly.
  */
-fun markedDone(task: CareTask, today: LocalDate): CareTask =
+fun markedDone(task: CareTask, today: LocalDate, intervalDays: Int = task.intervalDays): CareTask =
     task.copy(
         lastDone = today,
-        nextDue = today.plusDays(task.intervalDays.toLong()),
+        // [intervalDays] defaults to the task's own interval; weather-aware
+        // watering passes an adjusted one (the stored interval never changes).
+        nextDue = today.plusDays(intervalDays.toLong()),
     )
 
 /**

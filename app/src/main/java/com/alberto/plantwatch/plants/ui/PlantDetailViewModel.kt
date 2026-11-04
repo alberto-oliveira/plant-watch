@@ -24,6 +24,7 @@ import com.alberto.plantwatch.plants.data.PlantDao
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.plants.fertilizingPausedUntil
 import com.alberto.plantwatch.settings.SettingsStore
+import com.alberto.plantwatch.weather.intervalWhenDone
 import com.alberto.plantwatch.plants.markedDone
 import com.alberto.plantwatch.plants.withNewInterval
 import com.alberto.plantwatch.weather.SunSettings
@@ -115,6 +116,15 @@ class PlantDetailViewModel(
     val fertilizingPausedUntil: StateFlow<LocalDate?> =
         combine(settingsStore.location, settingsStore.pauseFertilizingInWinter) { location, enabled ->
             fertilizingPausedUntil(LocalDate.now(), location?.latitude, enabled)
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
+
+    /**
+     * The weather factor for watering when "Adjust watering to the weather" is
+     * on, or null when it's off (then intervals are used as set).
+     */
+    val wateringFactor: StateFlow<Double?> =
+        combine(settingsStore.adjustWateringToWeather, settingsStore.wateringFactor) { enabled, factor ->
+            if (enabled) factor else null
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
 
     // The day the screen was opened; "yesterday" and "last 7 days" count from it.
@@ -217,7 +227,8 @@ class PlantDetailViewModel(
         val today = LocalDate.now()
         viewModelScope.launch {
             careTaskDao.markDone(
-                updatedTask = markedDone(task, today),
+                // Watering may be scheduled sooner/later with the week's weather.
+                updatedTask = markedDone(task, today, intervalWhenDone(task, wateringFactor.value)),
                 log = CareLog(taskId = task.id, doneOn = today),
             )
         }
