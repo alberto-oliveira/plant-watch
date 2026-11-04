@@ -6,12 +6,22 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.alberto.plantwatch.PlantWatchApplication
+import com.alberto.plantwatch.plants.data.CareTask
+import com.alberto.plantwatch.plants.data.CareTaskDao
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
+import com.alberto.plantwatch.plants.mostUrgentTasks
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+
+/** One plant in the list, with its most urgent tasks for the next-care line. */
+data class PlantSummary(
+    val plant: Plant,
+    val nextTasks: List<CareTask>,
+)
 
 /**
  * State and actions for the plant list screen.
@@ -23,7 +33,10 @@ import kotlinx.coroutines.launch
  * The ViewModel gets its [PlantDao] through the constructor instead of creating
  * it, which keeps it independent of how the database is built (see [Factory]).
  */
-class PlantListViewModel(private val plantDao: PlantDao) : ViewModel() {
+class PlantListViewModel(
+    private val plantDao: PlantDao,
+    careTaskDao: CareTaskDao,
+) : ViewModel() {
 
     /**
      * All plants, always up to date.
@@ -38,7 +51,14 @@ class PlantListViewModel(private val plantDao: PlantDao) : ViewModel() {
      *   quick rotation, which would otherwise restart the query for nothing.
      *   (`5_000`: underscores in number literals are just for readability.)
      */
-    val plants: StateFlow<List<Plant>> = plantDao.observeAll()
+    // `combine` merges two Flows: whenever either the plants or the tasks change,
+    // the lambda runs again with the latest value of both. Here it pairs each
+    // plant with its most urgent tasks (`groupBy` = tasks bucketed by plant id;
+    // `orEmpty()` = an empty list for a plant without tasks).
+    val plants: StateFlow<List<PlantSummary>> = combine(plantDao.observeAll(), careTaskDao.observeAll()) { plants, tasks ->
+        val tasksByPlant = tasks.groupBy { it.plantId }
+        plants.map { plant -> PlantSummary(plant, mostUrgentTasks(tasksByPlant[plant.id].orEmpty())) }
+    }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -78,7 +98,10 @@ class PlantListViewModel(private val plantDao: PlantDao) : ViewModel() {
         val Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as PlantWatchApplication
-                PlantListViewModel(app.container.database.plantDao())
+                PlantListViewModel(
+                    plantDao = app.container.database.plantDao(),
+                    careTaskDao = app.container.database.careTaskDao(),
+                )
             }
         }
     }

@@ -1,20 +1,27 @@
 package com.alberto.plantwatch.plants.ui
 
-import androidx.compose.foundation.clickable
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -24,6 +31,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -36,8 +44,14 @@ import com.alberto.plantwatch.plants.daysUntilDue
 import com.alberto.plantwatch.plants.data.CareHistoryEntry
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.TaskType
+import com.alberto.plantwatch.ui.EmptyState
+import com.alberto.plantwatch.ui.IconBadge
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
+import com.alberto.plantwatch.weather.Compass
 import com.alberto.plantwatch.weather.SunSettings
+import com.alberto.plantwatch.weather.WindowDistance
+import com.alberto.plantwatch.weather.WindowPlacement
+import com.alberto.plantwatch.weather.WindowSettings
 import com.alberto.plantwatch.weather.parseSunSettings
 import kotlin.math.roundToInt
 import java.time.LocalDate
@@ -64,8 +78,17 @@ fun PlantDetailRoute(
         if (start != null && end != null && exposure != null) SunSettings(start, end, exposure) else null
     }
 
-    // Sun dialog: open or not, and its three texts.
+    // The plant's window settings, or null when not in window mode.
+    val windowSettings = plant?.windowSettings
+
+    // Sun dialog: open or not, its mode, the window choices (three enums, which
+    // rememberSaveable can store, unlike a whole WindowSettings object) and the
+    // custom-hours texts.
     var showSunDialog by rememberSaveable { mutableStateOf(false) }
+    var sunMode by rememberSaveable { mutableStateOf(SunMode.WINDOW) }
+    var draftDirection by rememberSaveable { mutableStateOf(Compass.N) }
+    var draftDistance by rememberSaveable { mutableStateOf(WindowDistance.SILL) }
+    var draftPlacement by rememberSaveable { mutableStateOf(WindowPlacement.IN_FRONT) }
     var sunExposureText by rememberSaveable { mutableStateOf("") }
     var sunStartText by rememberSaveable { mutableStateOf("") }
     var sunEndText by rememberSaveable { mutableStateOf("") }
@@ -103,6 +126,11 @@ fun PlantDetailRoute(
 
     fun openSunDialog() {
         // Prefill with the current settings, or sensible defaults when off.
+        // Window mode is the default for a plant that isn't tracked yet.
+        sunMode = if (windowSettings == null && sunSettings != null) SunMode.HOURS else SunMode.WINDOW
+        draftDirection = windowSettings?.direction ?: Compass.N
+        draftDistance = windowSettings?.distance ?: WindowDistance.SILL
+        draftPlacement = windowSettings?.placement ?: WindowPlacement.IN_FRONT
         sunExposureText = (sunSettings?.exposurePercent ?: 100).toString()
         sunStartText = (sunSettings?.startHour ?: 8).toString()
         sunEndText = (sunSettings?.endHour ?: 18).toString()
@@ -113,6 +141,7 @@ fun PlantDetailRoute(
         // `?.name ?: ""`: the name if the plant is loaded, empty text otherwise.
         plantName = plant?.name ?: "",
         sunSettings = sunSettings,
+        windowSettings = windowSettings,
         sunYesterday = sunYesterday,
         sunLastWeek = sunLastWeek,
         onSunClick = ::openSunDialog,
@@ -159,19 +188,30 @@ fun PlantDetailRoute(
 
     if (showSunDialog) {
         SunDialog(
+            mode = sunMode,
+            onModeChange = { sunMode = it },
+            window = WindowSettings(draftDirection, draftDistance, draftPlacement),
+            onWindowChange = { changed ->
+                draftDirection = changed.direction
+                draftDistance = changed.distance
+                draftPlacement = changed.placement
+            },
             exposure = sunExposureText,
             onExposureChange = { sunExposureText = it },
             startHour = sunStartText,
             onStartHourChange = { sunStartText = it },
             endHour = sunEndText,
             onEndHourChange = { sunEndText = it },
-            isTracked = sunSettings != null,
+            isTracked = windowSettings != null || sunSettings != null,
             onConfirm = {
-                parseSunSettings(sunStartText, sunEndText, sunExposureText)?.let(viewModel::setSunSettings)
+                when (sunMode) {
+                    SunMode.WINDOW -> viewModel.setSunWindow(WindowSettings(draftDirection, draftDistance, draftPlacement))
+                    SunMode.HOURS -> parseSunSettings(sunStartText, sunEndText, sunExposureText)?.let(viewModel::setSunHours)
+                }
                 showSunDialog = false
             },
             onTurnOff = {
-                viewModel.setSunSettings(null)
+                viewModel.turnOffSun()
                 showSunDialog = false
             },
             onDismiss = { showSunDialog = false },
@@ -208,6 +248,7 @@ fun PlantDetailRoute(
 fun PlantDetailScreen(
     plantName: String,
     sunSettings: SunSettings?,
+    windowSettings: WindowSettings?,
     sunYesterday: Double?,
     sunLastWeek: Double?,
     onSunClick: () -> Unit,
@@ -245,29 +286,34 @@ fun PlantDetailScreen(
             }
         },
     ) { innerPadding ->
-        // Extra bottom space so the last item can scroll out from under the "+".
+        // Side margins around the cards, and extra bottom space so the last item
+        // can scroll out from under the "+".
         LazyColumn(
             contentPadding = PaddingValues(
-                top = innerPadding.calculateTopPadding(),
+                start = 16.dp,
+                end = 16.dp,
+                top = innerPadding.calculateTopPadding() + 8.dp,
                 bottom = innerPadding.calculateBottomPadding() + 88.dp,
             ),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             item(key = "sun") {
-                SunRow(sunSettings, sunYesterday, sunLastWeek, onClick = onSunClick)
+                SunCard(sunSettings, windowSettings, sunYesterday, sunLastWeek, onClick = onSunClick)
             }
 
             if (tasks.isEmpty()) {
                 item(key = "tasks-empty") {
-                    Text(
-                        text = stringResource(R.string.tasks_empty),
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
+                    EmptyState(
+                        icon = R.drawable.ic_eco,
+                        title = stringResource(R.string.tasks_empty_title),
+                        message = stringResource(R.string.tasks_empty_message),
                     )
                 }
             } else {
                 // Keys must be unique across the whole list; tasks and log entries
                 // both have numeric ids, so each gets a prefix.
                 items(tasks, key = { "task-${it.id}" }) { task ->
-                    TaskRow(
+                    TaskCard(
                         task = task,
                         today = today,
                         onClick = { onTaskClick(task) },
@@ -283,7 +329,7 @@ fun PlantDetailScreen(
                             text = stringResource(R.string.history_title),
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 4.dp),
+                            modifier = Modifier.padding(start = 4.dp, top = 16.dp),
                         )
                     }
                     items(history, key = { "log-${it.logId}" }) { entry ->
@@ -296,23 +342,37 @@ fun PlantDetailScreen(
 }
 
 /**
- * The plant's sunlight, e.g.
- *   Sun
- *   Yesterday 2 h 15 min · Last 7 days 14 h 30 min
- *   08–18 h at 40%
+ * The plant's sunlight as a card, e.g.
+ *   (🪟)  Sun
+ *         Yesterday 2 h 15 min · Last 7 days 14 h 30 min
+ *         North window · 1–2 m · in front        (or "08–18 h at 40%")
  * or "Tracking off · Tap to set up". Tapping it opens the sun dialog.
  */
 @Composable
-private fun SunRow(
+private fun SunCard(
     settings: SunSettings?,
+    window: WindowSettings?,
     yesterday: Double?,
     lastWeek: Double?,
     onClick: () -> Unit,
 ) {
-    val text = if (settings == null) {
+    val text = if (settings == null && window == null) {
         stringResource(R.string.sun_off)
     } else {
-        val window = stringResource(R.string.sun_window, settings.startHour, settings.endHour, settings.exposurePercent)
+        // Window mode wins if both are set (it's what the sun job uses too).
+        // `replaceFirstChar { it.lowercase() }`: "In front" -> "in front" mid-sentence.
+        // A `when` without subject: the first true condition wins, and inside each
+        // branch Kotlin smart-casts the checked value to non-null.
+        val setup = when {
+            window != null -> stringResource(
+                R.string.sun_window_summary,
+                compassName(window.direction),
+                distanceName(window.distance).replaceFirstChar { it.lowercase() },
+                placementName(window.placement).replaceFirstChar { it.lowercase() },
+            )
+            settings != null -> stringResource(R.string.sun_window, settings.startHour, settings.endHour, settings.exposurePercent)
+            else -> ""
+        }
         val figures = if (yesterday == null && lastWeek == null) {
             stringResource(R.string.sun_no_data)
         } else {
@@ -322,38 +382,58 @@ private fun SunRow(
                 formatSunMinutes(lastWeek ?: 0.0),
             )
         }
-        "$figures\n$window"
+        "$figures\n$setup"
     }
-    ListItem(
-        modifier = Modifier.clickable(onClick = onClick),
-        headlineContent = { Text(stringResource(R.string.sun_title)) },
-        supportingContent = { Text(text) },
-    )
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            IconBadge(
+                icon = if (window != null) R.drawable.ic_window else R.drawable.ic_sunny,
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            )
+            Column {
+                Text(stringResource(R.string.sun_title), style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
 }
 
 /**
- * Minutes as "2 h 15 min", or "45 min" under an hour.
+ * Minutes as "2 h 15 min", "3 h" for whole hours, or "45 min" under an hour.
  * `roundToInt()` rounds to the nearest whole minute; `/` and `%` on Ints are
  * integer division and remainder.
  */
 @Composable
 private fun formatSunMinutes(minutes: Double): String {
     val total = minutes.roundToInt()
-    return if (total >= 60) {
-        stringResource(R.string.sun_duration_hours_minutes, total / 60, total % 60)
-    } else {
-        stringResource(R.string.sun_duration_minutes, total)
+    return when {
+        total < 60 -> stringResource(R.string.sun_duration_minutes, total)
+        total % 60 == 0 -> stringResource(R.string.sun_duration_hours, total / 60)
+        else -> stringResource(R.string.sun_duration_hours_minutes, total / 60, total % 60)
     }
 }
 
 /**
- * One task:
- *   Water                                   [Done] 🗑
- *   Every 7 days · Due in 3 days
- *   Last done 3 Nov 2026
+ * One task as a card:
+ *   (💧)  Water                         (✓)  🗑
+ *         [Due in 3 days]
+ *         Every 7 days · Last done 3 Nov 2026
  */
 @Composable
-private fun TaskRow(
+private fun TaskCard(
     task: CareTask,
     today: LocalDate,
     onClick: () -> Unit,
@@ -370,45 +450,115 @@ private fun TaskRow(
         days == 0L -> stringResource(R.string.task_due_today)
         else -> pluralStringResource(R.plurals.task_due_in, days.toInt(), days)
     }
+    // Chip colours by urgency: overdue = error, today = amber (tertiary),
+    // upcoming = neutral. `Pair(a, b)` / `to` hold the background and text colours.
+    val colors = MaterialTheme.colorScheme
+    val (chipBackground, chipText) = when {
+        days < 0 -> colors.errorContainer to colors.onErrorContainer
+        days == 0L -> colors.tertiaryContainer to colors.onTertiaryContainer
+        else -> colors.surfaceContainerHighest to colors.onSurfaceVariant
+    }
     val intervalText = pluralStringResource(R.plurals.task_interval, task.intervalDays, task.intervalDays)
     val lastDoneText = task.lastDone?.let { stringResource(R.string.task_last_done, formatDate(it)) }
         ?: stringResource(R.string.task_never_done)
+    val (badgeBackground, badgeIcon) = taskBadgeColors(task.type)
 
-    ListItem(
-        // Tapping the row (outside the buttons) edits the task.
-        modifier = Modifier.clickable(onClick = onClick),
-        headlineContent = { Text(name) },
-        supportingContent = {
-            Text(
-                text = "$intervalText · $dueText\n$lastDoneText",
-                // Overdue tasks get the theme's error color to stand out.
-                color = if (days < 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        },
-        trailingContent = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // Disabled once done today, so a double tap can't log it twice.
-                FilledTonalButton(onClick = onDoneClick, enabled = task.lastDone != today) {
-                    Text(stringResource(R.string.task_done))
-                }
-                IconButton(onClick = onDeleteClick) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_delete),
-                        contentDescription = stringResource(R.string.task_delete_description, name),
+    Card(
+        // Tapping the card (outside the buttons) edits the task.
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = colors.surfaceContainerLow),
+    ) {
+        Row(
+            modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp, end = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            IconBadge(icon = taskIcon(task.type), containerColor = badgeBackground, contentColor = badgeIcon)
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Text(name, style = MaterialTheme.typography.titleMedium)
+                // A small rounded "pill" with the due status.
+                Surface(shape = CircleShape, color = chipBackground) {
+                    Text(
+                        text = dueText,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = chipText,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp),
                     )
                 }
+                Text(
+                    text = "$intervalText · $lastDoneText",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = colors.onSurfaceVariant,
+                )
             }
-        },
-    )
+            // Disabled once done today, so a double tap can't log it twice.
+            FilledTonalIconButton(onClick = onDoneClick, enabled = task.lastDone != today) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_check),
+                    contentDescription = stringResource(R.string.task_mark_done_description, name),
+                )
+            }
+            IconButton(onClick = onDeleteClick) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_delete),
+                    contentDescription = stringResource(R.string.task_delete_description, name),
+                    tint = colors.onSurfaceVariant,
+                )
+            }
+        }
+    }
 }
 
-/** One history line: the date, and what was done ("Water", "Mist leaves", ...). */
+/** One history line: an icon, what was done ("Water", "Mist leaves", ...) and the date. */
 @Composable
 private fun HistoryRow(entry: CareHistoryEntry) {
-    ListItem(
-        headlineContent = { Text(taskName(entry.type, entry.customLabel)) },
-        supportingContent = { Text(formatDate(entry.doneOn)) },
-    )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Icon(
+            painter = painterResource(taskIcon(entry.type)),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(20.dp),
+        )
+        Text(
+            text = taskName(entry.type, entry.customLabel),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.weight(1f),
+        )
+        Text(
+            text = formatDate(entry.doneOn),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
+
+/** The icon for each task type. `@DrawableRes`: the Int is a drawable id. */
+@DrawableRes
+fun taskIcon(type: TaskType): Int = when (type) {
+    TaskType.WATER -> R.drawable.ic_water_drop
+    TaskType.FERTILIZE -> R.drawable.ic_compost
+    TaskType.OTHER -> R.drawable.ic_task_alt
+}
+
+/** Background and icon colour of a task type's badge (a `Pair`, unpacked by callers). */
+@Composable
+private fun taskBadgeColors(type: TaskType): Pair<Color, Color> {
+    val colors = MaterialTheme.colorScheme
+    return when (type) {
+        TaskType.WATER -> colors.primaryContainer to colors.onPrimaryContainer
+        TaskType.FERTILIZE -> colors.secondaryContainer to colors.onSecondaryContainer
+        TaskType.OTHER -> colors.tertiaryContainer to colors.onTertiaryContainer
+    }
 }
 
 /**
@@ -467,7 +617,9 @@ private val sampleHistory = listOf(
 private fun PlantDetailScreenPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", sunSettings = SunSettings(8, 18, 40), sunYesterday = 135.0, sunLastWeek = 870.0,
+            plantName = "Monstera", sunSettings = null,
+            windowSettings = WindowSettings(Compass.N, WindowDistance.FROM_1_TO_2M, WindowPlacement.IN_FRONT),
+            sunYesterday = 135.0, sunLastWeek = 870.0,
             onSunClick = {}, tasks = sampleTasks, history = sampleHistory, today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
@@ -479,7 +631,7 @@ private fun PlantDetailScreenPreview() {
 private fun PlantDetailScreenEmptyPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", sunSettings = null, sunYesterday = null, sunLastWeek = null,
+            plantName = "Monstera", sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
             onSunClick = {}, tasks = emptyList(), history = emptyList(), today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
