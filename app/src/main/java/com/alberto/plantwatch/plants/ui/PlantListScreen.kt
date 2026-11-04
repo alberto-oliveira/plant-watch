@@ -53,6 +53,7 @@ import com.alberto.plantwatch.ui.theme.PlantWatchTheme
 @Composable
 fun PlantListRoute(
     onPlantClick: (Plant) -> Unit,
+    onSettingsClick: () -> Unit,
     viewModel: PlantListViewModel = viewModel(factory = PlantListViewModel.Factory),
 ) {
     val plants by viewModel.plants.collectAsStateWithLifecycle()
@@ -70,6 +71,7 @@ fun PlantListRoute(
     PlantListScreen(
         plants = plants,
         onPlantClick = onPlantClick,
+        onSettingsClick = onSettingsClick,
         onAddClick = { showAddDialog = true },
         onDeleteClick = { plant -> plantIdToDelete = plant.id },
     )
@@ -129,6 +131,7 @@ fun PlantListRoute(
 fun PlantListScreen(
     plants: List<Plant>,
     onPlantClick: (Plant) -> Unit,
+    onSettingsClick: () -> Unit,
     onAddClick: () -> Unit,
     onDeleteClick: (Plant) -> Unit,
     modifier: Modifier = Modifier,
@@ -136,7 +139,18 @@ fun PlantListScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.app_name)) })
+            TopAppBar(
+                title = { Text(stringResource(R.string.app_name)) },
+                // `actions`: icons at the right end of the top bar.
+                actions = {
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_settings),
+                            contentDescription = stringResource(R.string.settings_title),
+                        )
+                    }
+                },
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onAddClick) {
@@ -221,7 +235,7 @@ private val samplePlants = listOf(
 private fun PlantListScreenPreview() {
     PlantWatchTheme {
         // `{}` is an empty lambda: in a preview, taps do nothing.
-        PlantListScreen(plants = samplePlants, onPlantClick = {}, onAddClick = {}, onDeleteClick = {})
+        PlantListScreen(plants = samplePlants, onPlantClick = {}, onSettingsClick = {}, onAddClick = {}, onDeleteClick = {})
     }
 }
 
@@ -229,6 +243,6 @@ private fun PlantListScreenPreview() {
 @Composable
 private fun PlantListScreenEmptyPreview() {
     PlantWatchTheme {
-        PlantListScreen(plants = emptyList(), onPlantClick = {}, onAddClick = {}, onDeleteClick = {})
+        PlantListScreen(plants = emptyList(), onPlantClick = {}, onSettingsClick = {}, onAddClick = {}, onDeleteClick = {})
     }
 }

@@ -70,6 +70,12 @@
     <string name="reminder_line">%1$s: %2$s</string>
     <string name="reminder_action_snooze">Snooze 1 day</string>
 
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_reminders">Reminders</string>
+    <string name="settings_reminder_time">Daily reminder time</string>
+    <string name="settings_reminder_time_dialog_title">Reminder time</string>
+
     <!-- Shared -->
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
