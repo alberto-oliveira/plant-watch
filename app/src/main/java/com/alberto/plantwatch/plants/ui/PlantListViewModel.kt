@@ -13,7 +13,11 @@ import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.CareTaskDao
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
+import com.alberto.plantwatch.plants.data.TaskType
+import com.alberto.plantwatch.plants.fertilizingPausedUntil
 import com.alberto.plantwatch.plants.mostUrgentTasks
+import com.alberto.plantwatch.settings.SettingsStore
+import java.time.LocalDate
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -44,6 +48,7 @@ class PlantListViewModel(
     private val plantDao: PlantDao,
     careTaskDao: CareTaskDao,
     private val careGuide: CareGuide,
+    settingsStore: SettingsStore,
 ) : ViewModel() {
 
     /**
@@ -63,8 +68,15 @@ class PlantListViewModel(
     // the lambda runs again with the latest value of both. Here it pairs each
     // plant with its most urgent tasks (`groupBy` = tasks bucketed by plant id;
     // `orEmpty()` = an empty list for a plant without tasks).
-    val plants: StateFlow<List<PlantSummary>> = combine(plantDao.observeAll(), careTaskDao.observeAll()) { plants, tasks ->
-        val tasksByPlant = tasks.groupBy { it.plantId }
+    val plants: StateFlow<List<PlantSummary>> = combine(
+        plantDao.observeAll(),
+        careTaskDao.observeAll(),
+        settingsStore.location,
+        settingsStore.pauseFertilizingInWinter,
+    ) { plants, tasks, location, pauseEnabled ->
+        // Fertilizer tasks paused for winter aren't the plant's next care.
+        val paused = fertilizingPausedUntil(LocalDate.now(), location?.latitude, pauseEnabled) != null
+        val tasksByPlant = tasks.filterNot { paused && it.type == TaskType.FERTILIZE }.groupBy { it.plantId }
         plants.map { plant ->
             PlantSummary(
                 plant = plant,
@@ -123,6 +135,7 @@ class PlantListViewModel(
                     plantDao = app.container.database.plantDao(),
                     careTaskDao = app.container.database.careTaskDao(),
                     careGuide = app.container.careGuide,
+                    settingsStore = app.container.settingsStore,
                 )
             }
         }

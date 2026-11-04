@@ -38,6 +38,14 @@ class SettingsViewModel(
     val location: StateFlow<Location?> = settingsStore.location
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
 
+    /** Whether fertilizer reminders pause in winter (default on). */
+    val pauseFertilizingInWinter: StateFlow<Boolean> = settingsStore.pauseFertilizingInWinter
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = true)
+
+    fun setPauseFertilizingInWinter(enabled: Boolean) {
+        viewModelScope.launch { settingsStore.setPauseFertilizingInWinter(enabled) }
+    }
+
     fun setLocation(location: Location) {
         viewModelScope.launch {
             settingsStore.setLocation(location)
