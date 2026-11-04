@@ -2,588 +2,1698 @@
   {
     "id": "epipremnum-aureum", "scientificName": "Epipremnum aureum",
     "namesPt": ["jiboia", "jibóia", "hera-do-diabo"], "namesEn": ["pothos", "golden pothos", "devil's ivy"],
-    "waterEveryDays": 7, "water": "Water when the top 2-3 cm of soil is dry; less in winter. Never leave it standing in water.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates low light but grows slower. Direct midday sun scorches the leaves.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer (e.g. NPK 10-10-10) at half strength, spring to summer; none in winter.",
+    "waterEveryDays": 7, "water": {
+      "en": "Water when the top 2-3 cm of soil is dry; less in winter. Never leave it standing in water.",
+      "pt": "Regue quando os 2-3 cm de cima da terra estiverem secos; menos no inverno. Nunca deixe água parada no prato."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; tolerates low light but grows slower. Direct midday sun scorches the leaves.",
+      "pt": "Luz indireta forte; tolera pouca luz, mas cresce mais devagar. O sol direto do meio-dia queima as folhas."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer (e.g. NPK 10-10-10) at half strength, spring to summer; none in winter.",
+      "pt": "Adubo líquido equilibrado (ex.: NPK 10-10-10) em meia dose, da primavera ao verão; nada no inverno."
+    },
     "problems": [
-      {"title": "Yellow leaves", "hint": "Usually overwatering: let the soil dry more between waterings."},
-      {"title": "Brown, crispy leaf edges", "hint": "Dry air or underwatering."},
-      {"title": "Mealybugs", "hint": "White cottony spots: wipe off with cotton and rubbing alcohol, repeat weekly."}
+      {
+        "title": {"en": "Yellow leaves", "pt": "Folhas amarelas"},
+        "hint": {
+          "en": "Usually overwatering: let the soil dry more between waterings.",
+          "pt": "Geralmente excesso de água: deixe a terra secar mais entre as regas."
+        }
+      },
+      {
+        "title": {"en": "Brown, crispy leaf edges", "pt": "Bordas das folhas marrons e secas"},
+        "hint": {
+          "en": "Dry air or underwatering.",
+          "pt": "Ar seco ou falta de água."
+        }
+      },
+      {
+        "title": {"en": "Mealybugs", "pt": "Cochonilhas"},
+        "hint": {
+          "en": "White cottony spots: wipe off with cotton and rubbing alcohol, repeat weekly.",
+          "pt": "Pontos brancos parecidos com algodão: limpe com algodão e álcool, repita toda semana."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "monstera-deliciosa", "scientificName": "Monstera deliciosa",
     "namesPt": ["costela-de-adão", "monstera"], "namesEn": ["swiss cheese plant", "split-leaf philodendron"],
-    "waterEveryDays": 7, "water": "Water when the top 3-5 cm of soil is dry; reduce in winter.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light gives bigger, more split leaves; avoid harsh direct sun.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in spring and summer.",
+    "waterEveryDays": 7, "water": {
+      "en": "Water when the top 3-5 cm of soil is dry; reduce in winter.",
+      "pt": "Regue quando os 3-5 cm de cima da terra estiverem secos; reduza no inverno."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light gives bigger, more split leaves; avoid harsh direct sun.",
+      "pt": "Luz indireta forte dá folhas maiores e mais recortadas; evite sol direto forte."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in spring and summer.",
+      "pt": "Adubo líquido equilibrado em meia dose na primavera e no verão."
+    },
     "problems": [
-      {"title": "Leaves without splits", "hint": "Too little light, or a young plant: move it to brighter indirect light."},
-      {"title": "Yellow lower leaves", "hint": "Overwatering or poor drainage; check the pot has holes."},
-      {"title": "Brown spots with yellow halo", "hint": "Often fungal from wet leaves or soil: water the soil, not the leaves, and improve airflow."}
+      {
+        "title": {"en": "Leaves without splits", "pt": "Folhas sem recortes"},
+        "hint": {
+          "en": "Too little light, or a young plant: move it to brighter indirect light.",
+          "pt": "Pouca luz, ou planta jovem: leve para uma luz indireta mais forte."
+        }
+      },
+      {
+        "title": {"en": "Yellow lower leaves", "pt": "Folhas de baixo amarelas"},
+        "hint": {
+          "en": "Overwatering or poor drainage; check the pot has holes.",
+          "pt": "Excesso de água ou drenagem ruim; confira se o vaso tem furos."
+        }
+      },
+      {
+        "title": {"en": "Brown spots with yellow halo", "pt": "Manchas marrons com halo amarelo"},
+        "hint": {
+          "en": "Often fungal from wet leaves or soil: water the soil, not the leaves, and improve airflow.",
+          "pt": "Muitas vezes fungo por folhas ou terra molhadas: regue a terra, não as folhas, e melhore a ventilação."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "dracaena-trifasciata", "scientificName": "Dracaena trifasciata",
     "namesPt": ["espada-de-são-jorge", "espada-de-santa-bárbara", "língua-de-sogra"], "namesEn": ["snake plant", "mother-in-law's tongue", "sansevieria"],
-    "waterEveryDays": 14, "water": "Let the soil dry out completely between waterings; every 3-4 weeks in winter.",
-    "sun": "PART_SUN", "sunHint": "Very adaptable: from low light to some direct sun. Grows best in bright light.",
-    "fertilizeEveryDays": 60, "fertilizer": "Cactus/succulent fertilizer or diluted balanced fertilizer, only in the warm months.",
+    "waterEveryDays": 14, "water": {
+      "en": "Let the soil dry out completely between waterings; every 3-4 weeks in winter.",
+      "pt": "Deixe a terra secar completamente entre as regas; a cada 3-4 semanas no inverno."
+    },
+    "sun": "PART_SUN", "sunHint": {
+      "en": "Very adaptable: from low light to some direct sun. Grows best in bright light.",
+      "pt": "Muito adaptável: de pouca luz a algum sol direto. Cresce melhor com bastante luz."
+    },
+    "fertilizeEveryDays": 60, "fertilizer": {
+      "en": "Cactus/succulent fertilizer or diluted balanced fertilizer, only in the warm months.",
+      "pt": "Adubo para cactos e suculentas ou adubo equilibrado diluído, só nos meses quentes."
+    },
     "problems": [
-      {"title": "Soft, mushy base", "hint": "Root rot from overwatering: remove rotten parts, repot in dry, fast-draining soil."},
-      {"title": "Leaves falling over", "hint": "Too much water or too little light."},
-      {"title": "Wrinkled leaves", "hint": "Thirsty: water thoroughly once."}
+      {
+        "title": {"en": "Soft, mushy base", "pt": "Base mole e encharcada"},
+        "hint": {
+          "en": "Root rot from overwatering: remove rotten parts, repot in dry, fast-draining soil.",
+          "pt": "Raiz podre por excesso de água: retire as partes podres e replante em terra seca e bem drenada."
+        }
+      },
+      {
+        "title": {"en": "Leaves falling over", "pt": "Folhas tombando"},
+        "hint": {
+          "en": "Too much water or too little light.",
+          "pt": "Água demais ou luz de menos."
+        }
+      },
+      {
+        "title": {"en": "Wrinkled leaves", "pt": "Folhas enrugadas"},
+        "hint": {
+          "en": "Thirsty: water thoroughly once.",
+          "pt": "Com sede: regue bem uma vez."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "zamioculcas-zamiifolia", "scientificName": "Zamioculcas zamiifolia",
     "namesPt": ["zamioculca", "zamioculcas", "zz"], "namesEn": ["zz plant", "zanzibar gem"],
-    "waterEveryDays": 14, "water": "Water only when the soil is completely dry; its thick rhizomes store water.",
-    "sun": "LOW_LIGHT", "sunHint": "Tolerates low light well; bright indirect light makes it grow faster. Avoid direct sun.",
-    "fertilizeEveryDays": 60, "fertilizer": "Balanced liquid fertilizer at half strength, 2-3 times in spring and summer.",
+    "waterEveryDays": 14, "water": {
+      "en": "Water only when the soil is completely dry; its thick rhizomes store water.",
+      "pt": "Regue só quando a terra estiver completamente seca; os rizomas grossos armazenam água."
+    },
+    "sun": "LOW_LIGHT", "sunHint": {
+      "en": "Tolerates low light well; bright indirect light makes it grow faster. Avoid direct sun.",
+      "pt": "Tolera bem pouca luz; luz indireta forte a faz crescer mais rápido. Evite sol direto."
+    },
+    "fertilizeEveryDays": 60, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength, 2-3 times in spring and summer.",
+      "pt": "Adubo líquido equilibrado em meia dose, 2-3 vezes na primavera e no verão."
+    },
     "problems": [
-      {"title": "Yellow leaves", "hint": "Almost always overwatering: let it dry out and water less often."},
-      {"title": "Stems collapsing", "hint": "Rotting rhizome from wet soil: check roots, repot in fast-draining mix."}
+      {
+        "title": {"en": "Yellow leaves", "pt": "Folhas amarelas"},
+        "hint": {
+          "en": "Almost always overwatering: let it dry out and water less often.",
+          "pt": "Quase sempre excesso de água: deixe secar e regue com menos frequência."
+        }
+      },
+      {
+        "title": {"en": "Stems collapsing", "pt": "Hastes caindo"},
+        "hint": {
+          "en": "Rotting rhizome from wet soil: check roots, repot in fast-draining mix.",
+          "pt": "Rizoma apodrecendo por terra molhada: confira as raízes e replante em substrato bem drenado."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "spathiphyllum-wallisii", "scientificName": "Spathiphyllum wallisii",
     "namesPt": ["lírio-da-paz", "espatifilo"], "namesEn": ["peace lily"],
-    "waterEveryDays": 5, "water": "Keep the soil lightly moist; it droops when thirsty and recovers quickly after watering.",
-    "sun": "LOW_LIGHT", "sunHint": "Medium to low indirect light; more light means more flowers. No direct sun.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in spring and summer.",
+    "waterEveryDays": 5, "water": {
+      "en": "Keep the soil lightly moist; it droops when thirsty and recovers quickly after watering.",
+      "pt": "Mantenha a terra levemente úmida; ele murcha quando tem sede e se recupera rápido depois da rega."
+    },
+    "sun": "LOW_LIGHT", "sunHint": {
+      "en": "Medium to low indirect light; more light means more flowers. No direct sun.",
+      "pt": "Luz indireta média a baixa; mais luz significa mais flores. Sem sol direto."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in spring and summer.",
+      "pt": "Adubo líquido equilibrado em meia dose na primavera e no verão."
+    },
     "problems": [
-      {"title": "Drooping plant", "hint": "Thirsty: water well. If the soil is wet, check for root rot."},
-      {"title": "Brown leaf tips", "hint": "Dry air, too much fertilizer, or chlorine/fluoride in tap water."},
-      {"title": "No flowers", "hint": "Too little light: move it to brighter indirect light."}
+      {
+        "title": {"en": "Drooping plant", "pt": "Planta murcha"},
+        "hint": {
+          "en": "Thirsty: water well. If the soil is wet, check for root rot.",
+          "pt": "Com sede: regue bem. Se a terra estiver molhada, verifique se há raiz podre."
+        }
+      },
+      {
+        "title": {"en": "Brown leaf tips", "pt": "Pontas das folhas marrons"},
+        "hint": {
+          "en": "Dry air, too much fertilizer, or chlorine/fluoride in tap water.",
+          "pt": "Ar seco, adubo demais, ou cloro/flúor na água da torneira."
+        }
+      },
+      {
+        "title": {"en": "No flowers", "pt": "Sem flores"},
+        "hint": {
+          "en": "Too little light: move it to brighter indirect light.",
+          "pt": "Pouca luz: leve para uma luz indireta mais forte."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "nephrolepis-exaltata", "scientificName": "Nephrolepis exaltata", "generic": true,
     "namesPt": ["samambaia", "samambaia-americana", "samambaia-de-boston"], "namesEn": ["fern", "boston fern", "sword fern"],
-    "waterEveryDays": 3, "water": "Keep the soil constantly moist, never soggy. Ferns dislike drying out. (Care varies among fern species.)",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light or light shade; direct sun burns the fronds.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at quarter to half strength in the growing season.",
+    "waterEveryDays": 3, "water": {
+      "en": "Keep the soil constantly moist, never soggy. Ferns dislike drying out. (Care varies among fern species.)",
+      "pt": "Mantenha a terra sempre úmida, nunca encharcada. Samambaias não gostam de secar. (O cuidado varia entre as espécies.)"
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light or light shade; direct sun burns the fronds.",
+      "pt": "Luz indireta forte ou sombra leve; o sol direto queima as folhas."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at quarter to half strength in the growing season.",
+      "pt": "Adubo líquido equilibrado em um quarto a meia dose na época de crescimento."
+    },
     "problems": [
-      {"title": "Fronds turning brown and dry", "hint": "Low humidity or soil drying out: water more regularly, mist or group plants."},
-      {"title": "Leaflets dropping", "hint": "Dry air, drafts or too little light."}
+      {
+        "title": {"en": "Fronds turning brown and dry", "pt": "Folhas ficando marrons e secas"},
+        "hint": {
+          "en": "Low humidity or soil drying out: water more regularly, mist or group plants.",
+          "pt": "Umidade baixa ou terra secando: regue com mais regularidade, borrife ou agrupe as plantas."
+        }
+      },
+      {
+        "title": {"en": "Leaflets dropping", "pt": "Folíolos caindo"},
+        "hint": {
+          "en": "Dry air, drafts or too little light.",
+          "pt": "Ar seco, correntes de ar ou pouca luz."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "anthurium-andraeanum", "scientificName": "Anthurium andraeanum",
     "namesPt": ["antúrio"], "namesEn": ["anthurium", "flamingo flower"],
-    "waterEveryDays": 5, "water": "Water when the top 2-3 cm are dry; likes humidity but not soggy roots.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light for flowering; direct sun burns the leaves.",
-    "fertilizeEveryDays": 30, "fertilizer": "Fertilizer richer in phosphorus (e.g. NPK 10-30-10) at half strength to encourage flowers.",
+    "waterEveryDays": 5, "water": {
+      "en": "Water when the top 2-3 cm are dry; likes humidity but not soggy roots.",
+      "pt": "Regue quando os 2-3 cm de cima estiverem secos; gosta de umidade, mas não de raízes encharcadas."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light for flowering; direct sun burns the leaves.",
+      "pt": "Luz indireta forte para florir; o sol direto queima as folhas."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Fertilizer richer in phosphorus (e.g. NPK 10-30-10) at half strength to encourage flowers.",
+      "pt": "Adubo mais rico em fósforo (ex.: NPK 10-30-10) em meia dose para estimular as flores."
+    },
     "problems": [
-      {"title": "No new flowers", "hint": "Too little light or not enough nutrients."},
-      {"title": "Yellow leaves", "hint": "Overwatering or old leaves aging naturally."},
-      {"title": "Brown leaf tips", "hint": "Low humidity or salt build-up: flush the soil with water now and then."}
+      {
+        "title": {"en": "No new flowers", "pt": "Sem flores novas"},
+        "hint": {
+          "en": "Too little light or not enough nutrients.",
+          "pt": "Pouca luz ou poucos nutrientes."
+        }
+      },
+      {
+        "title": {"en": "Yellow leaves", "pt": "Folhas amarelas"},
+        "hint": {
+          "en": "Overwatering or old leaves aging naturally.",
+          "pt": "Excesso de água ou folhas velhas envelhecendo naturalmente."
+        }
+      },
+      {
+        "title": {"en": "Brown leaf tips", "pt": "Pontas das folhas marrons"},
+        "hint": {
+          "en": "Low humidity or salt build-up: flush the soil with water now and then.",
+          "pt": "Umidade baixa ou acúmulo de sais: lave a terra com bastante água de vez em quando."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "dieffenbachia-seguine", "scientificName": "Dieffenbachia seguine",
     "namesPt": ["comigo-ninguém-pode", "difembáquia"], "namesEn": ["dumb cane", "dieffenbachia"],
-    "waterEveryDays": 7, "water": "Water when the top few cm are dry; less in winter.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates shade. Avoid direct sun.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in spring and summer.",
+    "waterEveryDays": 7, "water": {
+      "en": "Water when the top few cm are dry; less in winter.",
+      "pt": "Regue quando os primeiros centímetros estiverem secos; menos no inverno."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; tolerates shade. Avoid direct sun.",
+      "pt": "Luz indireta forte; tolera sombra. Evite sol direto."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in spring and summer.",
+      "pt": "Adubo líquido equilibrado em meia dose na primavera e no verão."
+    },
     "problems": [
-      {"title": "Lower leaves yellowing", "hint": "Normal aging, or overwatering if many at once."},
-      {"title": "Leggy stem", "hint": "Too little light; the top can be cut and rooted."},
-      {"title": "Irritating sap", "hint": "The sap irritates mouth and skin: wear gloves when pruning."}
+      {
+        "title": {"en": "Lower leaves yellowing", "pt": "Folhas de baixo amarelando"},
+        "hint": {
+          "en": "Normal aging, or overwatering if many at once.",
+          "pt": "Envelhecimento normal, ou excesso de água se forem muitas de uma vez."
+        }
+      },
+      {
+        "title": {"en": "Leggy stem", "pt": "Caule comprido e espichado"},
+        "hint": {
+          "en": "Too little light; the top can be cut and rooted.",
+          "pt": "Pouca luz; a ponta pode ser cortada e enraizada."
+        }
+      },
+      {
+        "title": {"en": "Irritating sap", "pt": "Seiva irritante"},
+        "hint": {
+          "en": "The sap irritates mouth and skin: wear gloves when pruning.",
+          "pt": "A seiva irrita a boca e a pele: use luvas ao podar."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "maranta-leuconeura", "scientificName": "Maranta leuconeura",
     "namesPt": ["maranta", "maranta-tricolor", "planta-que-reza"], "namesEn": ["prayer plant", "maranta"],
-    "waterEveryDays": 4, "water": "Keep the soil lightly moist; use rain or filtered water if tap water browns the tips.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Medium indirect light; direct sun fades and burns the leaves.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the growing season.",
+    "waterEveryDays": 4, "water": {
+      "en": "Keep the soil lightly moist; use rain or filtered water if tap water browns the tips.",
+      "pt": "Mantenha a terra levemente úmida; use água da chuva ou filtrada se a da torneira escurecer as pontas."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Medium indirect light; direct sun fades and burns the leaves.",
+      "pt": "Luz indireta média; o sol direto desbota e queima as folhas."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in the growing season.",
+      "pt": "Adubo líquido equilibrado em meia dose na época de crescimento."
+    },
     "problems": [
-      {"title": "Crispy brown edges", "hint": "Low humidity or hard tap water."},
-      {"title": "Curled leaves", "hint": "Underwatering or dry air."},
-      {"title": "Spider mites", "hint": "Fine webbing under leaves: shower the plant, raise humidity, repeat."}
+      {
+        "title": {"en": "Crispy brown edges", "pt": "Bordas marrons e secas"},
+        "hint": {
+          "en": "Low humidity or hard tap water.",
+          "pt": "Umidade baixa ou água da torneira muito dura."
+        }
+      },
+      {
+        "title": {"en": "Curled leaves", "pt": "Folhas enroladas"},
+        "hint": {
+          "en": "Underwatering or dry air.",
+          "pt": "Falta de água ou ar seco."
+        }
+      },
+      {
+        "title": {"en": "Spider mites", "pt": "Ácaros"},
+        "hint": {
+          "en": "Fine webbing under leaves: shower the plant, raise humidity, repeat.",
+          "pt": "Teias finas sob as folhas: dê um banho na planta, aumente a umidade e repita."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "goeppertia", "scientificName": "Goeppertia (Calathea)", "generic": true,
     "namesPt": ["calatéia", "calathea", "maranta-zebra"], "namesEn": ["calathea", "zebra plant", "rattlesnake plant"],
-    "waterEveryDays": 4, "water": "Keep the soil evenly moist, never soggy; prefers filtered or rain water. (Care varies among species.)",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Medium indirect light; no direct sun.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in spring and summer.",
+    "waterEveryDays": 4, "water": {
+      "en": "Keep the soil evenly moist, never soggy; prefers filtered or rain water. (Care varies among species.)",
+      "pt": "Mantenha a terra uniformemente úmida, nunca encharcada; prefere água filtrada ou da chuva. (O cuidado varia entre as espécies.)"
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Medium indirect light; no direct sun.",
+      "pt": "Luz indireta média; sem sol direto."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in spring and summer.",
+      "pt": "Adubo líquido equilibrado em meia dose na primavera e no verão."
+    },
     "problems": [
-      {"title": "Brown, crispy edges", "hint": "Low humidity or minerals in tap water."},
-      {"title": "Leaves curling", "hint": "Thirsty or air too dry."},
-      {"title": "Spider mites", "hint": "Check leaf undersides; wash leaves and increase humidity."}
+      {
+        "title": {"en": "Brown, crispy edges", "pt": "Bordas marrons e secas"},
+        "hint": {
+          "en": "Low humidity or minerals in tap water.",
+          "pt": "Umidade baixa ou minerais na água da torneira."
+        }
+      },
+      {
+        "title": {"en": "Leaves curling", "pt": "Folhas enrolando"},
+        "hint": {
+          "en": "Thirsty or air too dry.",
+          "pt": "Com sede ou ar seco demais."
+        }
+      },
+      {
+        "title": {"en": "Spider mites", "pt": "Ácaros"},
+        "hint": {
+          "en": "Check leaf undersides; wash leaves and increase humidity.",
+          "pt": "Confira o verso das folhas; lave-as e aumente a umidade."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "philodendron-hederaceum", "scientificName": "Philodendron hederaceum",
     "namesPt": ["filodendro", "filodendro-brasil", "filodendro-cordato"], "namesEn": ["heartleaf philodendron", "philodendron"],
-    "waterEveryDays": 7, "water": "Water when the top half of the soil is dry.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Medium to bright indirect light; tolerates lower light.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength, spring to summer.",
+    "waterEveryDays": 7, "water": {
+      "en": "Water when the top half of the soil is dry.",
+      "pt": "Regue quando a metade de cima da terra estiver seca."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Medium to bright indirect light; tolerates lower light.",
+      "pt": "Luz indireta média a forte; tolera menos luz."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength, spring to summer.",
+      "pt": "Adubo líquido equilibrado em meia dose, da primavera ao verão."
+    },
     "problems": [
-      {"title": "Yellow leaves", "hint": "Overwatering: let the soil dry more."},
-      {"title": "Small leaves, long gaps on stems", "hint": "Not enough light."}
+      {
+        "title": {"en": "Yellow leaves", "pt": "Folhas amarelas"},
+        "hint": {
+          "en": "Overwatering: let the soil dry more.",
+          "pt": "Excesso de água: deixe a terra secar mais."
+        }
+      },
+      {
+        "title": {"en": "Small leaves, long gaps on stems", "pt": "Folhas pequenas e espaços longos nos ramos"},
+        "hint": {
+          "en": "Not enough light.",
+          "pt": "Falta de luz."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "philodendron-martianum", "scientificName": "Philodendron martianum",
     "namesPt": ["pacová"], "namesEn": ["flask philodendron"],
-    "waterEveryDays": 7, "water": "Water when the top few cm are dry; its thick petioles store some water.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light or light shade; morning sun is fine.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the warm months.",
+    "waterEveryDays": 7, "water": {
+      "en": "Water when the top few cm are dry; its thick petioles store some water.",
+      "pt": "Regue quando os primeiros centímetros estiverem secos; os pecíolos grossos armazenam um pouco de água."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light or light shade; morning sun is fine.",
+      "pt": "Luz indireta forte ou sombra leve; sol da manhã é bem-vindo."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in the warm months.",
+      "pt": "Adubo líquido equilibrado em meia dose nos meses quentes."
+    },
     "problems": [
-      {"title": "Yellow leaves", "hint": "Overwatering or poor drainage."},
-      {"title": "Burnt patches", "hint": "Too much direct afternoon sun."}
+      {
+        "title": {"en": "Yellow leaves", "pt": "Folhas amarelas"},
+        "hint": {
+          "en": "Overwatering or poor drainage.",
+          "pt": "Excesso de água ou drenagem ruim."
+        }
+      },
+      {
+        "title": {"en": "Burnt patches", "pt": "Manchas queimadas"},
+        "hint": {
+          "en": "Too much direct afternoon sun.",
+          "pt": "Sol direto da tarde em excesso."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "syngonium-podophyllum", "scientificName": "Syngonium podophyllum",
     "namesPt": ["singônio", "planta-seta"], "namesEn": ["arrowhead plant", "syngonium"],
-    "waterEveryDays": 6, "water": "Keep the soil lightly moist, letting the top dry slightly between waterings.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light keeps the colours; no harsh sun.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the growing season.",
+    "waterEveryDays": 6, "water": {
+      "en": "Keep the soil lightly moist, letting the top dry slightly between waterings.",
+      "pt": "Mantenha a terra levemente úmida, deixando a parte de cima secar um pouco entre as regas."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light keeps the colours; no harsh sun.",
+      "pt": "Luz indireta forte mantém as cores; sem sol forte."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in the growing season.",
+      "pt": "Adubo líquido equilibrado em meia dose na época de crescimento."
+    },
     "problems": [
-      {"title": "Leggy growth", "hint": "Too little light; pinch back to keep it bushy."},
-      {"title": "Yellow leaves", "hint": "Overwatering."}
+      {
+        "title": {"en": "Leggy growth", "pt": "Crescimento espichado"},
+        "hint": {
+          "en": "Too little light; pinch back to keep it bushy.",
+          "pt": "Pouca luz; pode as pontas para manter a planta cheia."
+        }
+      },
+      {
+        "title": {"en": "Yellow leaves", "pt": "Folhas amarelas"},
+        "hint": {
+          "en": "Overwatering.",
+          "pt": "Excesso de água."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "peperomia-obtusifolia", "scientificName": "Peperomia obtusifolia",
     "namesPt": ["peperômia", "peperômia-obtusifolia"], "namesEn": ["baby rubber plant", "peperomia"],
-    "waterEveryDays": 10, "water": "Semi-succulent: let the soil dry well between waterings.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Medium to bright indirect light.",
-    "fertilizeEveryDays": 45, "fertilizer": "Balanced liquid fertilizer at half strength, a few times in spring and summer.",
+    "waterEveryDays": 10, "water": {
+      "en": "Semi-succulent: let the soil dry well between waterings.",
+      "pt": "Semissuculenta: deixe a terra secar bem entre as regas."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Medium to bright indirect light.",
+      "pt": "Luz indireta média a forte."
+    },
+    "fertilizeEveryDays": 45, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength, a few times in spring and summer.",
+      "pt": "Adubo líquido equilibrado em meia dose, algumas vezes na primavera e no verão."
+    },
     "problems": [
-      {"title": "Wilting with wet soil", "hint": "Root rot from overwatering: let it dry, repot if needed."},
-      {"title": "Leaves dropping", "hint": "Cold drafts or sudden changes."}
+      {
+        "title": {"en": "Wilting with wet soil", "pt": "Murcha com a terra molhada"},
+        "hint": {
+          "en": "Root rot from overwatering: let it dry, repot if needed.",
+          "pt": "Raiz podre por excesso de água: deixe secar e replante se for preciso."
+        }
+      },
+      {
+        "title": {"en": "Leaves dropping", "pt": "Folhas caindo"},
+        "hint": {
+          "en": "Cold drafts or sudden changes.",
+          "pt": "Correntes de ar frio ou mudanças bruscas."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "pilea-peperomioides", "scientificName": "Pilea peperomioides",
     "namesPt": ["pilea", "planta-chinesa-do-dinheiro"], "namesEn": ["chinese money plant", "pilea"],
-    "waterEveryDays": 7, "water": "Water when the top half of the soil is dry.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; rotate the pot weekly so it grows straight.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in spring and summer.",
+    "waterEveryDays": 7, "water": {
+      "en": "Water when the top half of the soil is dry.",
+      "pt": "Regue quando a metade de cima da terra estiver seca."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; rotate the pot weekly so it grows straight.",
+      "pt": "Luz indireta forte; gire o vaso toda semana para ela crescer reta."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in spring and summer.",
+      "pt": "Adubo líquido equilibrado em meia dose na primavera e no verão."
+    },
     "problems": [
-      {"title": "Leaves curling down (doming)", "hint": "Too much light or too little water."},
-      {"title": "Leaning plant", "hint": "Growing towards the light: turn the pot regularly."}
+      {
+        "title": {"en": "Leaves curling down (doming)", "pt": "Folhas curvando para baixo"},
+        "hint": {
+          "en": "Too much light or too little water.",
+          "pt": "Luz demais ou água de menos."
+        }
+      },
+      {
+        "title": {"en": "Leaning plant", "pt": "Planta inclinada"},
+        "hint": {
+          "en": "Growing towards the light: turn the pot regularly.",
+          "pt": "Está crescendo em direção à luz: gire o vaso regularmente."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "chlorophytum-comosum", "scientificName": "Chlorophytum comosum",
     "namesPt": ["clorofito", "gravatinha", "paulistinha"], "namesEn": ["spider plant"],
-    "waterEveryDays": 7, "water": "Water when the top few cm are dry; its fleshy roots store water.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates some morning sun.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the growing season.",
+    "waterEveryDays": 7, "water": {
+      "en": "Water when the top few cm are dry; its fleshy roots store water.",
+      "pt": "Regue quando os primeiros centímetros estiverem secos; as raízes carnudas armazenam água."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; tolerates some morning sun.",
+      "pt": "Luz indireta forte; tolera um pouco de sol da manhã."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in the growing season.",
+      "pt": "Adubo líquido equilibrado em meia dose na época de crescimento."
+    },
     "problems": [
-      {"title": "Brown leaf tips", "hint": "Fluoride/chlorine in tap water or dry air; trim the tips."},
-      {"title": "No baby plants", "hint": "Too little light or pot too large."}
+      {
+        "title": {"en": "Brown leaf tips", "pt": "Pontas das folhas marrons"},
+        "hint": {
+          "en": "Fluoride/chlorine in tap water or dry air; trim the tips.",
+          "pt": "Flúor/cloro na água da torneira ou ar seco; apare as pontas."
+        }
+      },
+      {
+        "title": {"en": "No baby plants", "pt": "Sem mudinhas"},
+        "hint": {
+          "en": "Too little light or pot too large.",
+          "pt": "Pouca luz ou vaso grande demais."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "dracaena-fragrans", "scientificName": "Dracaena fragrans",
     "namesPt": ["dracena", "pau-d'água", "coqueiro-de-vênus"], "namesEn": ["corn plant", "dracaena"],
-    "waterEveryDays": 10, "water": "Water when the top half of the soil is dry.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates lower light.",
-    "fertilizeEveryDays": 45, "fertilizer": "Balanced liquid fertilizer at half strength, spring to summer.",
+    "waterEveryDays": 10, "water": {
+      "en": "Water when the top half of the soil is dry.",
+      "pt": "Regue quando a metade de cima da terra estiver seca."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; tolerates lower light.",
+      "pt": "Luz indireta forte; tolera menos luz."
+    },
+    "fertilizeEveryDays": 45, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength, spring to summer.",
+      "pt": "Adubo líquido equilibrado em meia dose, da primavera ao verão."
+    },
     "problems": [
-      {"title": "Brown leaf tips", "hint": "Sensitive to fluoride in tap water and dry air."},
-      {"title": "Yellow lower leaves", "hint": "Normal shedding, or overwatering if many."}
+      {
+        "title": {"en": "Brown leaf tips", "pt": "Pontas das folhas marrons"},
+        "hint": {
+          "en": "Sensitive to fluoride in tap water and dry air.",
+          "pt": "Sensível ao flúor da água da torneira e ao ar seco."
+        }
+      },
+      {
+        "title": {"en": "Yellow lower leaves", "pt": "Folhas de baixo amarelas"},
+        "hint": {
+          "en": "Normal shedding, or overwatering if many.",
+          "pt": "Renovação normal, ou excesso de água se forem muitas."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "ficus-lyrata", "scientificName": "Ficus lyrata",
     "namesPt": ["figueira-lira", "fícus-lira"], "namesEn": ["fiddle-leaf fig"],
-    "waterEveryDays": 7, "water": "Water thoroughly when the top 5 cm are dry; keep a steady routine.",
-    "sun": "PART_SUN", "sunHint": "Lots of bright light, some gentle direct sun; dislikes being moved.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced or nitrogen-rich liquid fertilizer (e.g. NPK 3-1-2) in spring and summer.",
+    "waterEveryDays": 7, "water": {
+      "en": "Water thoroughly when the top 5 cm are dry; keep a steady routine.",
+      "pt": "Regue bem quando os 5 cm de cima estiverem secos; mantenha uma rotina constante."
+    },
+    "sun": "PART_SUN", "sunHint": {
+      "en": "Lots of bright light, some gentle direct sun; dislikes being moved.",
+      "pt": "Muita luz, com um pouco de sol direto suave; não gosta de ser mudada de lugar."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced or nitrogen-rich liquid fertilizer (e.g. NPK 3-1-2) in spring and summer.",
+      "pt": "Adubo líquido equilibrado ou rico em nitrogênio (ex.: NPK 3-1-2) na primavera e no verão."
+    },
     "problems": [
-      {"title": "Brown spots on leaves", "hint": "Overwatering (spots from the centre) or underwatering (from the edges)."},
-      {"title": "Leaves dropping", "hint": "Moved, drafts or sudden light change: keep it in one spot."}
+      {
+        "title": {"en": "Brown spots on leaves", "pt": "Manchas marrons nas folhas"},
+        "hint": {
+          "en": "Overwatering (spots from the centre) or underwatering (from the edges).",
+          "pt": "Excesso de água (manchas a partir do centro) ou falta de água (a partir das bordas)."
+        }
+      },
+      {
+        "title": {"en": "Leaves dropping", "pt": "Folhas caindo"},
+        "hint": {
+          "en": "Moved, drafts or sudden light change: keep it in one spot.",
+          "pt": "Mudança de lugar, correntes de ar ou mudança brusca de luz: deixe-a num lugar fixo."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "ficus-elastica", "scientificName": "Ficus elastica",
     "namesPt": ["falsa-seringueira", "fícus-elástica", "fícus"], "namesEn": ["rubber plant", "rubber fig"],
-    "waterEveryDays": 10, "water": "Water when the top few cm are dry; less in winter.",
-    "sun": "PART_SUN", "sunHint": "Bright light with some direct morning sun.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the growing season.",
+    "waterEveryDays": 10, "water": {
+      "en": "Water when the top few cm are dry; less in winter.",
+      "pt": "Regue quando os primeiros centímetros estiverem secos; menos no inverno."
+    },
+    "sun": "PART_SUN", "sunHint": {
+      "en": "Bright light with some direct morning sun.",
+      "pt": "Bastante luz, com um pouco de sol direto da manhã."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in the growing season.",
+      "pt": "Adubo líquido equilibrado em meia dose na época de crescimento."
+    },
     "problems": [
-      {"title": "Lower leaves dropping", "hint": "Overwatering or too little light."},
-      {"title": "Dusty leaves", "hint": "Wipe with a damp cloth so they can photosynthesize."}
+      {
+        "title": {"en": "Lower leaves dropping", "pt": "Folhas de baixo caindo"},
+        "hint": {
+          "en": "Overwatering or too little light.",
+          "pt": "Excesso de água ou pouca luz."
+        }
+      },
+      {
+        "title": {"en": "Dusty leaves", "pt": "Folhas empoeiradas"},
+        "hint": {
+          "en": "Wipe with a damp cloth so they can photosynthesize.",
+          "pt": "Limpe com um pano úmido para que façam fotossíntese."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "dypsis-lutescens", "scientificName": "Dypsis lutescens",
     "namesPt": ["palmeira-areca", "areca-bambu", "areca"], "namesEn": ["areca palm", "butterfly palm"],
-    "waterEveryDays": 5, "water": "Keep the soil lightly moist in summer; let the top dry a little in winter.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; outdoors, partial shade.",
-    "fertilizeEveryDays": 30, "fertilizer": "Palm fertilizer or balanced fertilizer with micronutrients (magnesium, iron) in spring and summer.",
+    "waterEveryDays": 5, "water": {
+      "en": "Keep the soil lightly moist in summer; let the top dry a little in winter.",
+      "pt": "Mantenha a terra levemente úmida no verão; deixe a parte de cima secar um pouco no inverno."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; outdoors, partial shade.",
+      "pt": "Luz indireta forte; ao ar livre, meia-sombra."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Palm fertilizer or balanced fertilizer with micronutrients (magnesium, iron) in spring and summer.",
+      "pt": "Adubo para palmeiras ou equilibrado com micronutrientes (magnésio, ferro) na primavera e no verão."
+    },
     "problems": [
-      {"title": "Brown frond tips", "hint": "Dry air, salt build-up or irregular watering."},
-      {"title": "Yellowing fronds", "hint": "Nutrient deficiency (often magnesium) or overwatering."}
+      {
+        "title": {"en": "Brown frond tips", "pt": "Pontas das folhas marrons"},
+        "hint": {
+          "en": "Dry air, salt build-up or irregular watering.",
+          "pt": "Ar seco, acúmulo de sais ou rega irregular."
+        }
+      },
+      {
+        "title": {"en": "Yellowing fronds", "pt": "Folhas amarelando"},
+        "hint": {
+          "en": "Nutrient deficiency (often magnesium) or overwatering.",
+          "pt": "Falta de nutrientes (muitas vezes magnésio) ou excesso de água."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "rhapis-excelsa", "scientificName": "Rhapis excelsa",
     "namesPt": ["ráfis", "palmeira-ráfis", "palmeira-dama"], "namesEn": ["lady palm", "broadleaf lady palm"],
-    "waterEveryDays": 7, "water": "Water when the top few cm are dry.",
-    "sun": "LOW_LIGHT", "sunHint": "Medium to low indirect light; direct sun yellows the leaves.",
-    "fertilizeEveryDays": 45, "fertilizer": "Palm or balanced liquid fertilizer at half strength in the warm months.",
+    "waterEveryDays": 7, "water": {
+      "en": "Water when the top few cm are dry.",
+      "pt": "Regue quando os primeiros centímetros estiverem secos."
+    },
+    "sun": "LOW_LIGHT", "sunHint": {
+      "en": "Medium to low indirect light; direct sun yellows the leaves.",
+      "pt": "Luz indireta média a baixa; o sol direto amarela as folhas."
+    },
+    "fertilizeEveryDays": 45, "fertilizer": {
+      "en": "Palm or balanced liquid fertilizer at half strength in the warm months.",
+      "pt": "Adubo para palmeiras ou líquido equilibrado em meia dose nos meses quentes."
+    },
     "problems": [
-      {"title": "Brown tips", "hint": "Dry air or salts in the soil: flush with water occasionally."},
-      {"title": "Scale insects", "hint": "Small brown bumps on stems: scrape off, treat with neem oil."}
+      {
+        "title": {"en": "Brown tips", "pt": "Pontas marrons"},
+        "hint": {
+          "en": "Dry air or salts in the soil: flush with water occasionally.",
+          "pt": "Ar seco ou sais na terra: lave a terra com bastante água de vez em quando."
+        }
+      },
+      {
+        "title": {"en": "Scale insects", "pt": "Cochonilhas de carapaça"},
+        "hint": {
+          "en": "Small brown bumps on stems: scrape off, treat with neem oil.",
+          "pt": "Pequenas bolinhas marrons nos caules: raspe e trate com óleo de neem."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "begonia", "scientificName": "Begonia", "generic": true,
     "namesPt": ["begônia"], "namesEn": ["begonia"],
-    "waterEveryDays": 5, "water": "Water when the top 2 cm are dry; avoid wetting the leaves. (Care varies among begonias.)",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; some morning sun for flowering types.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength; bloom fertilizer for flowering types.",
+    "waterEveryDays": 5, "water": {
+      "en": "Water when the top 2 cm are dry; avoid wetting the leaves. (Care varies among begonias.)",
+      "pt": "Regue quando os 2 cm de cima estiverem secos; evite molhar as folhas. (O cuidado varia entre as begônias.)"
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; some morning sun for flowering types.",
+      "pt": "Luz indireta forte; um pouco de sol da manhã para as que dão flor."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength; bloom fertilizer for flowering types.",
+      "pt": "Adubo líquido equilibrado em meia dose; adubo de floração para as que dão flor."
+    },
     "problems": [
-      {"title": "Powdery mildew", "hint": "White powder on leaves: improve airflow, avoid wet leaves, remove affected leaves."},
-      {"title": "Stem rot", "hint": "Overwatering: let the soil dry more."}
+      {
+        "title": {"en": "Powdery mildew", "pt": "Oídio"},
+        "hint": {
+          "en": "White powder on leaves: improve airflow, avoid wet leaves, remove affected leaves.",
+          "pt": "Pó branco nas folhas: melhore a ventilação, evite molhar as folhas, retire as folhas atingidas."
+        }
+      },
+      {
+        "title": {"en": "Stem rot", "pt": "Caule apodrecendo"},
+        "hint": {
+          "en": "Overwatering: let the soil dry more.",
+          "pt": "Excesso de água: deixe a terra secar mais."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "saintpaulia", "scientificName": "Saintpaulia (Streptocarpus sect. Saintpaulia)",
     "namesPt": ["violeta-africana", "violeta"], "namesEn": ["african violet"],
-    "waterEveryDays": 5, "water": "Water from below or at the soil with room-temperature water; keep leaves dry.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light, e.g. near an east window.",
-    "fertilizeEveryDays": 14, "fertilizer": "African violet fertilizer (higher phosphorus) at low strength.",
+    "waterEveryDays": 5, "water": {
+      "en": "Water from below or at the soil with room-temperature water; keep leaves dry.",
+      "pt": "Regue por baixo ou direto na terra, com água em temperatura ambiente; mantenha as folhas secas."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light, e.g. near an east window.",
+      "pt": "Luz indireta forte, por exemplo perto de uma janela a leste."
+    },
+    "fertilizeEveryDays": 14, "fertilizer": {
+      "en": "African violet fertilizer (higher phosphorus) at low strength.",
+      "pt": "Adubo para violetas (mais fósforo) em dose baixa."
+    },
     "problems": [
-      {"title": "Spots on leaves", "hint": "Cold water on the leaves: water the soil only."},
-      {"title": "No flowers", "hint": "Not enough light or fertilizer."},
-      {"title": "Crown rot", "hint": "Soggy soil: let it dry slightly, use a light mix."}
+      {
+        "title": {"en": "Spots on leaves", "pt": "Manchas nas folhas"},
+        "hint": {
+          "en": "Cold water on the leaves: water the soil only.",
+          "pt": "Água fria nas folhas: regue só a terra."
+        }
+      },
+      {
+        "title": {"en": "No flowers", "pt": "Sem flores"},
+        "hint": {
+          "en": "Not enough light or fertilizer.",
+          "pt": "Pouca luz ou pouco adubo."
+        }
+      },
+      {
+        "title": {"en": "Crown rot", "pt": "Podridão no centro"},
+        "hint": {
+          "en": "Soggy soil: let it dry slightly, use a light mix.",
+          "pt": "Terra encharcada: deixe secar um pouco e use um substrato leve."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "phalaenopsis", "scientificName": "Phalaenopsis", "generic": true,
     "namesPt": ["orquídea", "orquídea-borboleta", "falenópsis"], "namesEn": ["orchid", "moth orchid"],
-    "waterEveryDays": 7, "water": "Water when the roots turn silvery (about weekly); drain completely. Grow in bark, not soil. (Other orchids differ.)",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; no midday sun.",
-    "fertilizeEveryDays": 14, "fertilizer": "Orchid fertilizer at quarter to half strength ('weakly, weekly' style).",
+    "waterEveryDays": 7, "water": {
+      "en": "Water when the roots turn silvery (about weekly); drain completely. Grow in bark, not soil. (Other orchids differ.)",
+      "pt": "Regue quando as raízes ficarem prateadas (cerca de uma vez por semana) e deixe escorrer bem. Cultive em casca, não em terra. (Outras orquídeas são diferentes.)"
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; no midday sun.",
+      "pt": "Luz indireta forte; sem sol do meio-dia."
+    },
+    "fertilizeEveryDays": 14, "fertilizer": {
+      "en": "Orchid fertilizer at quarter to half strength ('weakly, weekly' style).",
+      "pt": "Adubo para orquídeas em um quarto a meia dose (pouco e com frequência)."
+    },
     "problems": [
-      {"title": "Wrinkled, limp leaves", "hint": "Root problems: check for rotten (brown, mushy) roots."},
-      {"title": "No new flower spike", "hint": "A slight night-time temperature drop in autumn helps it rebloom."},
-      {"title": "Crown rot", "hint": "Water left in the leaf base: water in the morning and tilt to drain."}
+      {
+        "title": {"en": "Wrinkled, limp leaves", "pt": "Folhas murchas e enrugadas"},
+        "hint": {
+          "en": "Root problems: check for rotten (brown, mushy) roots.",
+          "pt": "Problema nas raízes: procure raízes podres (marrons e moles)."
+        }
+      },
+      {
+        "title": {"en": "No new flower spike", "pt": "Sem nova haste floral"},
+        "hint": {
+          "en": "A slight night-time temperature drop in autumn helps it rebloom.",
+          "pt": "Uma pequena queda de temperatura à noite no outono ajuda a florir de novo."
+        }
+      },
+      {
+        "title": {"en": "Crown rot", "pt": "Podridão no centro"},
+        "hint": {
+          "en": "Water left in the leaf base: water in the morning and tilt to drain.",
+          "pt": "Água parada na base das folhas: regue de manhã e incline para escorrer."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "guzmania", "scientificName": "Guzmania (bromeliads)", "generic": true,
     "namesPt": ["bromélia", "guzmânia"], "namesEn": ["bromeliad", "guzmania"],
-    "waterEveryDays": 7, "water": "Keep a little water in the central cup (refresh it weekly) and keep the mix barely moist.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; no strong direct sun.",
-    "fertilizeEveryDays": 60, "fertilizer": "Very diluted liquid fertilizer, rarely; bromeliads need little feeding.",
+    "waterEveryDays": 7, "water": {
+      "en": "Keep a little water in the central cup (refresh it weekly) and keep the mix barely moist.",
+      "pt": "Mantenha um pouco de água no copo central (troque toda semana) e o substrato só levemente úmido."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; no strong direct sun.",
+      "pt": "Luz indireta forte; sem sol direto forte."
+    },
+    "fertilizeEveryDays": 60, "fertilizer": {
+      "en": "Very diluted liquid fertilizer, rarely; bromeliads need little feeding.",
+      "pt": "Adubo líquido bem diluído, raramente; bromélias precisam de pouco adubo."
+    },
     "problems": [
-      {"title": "Mother plant dying after flowering", "hint": "Normal: it produces pups; grow those on."},
-      {"title": "Rotting base", "hint": "Soil too wet: water the cup, not the soil."}
+      {
+        "title": {"en": "Mother plant dying after flowering", "pt": "Planta-mãe morrendo depois de florir"},
+        "hint": {
+          "en": "Normal: it produces pups; grow those on.",
+          "pt": "É normal: ela produz mudas; cultive as mudas."
+        }
+      },
+      {
+        "title": {"en": "Rotting base", "pt": "Base apodrecendo"},
+        "hint": {
+          "en": "Soil too wet: water the cup, not the soil.",
+          "pt": "Terra molhada demais: regue o copo, não a terra."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "hedera-helix", "scientificName": "Hedera helix",
     "namesPt": ["hera", "hera-inglesa"], "namesEn": ["english ivy", "ivy"],
-    "waterEveryDays": 5, "water": "Keep the soil lightly moist; let the top dry slightly.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates shade. Prefers cooler spots.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the growing season.",
+    "waterEveryDays": 5, "water": {
+      "en": "Keep the soil lightly moist; let the top dry slightly.",
+      "pt": "Mantenha a terra levemente úmida; deixe a parte de cima secar um pouco."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; tolerates shade. Prefers cooler spots.",
+      "pt": "Luz indireta forte; tolera sombra. Prefere lugares mais frescos."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced liquid fertilizer at half strength in the growing season.",
+      "pt": "Adubo líquido equilibrado em meia dose na época de crescimento."
+    },
     "problems": [
-      {"title": "Spider mites", "hint": "Common in warm, dry air: shower the leaves regularly."},
-      {"title": "Crispy leaves", "hint": "Too hot or too dry."}
+      {
+        "title": {"en": "Spider mites", "pt": "Ácaros"},
+        "hint": {
+          "en": "Common in warm, dry air: shower the leaves regularly.",
+          "pt": "Comuns em ar quente e seco: dê banhos regulares nas folhas."
+        }
+      },
+      {
+        "title": {"en": "Crispy leaves", "pt": "Folhas secas e quebradiças"},
+        "hint": {
+          "en": "Too hot or too dry.",
+          "pt": "Calor ou secura demais."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "aloe-vera", "scientificName": "Aloe vera",
     "namesPt": ["babosa", "aloe-vera"], "namesEn": ["aloe vera", "aloe"],
-    "waterEveryDays": 14, "water": "Water deeply only when the soil is completely dry; much less in winter.",
-    "sun": "FULL_SUN", "sunHint": "Full sun to bright light; a sunny window or outdoors.",
-    "fertilizeEveryDays": 90, "fertilizer": "Cactus/succulent fertilizer at half strength, a couple of times in the warm season.",
+    "waterEveryDays": 14, "water": {
+      "en": "Water deeply only when the soil is completely dry; much less in winter.",
+      "pt": "Regue bastante só quando a terra estiver completamente seca; muito menos no inverno."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun to bright light; a sunny window or outdoors.",
+      "pt": "Sol pleno a muita luz; uma janela ensolarada ou ao ar livre."
+    },
+    "fertilizeEveryDays": 90, "fertilizer": {
+      "en": "Cactus/succulent fertilizer at half strength, a couple of times in the warm season.",
+      "pt": "Adubo para cactos e suculentas em meia dose, algumas vezes na estação quente."
+    },
     "problems": [
-      {"title": "Soft, translucent leaves", "hint": "Overwatering: stop watering until dry."},
-      {"title": "Thin, curling leaves", "hint": "Thirsty, or too little light."},
-      {"title": "Brown/red leaves", "hint": "Sun stress after a sudden move to strong sun: acclimate gradually."}
+      {
+        "title": {"en": "Soft, translucent leaves", "pt": "Folhas moles e translúcidas"},
+        "hint": {
+          "en": "Overwatering: stop watering until dry.",
+          "pt": "Excesso de água: pare de regar até secar."
+        }
+      },
+      {
+        "title": {"en": "Thin, curling leaves", "pt": "Folhas finas e enroladas"},
+        "hint": {
+          "en": "Thirsty, or too little light.",
+          "pt": "Com sede, ou pouca luz."
+        }
+      },
+      {
+        "title": {"en": "Brown/red leaves", "pt": "Folhas marrons/avermelhadas"},
+        "hint": {
+          "en": "Sun stress after a sudden move to strong sun: acclimate gradually.",
+          "pt": "Estresse por sol após mudança brusca para sol forte: adapte aos poucos."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "crassula-ovata", "scientificName": "Crassula ovata",
     "namesPt": ["planta-jade", "jade", "árvore-da-amizade"], "namesEn": ["jade plant", "money tree (crassula)"],
-    "waterEveryDays": 14, "water": "Let the soil dry completely; water less in winter.",
-    "sun": "FULL_SUN", "sunHint": "Several hours of sun; red leaf edges are normal in strong light.",
-    "fertilizeEveryDays": 90, "fertilizer": "Succulent fertilizer at half strength in spring and summer.",
+    "waterEveryDays": 14, "water": {
+      "en": "Let the soil dry completely; water less in winter.",
+      "pt": "Deixe a terra secar completamente; regue menos no inverno."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Several hours of sun; red leaf edges are normal in strong light.",
+      "pt": "Várias horas de sol; bordas vermelhas nas folhas são normais com luz forte."
+    },
+    "fertilizeEveryDays": 90, "fertilizer": {
+      "en": "Succulent fertilizer at half strength in spring and summer.",
+      "pt": "Adubo para suculentas em meia dose na primavera e no verão."
+    },
     "problems": [
-      {"title": "Shriveled leaves", "hint": "Underwatering: water deeply."},
-      {"title": "Leaves dropping", "hint": "Overwatering or sudden cold."},
-      {"title": "Mealybugs", "hint": "White fluff in leaf joints: dab with alcohol."}
+      {
+        "title": {"en": "Shriveled leaves", "pt": "Folhas murchas e enrugadas"},
+        "hint": {
+          "en": "Underwatering: water deeply.",
+          "pt": "Falta de água: regue bem."
+        }
+      },
+      {
+        "title": {"en": "Leaves dropping", "pt": "Folhas caindo"},
+        "hint": {
+          "en": "Overwatering or sudden cold.",
+          "pt": "Excesso de água ou frio repentino."
+        }
+      },
+      {
+        "title": {"en": "Mealybugs", "pt": "Cochonilhas"},
+        "hint": {
+          "en": "White fluff in leaf joints: dab with alcohol.",
+          "pt": "Algodãozinho branco nas axilas das folhas: aplique álcool com cotonete."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "echeveria", "scientificName": "Echeveria", "generic": true,
     "namesPt": ["echevéria", "suculenta", "rosa-de-pedra"], "namesEn": ["echeveria", "succulent"],
-    "waterEveryDays": 14, "water": "Soak and dry: water thoroughly, then wait until the soil is fully dry. Keep water off the rosette.",
-    "sun": "FULL_SUN", "sunHint": "Lots of direct sun; indoors, the sunniest window.",
-    "fertilizeEveryDays": 90, "fertilizer": "Succulent fertilizer at low strength in the growing season.",
+    "waterEveryDays": 14, "water": {
+      "en": "Soak and dry: water thoroughly, then wait until the soil is fully dry. Keep water off the rosette.",
+      "pt": "Encharque e deixe secar: regue bem e espere a terra secar totalmente. Não deixe água na roseta."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Lots of direct sun; indoors, the sunniest window.",
+      "pt": "Muito sol direto; dentro de casa, a janela mais ensolarada."
+    },
+    "fertilizeEveryDays": 90, "fertilizer": {
+      "en": "Succulent fertilizer at low strength in the growing season.",
+      "pt": "Adubo para suculentas em dose baixa na época de crescimento."
+    },
     "problems": [
-      {"title": "Stretched, pale growth", "hint": "Etiolation from too little light: move to more sun."},
-      {"title": "Mushy leaves", "hint": "Overwatering or water in the rosette."}
+      {
+        "title": {"en": "Stretched, pale growth", "pt": "Crescimento esticado e pálido"},
+        "hint": {
+          "en": "Etiolation from too little light: move to more sun.",
+          "pt": "Estiolamento por falta de luz: leve para mais sol."
+        }
+      },
+      {
+        "title": {"en": "Mushy leaves", "pt": "Folhas moles"},
+        "hint": {
+          "en": "Overwatering or water in the rosette.",
+          "pt": "Excesso de água ou água na roseta."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "kalanchoe-blossfeldiana", "scientificName": "Kalanchoe blossfeldiana",
     "namesPt": ["kalanchoe", "calanchoê", "flor-da-fortuna"], "namesEn": ["flaming katy", "kalanchoe"],
-    "waterEveryDays": 10, "water": "Let the soil dry between waterings; it's a succulent.",
-    "sun": "FULL_SUN", "sunHint": "Bright light with some direct sun for flowering.",
-    "fertilizeEveryDays": 30, "fertilizer": "Bloom fertilizer (higher phosphorus) at half strength during growth.",
+    "waterEveryDays": 10, "water": {
+      "en": "Let the soil dry between waterings; it's a succulent.",
+      "pt": "Deixe a terra secar entre as regas; é uma suculenta."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Bright light with some direct sun for flowering.",
+      "pt": "Bastante luz, com um pouco de sol direto para florir."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Bloom fertilizer (higher phosphorus) at half strength during growth.",
+      "pt": "Adubo de floração (mais fósforo) em meia dose durante o crescimento."
+    },
     "problems": [
-      {"title": "Not reblooming", "hint": "Needs short days: about 6 weeks of 14 hours of darkness each night."},
-      {"title": "Rotting stems", "hint": "Overwatering."}
+      {
+        "title": {"en": "Not reblooming", "pt": "Não floresce de novo"},
+        "hint": {
+          "en": "Needs short days: about 6 weeks of 14 hours of darkness each night.",
+          "pt": "Precisa de dias curtos: cerca de 6 semanas com 14 horas de escuro por noite."
+        }
+      },
+      {
+        "title": {"en": "Rotting stems", "pt": "Caules apodrecendo"},
+        "hint": {
+          "en": "Overwatering.",
+          "pt": "Excesso de água."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "cactaceae", "scientificName": "Cactaceae (cacti)", "generic": true,
     "namesPt": ["cacto", "cactus", "mandacaru"], "namesEn": ["cactus", "cacti"],
-    "waterEveryDays": 21, "water": "Water deeply only when the soil is bone dry; almost none in winter. (Forest cacti like Christmas cactus need more.)",
-    "sun": "FULL_SUN", "sunHint": "As much direct sun as possible.",
-    "fertilizeEveryDays": 60, "fertilizer": "Cactus fertilizer (low nitrogen) at half strength in the warm season.",
+    "waterEveryDays": 21, "water": {
+      "en": "Water deeply only when the soil is bone dry; almost none in winter. (Forest cacti like Christmas cactus need more.)",
+      "pt": "Regue bastante só quando a terra estiver totalmente seca; quase nada no inverno. (Cactos de floresta, como a flor-de-maio, precisam de mais.)"
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "As much direct sun as possible.",
+      "pt": "O máximo de sol direto possível."
+    },
+    "fertilizeEveryDays": 60, "fertilizer": {
+      "en": "Cactus fertilizer (low nitrogen) at half strength in the warm season.",
+      "pt": "Adubo para cactos (pouco nitrogênio) em meia dose na estação quente."
+    },
     "problems": [
-      {"title": "Soft, dark base", "hint": "Rot from overwatering: usually fatal, cut and re-root healthy parts."},
-      {"title": "Leaning or thin growth", "hint": "Not enough sun."}
+      {
+        "title": {"en": "Soft, dark base", "pt": "Base mole e escura"},
+        "hint": {
+          "en": "Rot from overwatering: usually fatal, cut and re-root healthy parts.",
+          "pt": "Podridão por excesso de água: geralmente fatal; corte e enraíze as partes saudáveis."
+        }
+      },
+      {
+        "title": {"en": "Leaning or thin growth", "pt": "Crescimento torto ou fino"},
+        "hint": {
+          "en": "Not enough sun.",
+          "pt": "Falta de sol."
+        }
+      }
     ]
   },
   {
     "id": "ocimum-basilicum", "scientificName": "Ocimum basilicum",
     "namesPt": ["manjericão", "alfavaca"], "namesEn": ["basil", "sweet basil"],
-    "waterEveryDays": 2, "water": "Keep the soil moist but not soggy; water at the base in the morning.",
-    "sun": "FULL_SUN", "sunHint": "At least 6 hours of sun.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced or nitrogen-rich organic fertilizer (e.g. worm castings) monthly.",
+    "waterEveryDays": 2, "water": {
+      "en": "Keep the soil moist but not soggy; water at the base in the morning.",
+      "pt": "Mantenha a terra úmida, mas não encharcada; regue na base, de manhã."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "At least 6 hours of sun.",
+      "pt": "Pelo menos 6 horas de sol."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced or nitrogen-rich organic fertilizer (e.g. worm castings) monthly.",
+      "pt": "Adubo orgânico equilibrado ou rico em nitrogênio (ex.: húmus de minhoca) todo mês."
+    },
     "problems": [
-      {"title": "Flowering and fewer leaves", "hint": "Pinch off flower buds and harvest tips often to keep it bushy."},
-      {"title": "Black spots / wilting", "hint": "Fungal disease from wet leaves or cold: water the soil, give airflow."},
-      {"title": "Aphids", "hint": "Small insects on tips: hose off or use soapy water."}
+      {
+        "title": {"en": "Flowering and fewer leaves", "pt": "Florescendo e com menos folhas"},
+        "hint": {
+          "en": "Pinch off flower buds and harvest tips often to keep it bushy.",
+          "pt": "Retire os botões florais e colha as pontas com frequência para manter a planta cheia."
+        }
+      },
+      {
+        "title": {"en": "Black spots / wilting", "pt": "Manchas pretas / murcha"},
+        "hint": {
+          "en": "Fungal disease from wet leaves or cold: water the soil, give airflow.",
+          "pt": "Doença fúngica por folhas molhadas ou frio: regue a terra e deixe o ar circular."
+        }
+      },
+      {
+        "title": {"en": "Aphids", "pt": "Pulgões"},
+        "hint": {
+          "en": "Small insects on tips: hose off or use soapy water.",
+          "pt": "Insetos pequenos nas pontas: retire com jato de água ou água com sabão."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "salvia-rosmarinus", "scientificName": "Salvia rosmarinus",
     "namesPt": ["alecrim"], "namesEn": ["rosemary"],
-    "waterEveryDays": 5, "water": "Let the soil dry between waterings; it hates soggy roots.",
-    "sun": "FULL_SUN", "sunHint": "Full sun, at least 6 hours.",
-    "fertilizeEveryDays": 60, "fertilizer": "Light feeding only: a little organic fertilizer in spring.",
+    "waterEveryDays": 5, "water": {
+      "en": "Let the soil dry between waterings; it hates soggy roots.",
+      "pt": "Deixe a terra secar entre as regas; detesta raízes encharcadas."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun, at least 6 hours.",
+      "pt": "Sol pleno, pelo menos 6 horas."
+    },
+    "fertilizeEveryDays": 60, "fertilizer": {
+      "en": "Light feeding only: a little organic fertilizer in spring.",
+      "pt": "Pouco adubo: só um pouco de adubo orgânico na primavera."
+    },
     "problems": [
-      {"title": "Needles browning from the base", "hint": "Root rot from overwatering or poor drainage."},
-      {"title": "Powdery mildew", "hint": "Too humid and shaded: more sun and airflow."}
+      {
+        "title": {"en": "Needles browning from the base", "pt": "Folhas escurecendo a partir da base"},
+        "hint": {
+          "en": "Root rot from overwatering or poor drainage.",
+          "pt": "Raiz podre por excesso de água ou drenagem ruim."
+        }
+      },
+      {
+        "title": {"en": "Powdery mildew", "pt": "Oídio"},
+        "hint": {
+          "en": "Too humid and shaded: more sun and airflow.",
+          "pt": "Muita umidade e sombra: mais sol e ventilação."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "mentha-spicata", "scientificName": "Mentha spicata",
     "namesPt": ["hortelã", "hortelã-comum", "menta"], "namesEn": ["mint", "spearmint"],
-    "waterEveryDays": 2, "water": "Keep the soil consistently moist.",
-    "sun": "PART_SUN", "sunHint": "Sun to part shade; afternoon shade helps in hot weather.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced organic fertilizer monthly in the growing season.",
+    "waterEveryDays": 2, "water": {
+      "en": "Keep the soil consistently moist.",
+      "pt": "Mantenha a terra sempre úmida."
+    },
+    "sun": "PART_SUN", "sunHint": {
+      "en": "Sun to part shade; afternoon shade helps in hot weather.",
+      "pt": "Sol a meia-sombra; sombra à tarde ajuda no calor."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced organic fertilizer monthly in the growing season.",
+      "pt": "Adubo orgânico equilibrado todo mês na época de crescimento."
+    },
     "problems": [
-      {"title": "Spreads aggressively", "hint": "Grow it in its own pot."},
-      {"title": "Rust (orange spots)", "hint": "Remove affected leaves, avoid wetting foliage."}
+      {
+        "title": {"en": "Spreads aggressively", "pt": "Espalha-se demais"},
+        "hint": {
+          "en": "Grow it in its own pot.",
+          "pt": "Cultive num vaso só para ela."
+        }
+      },
+      {
+        "title": {"en": "Rust (orange spots)", "pt": "Ferrugem (manchas laranja)"},
+        "hint": {
+          "en": "Remove affected leaves, avoid wetting foliage.",
+          "pt": "Retire as folhas atingidas e evite molhar a folhagem."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "allium-fistulosum", "scientificName": "Allium fistulosum",
     "namesPt": ["cebolinha", "cebolinha-verde"], "namesEn": ["green onion", "scallion", "welsh onion"],
-    "waterEveryDays": 3, "water": "Keep the soil lightly moist.",
-    "sun": "FULL_SUN", "sunHint": "Full sun to part shade.",
-    "fertilizeEveryDays": 30, "fertilizer": "Nitrogen-rich organic fertilizer after harvests.",
+    "waterEveryDays": 3, "water": {
+      "en": "Keep the soil lightly moist.",
+      "pt": "Mantenha a terra levemente úmida."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun to part shade.",
+      "pt": "Sol pleno a meia-sombra."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Nitrogen-rich organic fertilizer after harvests.",
+      "pt": "Adubo orgânico rico em nitrogênio depois das colheitas."
+    },
     "problems": [
-      {"title": "Yellow tips", "hint": "Irregular watering or lack of nitrogen."},
-      {"title": "Thrips", "hint": "Silvery streaks on leaves: rinse, use soapy water."}
+      {
+        "title": {"en": "Yellow tips", "pt": "Pontas amarelas"},
+        "hint": {
+          "en": "Irregular watering or lack of nitrogen.",
+          "pt": "Rega irregular ou falta de nitrogênio."
+        }
+      },
+      {
+        "title": {"en": "Thrips", "pt": "Tripes"},
+        "hint": {
+          "en": "Silvery streaks on leaves: rinse, use soapy water.",
+          "pt": "Riscos prateados nas folhas: lave e use água com sabão."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "petroselinum-crispum", "scientificName": "Petroselinum crispum",
     "namesPt": ["salsinha", "salsa"], "namesEn": ["parsley"],
-    "waterEveryDays": 3, "water": "Keep the soil evenly moist.",
-    "sun": "PART_SUN", "sunHint": "Sun to part shade.",
-    "fertilizeEveryDays": 30, "fertilizer": "Balanced organic fertilizer monthly.",
+    "waterEveryDays": 3, "water": {
+      "en": "Keep the soil evenly moist.",
+      "pt": "Mantenha a terra uniformemente úmida."
+    },
+    "sun": "PART_SUN", "sunHint": {
+      "en": "Sun to part shade.",
+      "pt": "Sol a meia-sombra."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Balanced organic fertilizer monthly.",
+      "pt": "Adubo orgânico equilibrado todo mês."
+    },
     "problems": [
-      {"title": "Yellow leaves", "hint": "Overwatering or too little nitrogen."},
-      {"title": "Bolting (flowering)", "hint": "Heat or age: it's a biennial, resow periodically."}
+      {
+        "title": {"en": "Yellow leaves", "pt": "Folhas amarelas"},
+        "hint": {
+          "en": "Overwatering or too little nitrogen.",
+          "pt": "Excesso de água ou pouco nitrogênio."
+        }
+      },
+      {
+        "title": {"en": "Bolting (flowering)", "pt": "Pendoamento (florescendo)"},
+        "hint": {
+          "en": "Heat or age: it's a biennial, resow periodically.",
+          "pt": "Calor ou idade: é bienal, semeie de novo de tempos em tempos."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "coriandrum-sativum", "scientificName": "Coriandrum sativum",
     "namesPt": ["coentro"], "namesEn": ["coriander", "cilantro"],
-    "waterEveryDays": 2, "water": "Keep the soil moist; it bolts when stressed.",
-    "sun": "PART_SUN", "sunHint": "Sun in mild weather, afternoon shade in hot weather.",
-    "fertilizeEveryDays": 30, "fertilizer": "Light organic fertilizer; too much nitrogen reduces flavour.",
+    "waterEveryDays": 2, "water": {
+      "en": "Keep the soil moist; it bolts when stressed.",
+      "pt": "Mantenha a terra úmida; sob estresse ele pendoa."
+    },
+    "sun": "PART_SUN", "sunHint": {
+      "en": "Sun in mild weather, afternoon shade in hot weather.",
+      "pt": "Sol em clima ameno, sombra à tarde no calor."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Light organic fertilizer; too much nitrogen reduces flavour.",
+      "pt": "Adubo orgânico leve; nitrogênio demais tira o sabor."
+    },
     "problems": [
-      {"title": "Quickly goes to seed", "hint": "Heat and dry soil: sow small batches every few weeks."}
+      {
+        "title": {"en": "Quickly goes to seed", "pt": "Vai logo para semente"},
+        "hint": {
+          "en": "Heat and dry soil: sow small batches every few weeks.",
+          "pt": "Calor e terra seca: semeie pequenas quantidades a cada poucas semanas."
+        }
+      }
     ]
   },
   {
     "id": "origanum-vulgare", "scientificName": "Origanum vulgare",
     "namesPt": ["orégano", "orégão"], "namesEn": ["oregano"],
-    "waterEveryDays": 5, "water": "Let the soil dry between waterings.",
-    "sun": "FULL_SUN", "sunHint": "Full sun for the best flavour.",
-    "fertilizeEveryDays": 60, "fertilizer": "Little feeding needed: light organic fertilizer in spring.",
+    "waterEveryDays": 5, "water": {
+      "en": "Let the soil dry between waterings.",
+      "pt": "Deixe a terra secar entre as regas."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun for the best flavour.",
+      "pt": "Sol pleno para o melhor sabor."
+    },
+    "fertilizeEveryDays": 60, "fertilizer": {
+      "en": "Little feeding needed: light organic fertilizer in spring.",
+      "pt": "Precisa de pouco adubo: um pouco de adubo orgânico na primavera."
+    },
     "problems": [
-      {"title": "Root rot", "hint": "Overwatering or heavy soil: use a well-draining mix."}
+      {
+        "title": {"en": "Root rot", "pt": "Raiz podre"},
+        "hint": {
+          "en": "Overwatering or heavy soil: use a well-draining mix.",
+          "pt": "Excesso de água ou terra pesada: use um substrato bem drenado."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "thymus-vulgaris", "scientificName": "Thymus vulgaris",
     "namesPt": ["tomilho"], "namesEn": ["thyme"],
-    "waterEveryDays": 5, "water": "Let the soil dry between waterings; drought tolerant.",
-    "sun": "FULL_SUN", "sunHint": "Full sun.",
-    "fertilizeEveryDays": 60, "fertilizer": "Very little: a light organic feed in spring.",
+    "waterEveryDays": 5, "water": {
+      "en": "Let the soil dry between waterings; drought tolerant.",
+      "pt": "Deixe a terra secar entre as regas; tolera seca."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun.",
+      "pt": "Sol pleno."
+    },
+    "fertilizeEveryDays": 60, "fertilizer": {
+      "en": "Very little: a light organic feed in spring.",
+      "pt": "Muito pouco: um adubo orgânico leve na primavera."
+    },
     "problems": [
-      {"title": "Woody, sparse plant", "hint": "Trim lightly after flowering to keep it compact."},
-      {"title": "Rotting", "hint": "Too much water."}
+      {
+        "title": {"en": "Woody, sparse plant", "pt": "Planta lenhosa e rala"},
+        "hint": {
+          "en": "Trim lightly after flowering to keep it compact.",
+          "pt": "Pode levemente depois da floração para mantê-la compacta."
+        }
+      },
+      {
+        "title": {"en": "Rotting", "pt": "Apodrecendo"},
+        "hint": {
+          "en": "Too much water.",
+          "pt": "Água demais."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "capsicum", "scientificName": "Capsicum (peppers)", "generic": true,
     "namesPt": ["pimenta", "pimenteira", "pimenta-dedo-de-moça", "pimenta-malagueta"], "namesEn": ["chili pepper", "pepper"],
-    "waterEveryDays": 3, "water": "Keep the soil evenly moist; mulch helps in heat.",
-    "sun": "FULL_SUN", "sunHint": "Full sun, 6-8 hours.",
-    "fertilizeEveryDays": 15, "fertilizer": "Balanced fertilizer while growing, then one richer in potassium (e.g. NPK 4-14-8) when flowering and fruiting.",
+    "waterEveryDays": 3, "water": {
+      "en": "Keep the soil evenly moist; mulch helps in heat.",
+      "pt": "Mantenha a terra uniformemente úmida; cobertura morta ajuda no calor."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun, 6-8 hours.",
+      "pt": "Sol pleno, 6-8 horas."
+    },
+    "fertilizeEveryDays": 15, "fertilizer": {
+      "en": "Balanced fertilizer while growing, then one richer in potassium (e.g. NPK 4-14-8) when flowering and fruiting.",
+      "pt": "Adubo equilibrado no crescimento, depois um mais rico em potássio (ex.: NPK 4-14-8) na floração e frutificação."
+    },
     "problems": [
-      {"title": "Flowers dropping", "hint": "Heat stress or irregular watering."},
-      {"title": "Aphids and whiteflies", "hint": "Check leaf undersides; soapy water or neem oil."}
+      {
+        "title": {"en": "Flowers dropping", "pt": "Flores caindo"},
+        "hint": {
+          "en": "Heat stress or irregular watering.",
+          "pt": "Estresse por calor ou rega irregular."
+        }
+      },
+      {
+        "title": {"en": "Aphids and whiteflies", "pt": "Pulgões e moscas-brancas"},
+        "hint": {
+          "en": "Check leaf undersides; soapy water or neem oil.",
+          "pt": "Confira o verso das folhas; água com sabão ou óleo de neem."
+        }
+      }
     ]
   },
   {
     "id": "lavandula-angustifolia", "scientificName": "Lavandula angustifolia",
     "namesPt": ["lavanda", "alfazema"], "namesEn": ["lavender", "english lavender"],
-    "waterEveryDays": 7, "water": "Let the soil dry out between waterings; very sensitive to wet roots.",
-    "sun": "FULL_SUN", "sunHint": "Full sun, at least 6-8 hours.",
-    "fertilizeEveryDays": 90, "fertilizer": "Little or no feeding; poor, well-drained soil suits it.",
+    "waterEveryDays": 7, "water": {
+      "en": "Let the soil dry out between waterings; very sensitive to wet roots.",
+      "pt": "Deixe a terra secar entre as regas; muito sensível a raízes molhadas."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun, at least 6-8 hours.",
+      "pt": "Sol pleno, pelo menos 6-8 horas."
+    },
+    "fertilizeEveryDays": 90, "fertilizer": {
+      "en": "Little or no feeding; poor, well-drained soil suits it.",
+      "pt": "Pouco ou nenhum adubo; terra pobre e bem drenada combina com ela."
+    },
     "problems": [
-      {"title": "Grey, dying stems", "hint": "Root rot from humidity and wet soil: improve drainage."},
-      {"title": "Few flowers", "hint": "Not enough sun or too much fertilizer."}
+      {
+        "title": {"en": "Grey, dying stems", "pt": "Ramos cinzentos morrendo"},
+        "hint": {
+          "en": "Root rot from humidity and wet soil: improve drainage.",
+          "pt": "Raiz podre por umidade e terra molhada: melhore a drenagem."
+        }
+      },
+      {
+        "title": {"en": "Few flowers", "pt": "Poucas flores"},
+        "hint": {
+          "en": "Not enough sun or too much fertilizer.",
+          "pt": "Falta de sol ou adubo demais."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "rosa", "scientificName": "Rosa (roses)", "generic": true,
     "namesPt": ["rosa", "roseira"], "namesEn": ["rose"],
-    "waterEveryDays": 3, "water": "Water deeply at the base, keeping leaves dry.",
-    "sun": "FULL_SUN", "sunHint": "At least 6 hours of sun.",
-    "fertilizeEveryDays": 30, "fertilizer": "Rose or flowering-plant fertilizer (e.g. NPK 4-14-8) during the growing season.",
+    "waterEveryDays": 3, "water": {
+      "en": "Water deeply at the base, keeping leaves dry.",
+      "pt": "Regue bem na base, mantendo as folhas secas."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "At least 6 hours of sun.",
+      "pt": "Pelo menos 6 horas de sol."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Rose or flowering-plant fertilizer (e.g. NPK 4-14-8) during the growing season.",
+      "pt": "Adubo para rosas ou plantas floríferas (ex.: NPK 4-14-8) na época de crescimento."
+    },
     "problems": [
-      {"title": "Black spot", "hint": "Fungal spots on leaves: remove them, water the soil only, improve airflow."},
-      {"title": "Aphids", "hint": "On buds: hose off or soapy water."},
-      {"title": "Powdery mildew", "hint": "White powder: more sun and airflow."}
+      {
+        "title": {"en": "Black spot", "pt": "Mancha-negra"},
+        "hint": {
+          "en": "Fungal spots on leaves: remove them, water the soil only, improve airflow.",
+          "pt": "Manchas de fungo nas folhas: retire-as, regue só a terra e melhore a ventilação."
+        }
+      },
+      {
+        "title": {"en": "Aphids", "pt": "Pulgões"},
+        "hint": {
+          "en": "On buds: hose off or soapy water.",
+          "pt": "Nos botões: retire com jato de água ou água com sabão."
+        }
+      },
+      {
+        "title": {"en": "Powdery mildew", "pt": "Oídio"},
+        "hint": {
+          "en": "White powder: more sun and airflow.",
+          "pt": "Pó branco: mais sol e ventilação."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "hibiscus-rosa-sinensis", "scientificName": "Hibiscus rosa-sinensis",
     "namesPt": ["hibisco", "mimo-de-vênus"], "namesEn": ["hibiscus", "chinese hibiscus"],
-    "waterEveryDays": 3, "water": "Keep the soil moist in heat and flowering; less in winter.",
-    "sun": "FULL_SUN", "sunHint": "Full sun for abundant flowers.",
-    "fertilizeEveryDays": 15, "fertilizer": "Fertilizer richer in potassium, lower in phosphorus, during flowering.",
+    "waterEveryDays": 3, "water": {
+      "en": "Keep the soil moist in heat and flowering; less in winter.",
+      "pt": "Mantenha a terra úmida no calor e na floração; menos no inverno."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun for abundant flowers.",
+      "pt": "Sol pleno para flores abundantes."
+    },
+    "fertilizeEveryDays": 15, "fertilizer": {
+      "en": "Fertilizer richer in potassium, lower in phosphorus, during flowering.",
+      "pt": "Adubo mais rico em potássio e com menos fósforo durante a floração."
+    },
     "problems": [
-      {"title": "Buds dropping", "hint": "Irregular watering, heat stress or moving the plant."},
-      {"title": "Yellow leaves", "hint": "Over/underwatering or nutrient deficiency."},
-      {"title": "Whiteflies and aphids", "hint": "Treat with soapy water or neem oil."}
+      {
+        "title": {"en": "Buds dropping", "pt": "Botões caindo"},
+        "hint": {
+          "en": "Irregular watering, heat stress or moving the plant.",
+          "pt": "Rega irregular, estresse por calor ou mudança de lugar."
+        }
+      },
+      {
+        "title": {"en": "Yellow leaves", "pt": "Folhas amarelas"},
+        "hint": {
+          "en": "Over/underwatering or nutrient deficiency.",
+          "pt": "Água demais ou de menos, ou falta de nutrientes."
+        }
+      },
+      {
+        "title": {"en": "Whiteflies and aphids", "pt": "Moscas-brancas e pulgões"},
+        "hint": {
+          "en": "Treat with soapy water or neem oil.",
+          "pt": "Trate com água com sabão ou óleo de neem."
+        }
+      }
     ],
     "toxicToPets": false
   },
   {
     "id": "bougainvillea", "scientificName": "Bougainvillea", "generic": true,
     "namesPt": ["primavera", "buganvília", "três-marias"], "namesEn": ["bougainvillea"],
-    "waterEveryDays": 7, "water": "Water when dry; slightly dry conditions encourage flowering.",
-    "sun": "FULL_SUN", "sunHint": "Full sun; the more sun, the more colour.",
-    "fertilizeEveryDays": 30, "fertilizer": "Low-nitrogen, higher-potassium fertilizer; too much nitrogen gives leaves instead of flowers.",
+    "waterEveryDays": 7, "water": {
+      "en": "Water when dry; slightly dry conditions encourage flowering.",
+      "pt": "Regue quando estiver seca; um pouco de secura estimula a floração."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun; the more sun, the more colour.",
+      "pt": "Sol pleno; quanto mais sol, mais cor."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Low-nitrogen, higher-potassium fertilizer; too much nitrogen gives leaves instead of flowers.",
+      "pt": "Adubo com pouco nitrogênio e mais potássio; nitrogênio demais dá folhas em vez de flores."
+    },
     "problems": [
-      {"title": "No flowers", "hint": "Too little sun, too much water or too much nitrogen."},
-      {"title": "Leaves dropping", "hint": "Sudden change or overwatering; usually recovers."}
+      {
+        "title": {"en": "No flowers", "pt": "Sem flores"},
+        "hint": {
+          "en": "Too little sun, too much water or too much nitrogen.",
+          "pt": "Pouco sol, água demais ou nitrogênio demais."
+        }
+      },
+      {
+        "title": {"en": "Leaves dropping", "pt": "Folhas caindo"},
+        "hint": {
+          "en": "Sudden change or overwatering; usually recovers.",
+          "pt": "Mudança brusca ou excesso de água; normalmente se recupera."
+        }
+      }
     ]
   },
   {
     "id": "pelargonium-hortorum", "scientificName": "Pelargonium × hortorum",
     "namesPt": ["gerânio", "malva"], "namesEn": ["geranium", "zonal geranium"],
-    "waterEveryDays": 5, "water": "Water when the top few cm are dry; avoid soggy soil.",
-    "sun": "FULL_SUN", "sunHint": "Full sun to bright light.",
-    "fertilizeEveryDays": 15, "fertilizer": "Balanced or bloom fertilizer at half strength during flowering.",
+    "waterEveryDays": 5, "water": {
+      "en": "Water when the top few cm are dry; avoid soggy soil.",
+      "pt": "Regue quando os primeiros centímetros estiverem secos; evite terra encharcada."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun to bright light.",
+      "pt": "Sol pleno a bastante luz."
+    },
+    "fertilizeEveryDays": 15, "fertilizer": {
+      "en": "Balanced or bloom fertilizer at half strength during flowering.",
+      "pt": "Adubo equilibrado ou de floração em meia dose durante a floração."
+    },
     "problems": [
-      {"title": "Yellow leaves", "hint": "Overwatering."},
-      {"title": "Grey mould on flowers", "hint": "Remove spent flowers, improve airflow."}
+      {
+        "title": {"en": "Yellow leaves", "pt": "Folhas amarelas"},
+        "hint": {
+          "en": "Overwatering.",
+          "pt": "Excesso de água."
+        }
+      },
+      {
+        "title": {"en": "Grey mould on flowers", "pt": "Mofo cinzento nas flores"},
+        "hint": {
+          "en": "Remove spent flowers, improve airflow.",
+          "pt": "Retire as flores murchas e melhore a ventilação."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "plumeria-pudica", "scientificName": "Plumeria pudica",
     "namesPt": ["jasmim-do-caribe", "plumeria-pudica", "buquê-de-noiva"], "namesEn": ["bridal bouquet", "white frangipani", "fiddle-leaf plumeria"],
-    "waterEveryDays": 5, "water": "Water when the top few cm are dry; drought tolerant once established. Much less in cool weather, when it may drop leaves.",
-    "sun": "FULL_SUN", "sunHint": "Full sun, at least 6 hours, for abundant flowers; tolerates light shade but flowers less.",
-    "fertilizeEveryDays": 30, "fertilizer": "Bloom fertilizer richer in phosphorus (e.g. NPK 10-30-10 or 4-14-8) in the warm season; none in winter.",
+    "waterEveryDays": 5, "water": {
+      "en": "Water when the top few cm are dry; drought tolerant once established. Much less in cool weather, when it may drop leaves.",
+      "pt": "Regue quando os primeiros centímetros estiverem secos; depois de estabelecido, tolera seca. Bem menos no tempo frio, quando pode perder folhas."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun, at least 6 hours, for abundant flowers; tolerates light shade but flowers less.",
+      "pt": "Sol pleno, pelo menos 6 horas, para flores abundantes; tolera sombra leve, mas floresce menos."
+    },
+    "fertilizeEveryDays": 30, "fertilizer": {
+      "en": "Bloom fertilizer richer in phosphorus (e.g. NPK 10-30-10 or 4-14-8) in the warm season; none in winter.",
+      "pt": "Adubo de floração mais rico em fósforo (ex.: NPK 10-30-10 ou 4-14-8) na estação quente; nada no inverno."
+    },
     "problems": [
-      {"title": "Few or no flowers", "hint": "Not enough sun, or too much nitrogen: move to full sun and use a bloom fertilizer."},
-      {"title": "Leaves dropping in winter", "hint": "Normal in cooler months; reduce watering until new growth appears."},
-      {"title": "Rust (orange powder under leaves)", "hint": "Remove affected leaves and fallen debris; improve airflow."},
-      {"title": "Mealybugs and whiteflies", "hint": "Check leaf undersides; wipe off or treat with neem oil or soapy water."}
+      {
+        "title": {"en": "Few or no flowers", "pt": "Poucas ou nenhuma flor"},
+        "hint": {
+          "en": "Not enough sun, or too much nitrogen: move to full sun and use a bloom fertilizer.",
+          "pt": "Pouco sol ou nitrogênio demais: leve para o sol pleno e use adubo de floração."
+        }
+      },
+      {
+        "title": {"en": "Leaves dropping in winter", "pt": "Folhas caindo no inverno"},
+        "hint": {
+          "en": "Normal in cooler months; reduce watering until new growth appears.",
+          "pt": "Normal nos meses frios; regue menos até surgirem brotos novos."
+        }
+      },
+      {
+        "title": {"en": "Rust (orange powder under leaves)", "pt": "Ferrugem (pó laranja sob as folhas)"},
+        "hint": {
+          "en": "Remove affected leaves and fallen debris; improve airflow.",
+          "pt": "Retire as folhas atingidas e as caídas; melhore a ventilação."
+        }
+      },
+      {
+        "title": {"en": "Mealybugs and whiteflies", "pt": "Cochonilhas e moscas-brancas"},
+        "hint": {
+          "en": "Check leaf undersides; wipe off or treat with neem oil or soapy water.",
+          "pt": "Confira o verso das folhas; limpe ou trate com óleo de neem ou água com sabão."
+        }
+      }
     ]
   },
   {
     "id": "lantana-camara", "scientificName": "Lantana camara",
     "namesPt": ["lantana", "cambará", "camará", "chumbinho"], "namesEn": ["lantana", "shrub verbena"],
-    "waterEveryDays": 5, "water": "Water when the soil is dry a few cm down; drought tolerant in the ground, pots need more frequent watering.",
-    "sun": "FULL_SUN", "sunHint": "Full sun; in shade it flowers poorly and gets powdery mildew.",
-    "fertilizeEveryDays": 45, "fertilizer": "Light feeding with a balanced or bloom fertilizer in the growing season; too much fertilizer gives leaves instead of flowers.",
+    "waterEveryDays": 5, "water": {
+      "en": "Water when the soil is dry a few cm down; drought tolerant in the ground, pots need more frequent watering.",
+      "pt": "Regue quando a terra estiver seca alguns centímetros abaixo; no chão tolera seca, em vasos precisa de regas mais frequentes."
+    },
+    "sun": "FULL_SUN", "sunHint": {
+      "en": "Full sun; in shade it flowers poorly and gets powdery mildew.",
+      "pt": "Sol pleno; na sombra floresce pouco e pega oídio."
+    },
+    "fertilizeEveryDays": 45, "fertilizer": {
+      "en": "Light feeding with a balanced or bloom fertilizer in the growing season; too much fertilizer gives leaves instead of flowers.",
+      "pt": "Adubação leve com adubo equilibrado ou de floração na época de crescimento; adubo demais dá folhas em vez de flores."
+    },
     "problems": [
-      {"title": "Powdery mildew", "hint": "White powder on leaves: more sun and airflow, water at the base."},
-      {"title": "Whiteflies and lace bugs", "hint": "Pale speckled leaves: rinse undersides, use soapy water or neem oil."},
-      {"title": "Spreads by seed", "hint": "Its berries spread easily (it's invasive in many regions): remove spent flower heads. The berries are poisonous."}
+      {
+        "title": {"en": "Powdery mildew", "pt": "Oídio"},
+        "hint": {
+          "en": "White powder on leaves: more sun and airflow, water at the base.",
+          "pt": "Pó branco nas folhas: mais sol e ventilação, regue na base."
+        }
+      },
+      {
+        "title": {"en": "Whiteflies and lace bugs", "pt": "Moscas-brancas e percevejos-de-renda"},
+        "hint": {
+          "en": "Pale speckled leaves: rinse undersides, use soapy water or neem oil.",
+          "pt": "Folhas pálidas e pintadas: lave o verso, use água com sabão ou óleo de neem."
+        }
+      },
+      {
+        "title": {"en": "Spreads by seed", "pt": "Espalha-se por sementes"},
+        "hint": {
+          "en": "Its berries spread easily (it's invasive in many regions): remove spent flower heads. The berries are poisonous.",
+          "pt": "Os frutinhos se espalham fácil (é invasora em muitas regiões): retire as flores secas. Os frutos são venenosos."
+        }
+      }
     ],
     "toxicToPets": true
   },
   {
     "id": "dracaena-sanderiana", "scientificName": "Dracaena sanderiana",
     "namesPt": ["bambu-da-sorte", "dracena-bambu", "bambu-chinês"], "namesEn": ["lucky bamboo", "ribbon plant"],
-    "waterEveryDays": 7, "water": "In water: keep the roots covered and change the water every 1-2 weeks, using filtered or rain water. In soil: keep it lightly moist.",
-    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates low light. Direct sun yellows and scorches the leaves.",
-    "fertilizeEveryDays": 60, "fertilizer": "A drop of very diluted liquid fertilizer (made for lucky bamboo or houseplants) every 1-2 months; too much burns it.",
+    "waterEveryDays": 7, "water": {
+      "en": "In water: keep the roots covered and change the water every 1-2 weeks, using filtered or rain water. In soil: keep it lightly moist.",
+      "pt": "Na água: mantenha as raízes cobertas e troque a água a cada 1-2 semanas, usando água filtrada ou da chuva. Na terra: mantenha levemente úmida."
+    },
+    "sun": "BRIGHT_INDIRECT", "sunHint": {
+      "en": "Bright indirect light; tolerates low light. Direct sun yellows and scorches the leaves.",
+      "pt": "Luz indireta forte; tolera pouca luz. O sol direto amarela e queima as folhas."
+    },
+    "fertilizeEveryDays": 60, "fertilizer": {
+      "en": "A drop of very diluted liquid fertilizer (made for lucky bamboo or houseplants) every 1-2 months; too much burns it.",
+      "pt": "Uma gota de adubo líquido bem diluído (para bambu-da-sorte ou plantas de interior) a cada 1-2 meses; demais queima."
+    },
     "problems": [
-      {"title": "Yellow leaves or stalks", "hint": "Too much sun, too much fertilizer, or chlorine/fluoride in tap water: use filtered water."},
-      {"title": "Green algae in the water", "hint": "Light reaching the water: use an opaque container and change the water more often."},
-      {"title": "Soft, rotting stalk", "hint": "Remove it so the rot doesn't spread; refresh the water and rinse the container."}
+      {
+        "title": {"en": "Yellow leaves or stalks", "pt": "Folhas ou hastes amarelas"},
+        "hint": {
+          "en": "Too much sun, too much fertilizer, or chlorine/fluoride in tap water: use filtered water.",
+          "pt": "Sol demais, adubo demais, ou cloro/flúor na água da torneira: use água filtrada."
+        }
+      },
+      {
+        "title": {"en": "Green algae in the water", "pt": "Algas verdes na água"},
+        "hint": {
+          "en": "Light reaching the water: use an opaque container and change the water more often.",
+          "pt": "Luz chegando à água: use um recipiente opaco e troque a água com mais frequência."
+        }
+      },
+      {
+        "title": {"en": "Soft, rotting stalk", "pt": "Haste mole apodrecendo"},
+        "hint": {
+          "en": "Remove it so the rot doesn't spread; refresh the water and rinse the container.",
+          "pt": "Retire-a para a podridão não se espalhar; troque a água e lave o recipiente."
+        }
+      }
     ],
     "toxicToPets": true
   }

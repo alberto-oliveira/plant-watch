@@ -10,10 +10,11 @@ import java.time.LocalDate
 class SuggestedTasksTest {
 
     private val today = LocalDate.of(2026, 11, 4)
+    private val text = LocalizedText("x", "x")
     private val basil = CareGuideEntry(
         id = "ocimum-basilicum", scientificName = "Ocimum basilicum", namesPt = listOf("manjericão"),
-        namesEn = listOf("basil"), waterEveryDays = 2, water = "w", sun = SunNeed.FULL_SUN, sunHint = "s",
-        fertilizeEveryDays = 30, fertilizer = "f", problems = listOf(Problem("t", "h")),
+        namesEn = listOf("basil"), waterEveryDays = 2, water = text, sun = SunNeed.FULL_SUN, sunHint = text,
+        fertilizeEveryDays = 30, fertilizer = text, problems = listOf(Problem(text, text)),
     )
 
     @Test

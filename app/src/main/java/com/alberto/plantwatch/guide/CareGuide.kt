@@ -12,9 +12,18 @@ import kotlinx.serialization.json.Json
 /** How much light a species wants. Stored in the JSON as the constant's name. */
 enum class SunNeed { FULL_SUN, PART_SUN, BRIGHT_INDIRECT, LOW_LIGHT }
 
+/**
+ * A text in the guide's two languages. In the JSON: {"en": "...", "pt": "..."}.
+ */
+@Serializable
+data class LocalizedText(val en: String, val pt: String) {
+    /** The text for a language code ("pt", "en", ...); English for any other language. */
+    fun forLanguage(language: String): String = if (language == "pt") pt else en
+}
+
 /** A common problem and what to do about it. */
 @Serializable
-data class Problem(val title: String, val hint: String)
+data class Problem(val title: LocalizedText, val hint: LocalizedText)
 
 /**
  * One species (or, if [generic], a group such as "ferns" whose members need
@@ -34,12 +43,12 @@ data class CareGuideEntry(
     val generic: Boolean = false,
     /** Suggested watering interval in days (a typical value; adjust to the plant). */
     val waterEveryDays: Int,
-    val water: String,
+    val water: LocalizedText,
     val sun: SunNeed,
-    val sunHint: String,
+    val sunHint: LocalizedText,
     /** Suggested fertilizing interval in days, or null if it rarely needs feeding. */
     val fertilizeEveryDays: Int? = null,
-    val fertilizer: String,
+    val fertilizer: LocalizedText,
     val problems: List<Problem>,
     /** True if toxic to cats/dogs; null if unknown. */
     val toxicToPets: Boolean? = null,

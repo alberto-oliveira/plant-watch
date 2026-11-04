@@ -34,8 +34,11 @@ class CareGuideDataTest {
             assertTrue("$where: English name", e.namesEn.isNotEmpty())
             assertTrue("$where: watering 1-60 days", e.waterEveryDays in 1..60)
             assertTrue("$where: fertilizing 7-120 days", e.fertilizeEveryDays == null || e.fertilizeEveryDays in 7..120)
-            assertTrue("$where: hints", listOf(e.water, e.sunHint, e.fertilizer).all { it.isNotBlank() })
-            assertTrue("$where: problems", e.problems.isNotEmpty() && e.problems.all { it.title.isNotBlank() && it.hint.isNotBlank() })
+            // Every text in both languages (and the Portuguese actually translated).
+            val texts = listOf(e.water, e.sunHint, e.fertilizer) + e.problems.flatMap { listOf(it.title, it.hint) }
+            assertTrue("$where: problems", e.problems.isNotEmpty())
+            assertTrue("$where: texts in English and Portuguese", texts.all { it.en.isNotBlank() && it.pt.isNotBlank() })
+            assertTrue("$where: hints translated", listOf(e.water, e.sunHint, e.fertilizer).all { it.en != it.pt })
         }
     }
 
@@ -62,5 +65,19 @@ class CareGuideDataTest {
         assertEquals("plumeria-pudica", top("jasmim do caribe"))
         assertEquals("lantana-camara", top("cambara"))
         assertEquals("dracaena-sanderiana", top("bambu da sorte"))
+    }
+
+    /**
+     * Every UI string exists in Portuguese too (Lint's MissingTranslation
+     * checks the same, but this names the missing keys).
+     */
+    @Test
+    fun `every UI string has a Portuguese translation`() {
+        fun keys(path: String) = Regex("""<(?:string|plurals) name="([^"]+)"""")
+            .findAll(File(path).readText()).map { it.groupValues[1] }.toSet()
+        val english = keys("src/main/res/values/strings.xml")
+        val portuguese = keys("src/main/res/values-pt/strings.xml")
+        assertEquals(emptySet<String>(), english - portuguese)
+        assertEquals(emptySet<String>(), portuguese - english)
     }
 }
