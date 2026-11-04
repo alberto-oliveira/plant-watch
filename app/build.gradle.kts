@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.serialization.json)
 
     // platform(...) imports the BOM so the Compose libraries below need no versions.
     implementation(platform(libs.androidx.compose.bom))
