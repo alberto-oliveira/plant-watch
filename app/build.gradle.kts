@@ -42,8 +42,8 @@ android {
         applicationId = "com.alberto.plantwatch" // unique ID of the installed app
         minSdk = 34
         targetSdk = 35                  // matches the phone (Android 15)
-        versionCode = 1
-        versionName = "0.1"
+        versionCode = 2                 // must increase with every APK you share (Android refuses "downgrades")
+        versionName = "1.0"
     }
 
     signingConfigs {
