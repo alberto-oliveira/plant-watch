@@ -7,7 +7,7 @@ import java.time.LocalDateTime
  * Sunlight rules in plain Kotlin (unit-tested in SunCalculationTest).
  */
 
-/** One hour of weather data: its local start time and the seconds of sunshine in it. */
+/** One hour of weather data: the local time the hour *starts* and the seconds of sunshine in it. */
 data class HourlySun(
     val time: LocalDateTime,
     val sunshineSeconds: Double,
@@ -35,6 +35,22 @@ fun sunMinutesInWindow(
         .sumOf { it.sunshineSeconds }
     return seconds / 60.0 * exposurePercent / 100.0
 }
+
+/**
+ * The days that can be stored: before [today] (still in progress) and covered
+ * by all 24 hours of data. The first day of a fetch is usually partial (its
+ * only hour is 23:00-24:00, because of the hour shift in toHourlySun) and is
+ * skipped instead of being stored with almost no sun.
+ *
+ * Kotlin notes: `groupingBy { }.eachCount()` counts items per key (here, hours
+ * per date); `filter` on a Map keeps the entries matching the condition.
+ */
+fun completeDays(hours: List<HourlySun>, today: LocalDate): List<LocalDate> =
+    hours.groupingBy { it.time.toLocalDate() }
+        .eachCount()
+        .filter { (day, count) -> day < today && count == 24 }
+        .keys
+        .sorted()
 
 /**
  * Validates a latitude/longitude typed by the user. Returns the pair of numbers,

@@ -41,7 +41,7 @@ class SunWorker(
         }
 
         val today = LocalDate.now()
-        val completeDays = hours.map { it.time.toLocalDate() }.distinct().filter { it < today }
+        val completeDays = completeDays(hours, today)
 
         // `flatMap`: for each plant, a list of rows (one per day), all joined into one list.
         val rows = plants.flatMap { plant ->
