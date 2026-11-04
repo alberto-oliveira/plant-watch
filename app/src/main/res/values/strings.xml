@@ -45,6 +45,24 @@
     <string name="task_never_done">Not done yet</string>
     <string name="task_done">Done</string>
     <string name="history_title">History</string>
+
+    <!-- Plant detail: sun -->
+    <string name="sun_title">Sun</string>
+    <string name="sun_off">Tracking off · Tap to set up</string>
+    <!-- %1$s = yesterday's duration, %2$s = last 7 days, e.g. "Yesterday 2 h 15 min · Last 7 days 14 h" -->
+    <string name="sun_summary">Yesterday %1$s · Last 7 days %2$s</string>
+    <string name="sun_no_data">No data yet (needs a location in Settings and a network connection)</string>
+    <!-- %1$d = start hour, %2$d = end hour, %3$d = exposure percent -->
+    <string name="sun_window">%1$02d–%2$02d h at %3$d%%</string>
+    <string name="sun_duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="sun_duration_minutes">%1$d min</string>
+    <string name="sun_dialog_title">Sun tracking</string>
+    <string name="sun_dialog_hint">Exposure: how much of the outdoor sun the plant gets (100 outdoors, about 40 by a window). Hours: when the sun can reach it.</string>
+    <string name="sun_exposure_label">Exposure (%)</string>
+    <string name="sun_start_label">From hour (0–23)</string>
+    <string name="sun_end_label">To hour (1–24)</string>
+    <string name="sun_invalid">Exposure 0–100, and the start hour must be before the end hour</string>
+    <string name="sun_turn_off">Turn off</string>
     <!-- %1$s = task name, e.g. "Delete Water" -->
     <string name="task_delete_description">Delete %1$s</string>
 

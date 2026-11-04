@@ -44,6 +44,16 @@ class SunCalculationTest {
     }
 
     @Test
+    fun `sun settings parsing enforces ranges and start before end`() {
+        assertEquals(SunSettings(8, 18, 40), parseSunSettings("8", " 18 ", "40"))
+        assertEquals(SunSettings(0, 24, 100), parseSunSettings("0", "24", "100")) // whole day
+        assertNull(parseSunSettings("18", "8", "40")) // start after end
+        assertNull(parseSunSettings("8", "8", "40")) // empty window
+        assertNull(parseSunSettings("8", "18", "120")) // exposure over 100
+        assertNull(parseSunSettings("", "18", "40"))
+    }
+
+    @Test
     fun `Open-Meteo response is parsed into hours, missing values count as no sun`() {
         // Shaped like a real response (trimmed), including fields we don't use.
         val json = """

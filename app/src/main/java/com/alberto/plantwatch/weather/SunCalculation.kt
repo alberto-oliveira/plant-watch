@@ -47,3 +47,21 @@ fun parseLocation(latitude: String, longitude: String): Pair<Double, Double>? {
     if (lat !in -90.0..90.0 || lon !in -180.0..180.0) return null
     return Pair(lat, lon)
 }
+
+/** A plant's sun window and exposure, as entered in its sun dialog. */
+data class SunSettings(val startHour: Int, val endHour: Int, val exposurePercent: Int)
+
+/**
+ * Validates the sun dialog's three fields: start hour 0..23, end hour 1..24,
+ * start before end, exposure 0..100. Returns null if anything is off.
+ *
+ * Kotlin note: `?: return null` inside an expression stops the function early
+ * when the left side is null (here, text that isn't a whole number).
+ */
+fun parseSunSettings(startHour: String, endHour: String, exposurePercent: String): SunSettings? {
+    val start = startHour.trim().toIntOrNull() ?: return null
+    val end = endHour.trim().toIntOrNull() ?: return null
+    val exposure = exposurePercent.trim().toIntOrNull() ?: return null
+    if (start !in 0..23 || end !in 1..24 || start >= end || exposure !in 0..100) return null
+    return SunSettings(start, end, exposure)
+}
