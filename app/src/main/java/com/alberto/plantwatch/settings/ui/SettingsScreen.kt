@@ -1,5 +1,6 @@
 package com.alberto.plantwatch.settings.ui
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,6 +40,7 @@ import com.alberto.plantwatch.settings.appDetailsIntent
 import com.alberto.plantwatch.settings.ignoresBatteryOptimizations
 import com.alberto.plantwatch.settings.notificationSettingsIntent
 import com.alberto.plantwatch.settings.notificationsEnabled
+import com.alberto.plantwatch.ui.IconBadge
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
 import com.alberto.plantwatch.weather.parseLocation
 import java.time.LocalTime
@@ -164,6 +166,7 @@ fun SettingsScreen(
             SectionTitle(stringResource(R.string.settings_section_reminders))
             ListItem(
                 modifier = Modifier.clickable(onClick = onReminderTimeClick),
+                leadingContent = { SettingIcon(R.drawable.ic_schedule) },
                 headlineContent = { Text(stringResource(R.string.settings_reminder_time)) },
                 trailingContent = {
                     Text(
@@ -173,6 +176,7 @@ fun SettingsScreen(
                 },
             )
             StatusRow(
+                icon = R.drawable.ic_notifications,
                 title = stringResource(R.string.settings_notifications),
                 status = stringResource(
                     if (notificationsOn) R.string.settings_notifications_on else R.string.settings_notifications_off,
@@ -181,6 +185,7 @@ fun SettingsScreen(
                 onOpenSettings = onOpenNotificationSettings,
             )
             StatusRow(
+                icon = R.drawable.ic_battery_full,
                 title = stringResource(R.string.settings_battery),
                 status = stringResource(
                     if (batteryUnrestricted) R.string.settings_battery_unrestricted else R.string.settings_battery_optimized,
@@ -192,6 +197,7 @@ fun SettingsScreen(
             SectionTitle(stringResource(R.string.settings_section_sunlight))
             ListItem(
                 modifier = Modifier.clickable(onClick = onLocationClick),
+                leadingContent = { SettingIcon(R.drawable.ic_location_on) },
                 headlineContent = { Text(stringResource(R.string.settings_location)) },
                 supportingContent = {
                     Text(
@@ -212,12 +218,14 @@ fun SettingsScreen(
  */
 @Composable
 private fun StatusRow(
+    @DrawableRes icon: Int,
     title: String,
     status: String,
     isProblem: Boolean,
     onOpenSettings: () -> Unit,
 ) {
     ListItem(
+        leadingContent = { SettingIcon(icon) },
         headlineContent = { Text(title) },
         supportingContent = {
             Text(
@@ -230,6 +238,17 @@ private fun StatusRow(
                 Text(stringResource(R.string.settings_open_system))
             }
         },
+    )
+}
+
+/** The small round icon at the start of each settings row. */
+@Composable
+private fun SettingIcon(@DrawableRes icon: Int) {
+    IconBadge(
+        icon = icon,
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        size = 36.dp,
     )
 }
 
