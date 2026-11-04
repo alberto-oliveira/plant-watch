@@ -28,15 +28,20 @@ import com.alberto.plantwatch.weather.data.SunDao
  */
 @Database(
     entities = [Plant::class, CareTask::class, CareLog::class, SunDaily::class],
-    version = 3,
+    version = 4,
     exportSchema = true,
     // How to upgrade an existing database, one version at a time. An
     // *auto* migration: Room compares the exported schemas 1.json and 2.json
     // and generates the SQL (here: 3 new nullable columns on plants, and the
-    // new sun_daily table; v3: 3 nullable window columns on plants). Complex
+    // new sun_daily table; v3: 3 nullable window columns on plants; v4: the
+    // nullable speciesId column on plants). Complex
     // changes (renames, splits) need a hand-written Migration instead.
-    // Room chains them: a v1 database is upgraded 1 -> 2 -> 3.
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)],
+    // Room chains them: a v1 database is upgraded 1 -> 2 -> 3 -> 4.
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4),
+    ],
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
