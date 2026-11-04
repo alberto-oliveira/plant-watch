@@ -46,6 +46,22 @@ data class OpenMeteoResponse(
     )
 }
 
+/** Daily evapotranspiration (ET0, mm/day), for weather-aware watering. */
+@Serializable
+data class OpenMeteoDailyResponse(val daily: Daily) {
+    @Serializable
+    data class Daily(
+        /** Local dates, ISO format ("2026-11-05"). */
+        val time: List<String>,
+        @SerialName("et0_fao_evapotranspiration")
+        val et0: List<Double?>,
+    )
+}
+
+/** Pairs each date with its ET0 value (null when Open-Meteo has none). */
+fun OpenMeteoDailyResponse.toDailyEt0(): List<Pair<java.time.LocalDate, Double?>> =
+    daily.time.zip(daily.et0) { day, value -> java.time.LocalDate.parse(day) to value }
+
 /** The JSON settings used to decode Open-Meteo responses (also by Retrofit). */
 val OpenMeteoJson = Json { ignoreUnknownKeys = true }
 

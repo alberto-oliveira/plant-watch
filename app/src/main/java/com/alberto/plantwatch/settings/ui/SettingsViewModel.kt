@@ -46,6 +46,20 @@ class SettingsViewModel(
         viewModelScope.launch { settingsStore.setPauseFertilizingInWinter(enabled) }
     }
 
+    /** Weather-aware watering: on/off, and the current factor (1.0 = no change). */
+    val adjustWatering: StateFlow<Boolean> = settingsStore.adjustWateringToWeather
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
+    val wateringFactor: StateFlow<Double> = settingsStore.wateringFactor
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = 1.0)
+
+    fun setAdjustWatering(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsStore.setAdjustWateringToWeather(enabled)
+            // Fetch now so the factor is up to date right away.
+            if (enabled) fetchSun()
+        }
+    }
+
     fun setLocation(location: Location) {
         viewModelScope.launch {
             settingsStore.setLocation(location)

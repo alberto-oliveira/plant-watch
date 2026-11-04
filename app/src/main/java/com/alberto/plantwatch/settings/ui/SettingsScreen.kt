@@ -57,6 +57,8 @@ fun SettingsRoute(
     val reminderTime by viewModel.reminderTime.collectAsStateWithLifecycle()
     val location by viewModel.location.collectAsStateWithLifecycle()
     val pauseFertilizing by viewModel.pauseFertilizingInWinter.collectAsStateWithLifecycle()
+    val adjustWatering by viewModel.adjustWatering.collectAsStateWithLifecycle()
+    val wateringFactor by viewModel.wateringFactor.collectAsStateWithLifecycle()
     var showTimePicker by rememberSaveable { mutableStateOf(false) }
 
     // Location dialog: open or not, and the two texts being typed.
@@ -83,6 +85,9 @@ fun SettingsRoute(
         location = location,
         pauseFertilizing = pauseFertilizing,
         onPauseFertilizingChange = viewModel::setPauseFertilizingInWinter,
+        adjustWatering = adjustWatering,
+        wateringFactor = wateringFactor,
+        onAdjustWateringChange = viewModel::setAdjustWatering,
         notificationsOn = notificationsOn,
         batteryUnrestricted = batteryUnrestricted,
         onBack = onBack,
@@ -138,6 +143,9 @@ fun SettingsScreen(
     location: Location?,
     pauseFertilizing: Boolean,
     onPauseFertilizingChange: (Boolean) -> Unit,
+    adjustWatering: Boolean,
+    wateringFactor: Double,
+    onAdjustWateringChange: (Boolean) -> Unit,
     notificationsOn: Boolean,
     batteryUnrestricted: Boolean,
     onBack: () -> Unit,
@@ -218,6 +226,25 @@ fun SettingsScreen(
                     )
                 },
                 trailingContent = { Switch(checked = pauseFertilizing, onCheckedChange = onPauseFertilizingChange) },
+            )
+            ListItem(
+                modifier = Modifier.clickable { onAdjustWateringChange(!adjustWatering) },
+                leadingContent = { SettingIcon(R.drawable.ic_water_drop) },
+                headlineContent = { Text(stringResource(R.string.settings_adjust_watering)) },
+                supportingContent = {
+                    // When on, also say what it does this week.
+                    val percent = kotlin.math.abs(kotlin.math.round((wateringFactor - 1) * 100)).toInt()
+                    val now = when {
+                        percent == 0 -> stringResource(R.string.settings_adjust_watering_now_same)
+                        wateringFactor > 1 -> stringResource(R.string.settings_adjust_watering_now_sooner, percent)
+                        else -> stringResource(R.string.settings_adjust_watering_now_later, percent)
+                    }
+                    Text(
+                        if (adjustWatering) "${stringResource(R.string.settings_adjust_watering_hint)}\n$now"
+                        else stringResource(R.string.settings_adjust_watering_hint),
+                    )
+                },
+                trailingContent = { Switch(checked = adjustWatering, onCheckedChange = onAdjustWateringChange) },
             )
 
             SectionTitle(stringResource(R.string.settings_section_sunlight))
@@ -335,6 +362,7 @@ private fun SettingsScreenPreview() {
     PlantWatchTheme {
         SettingsScreen(
             reminderTime = LocalTime.of(9, 0), location = Location(-23.5505, -46.6333), pauseFertilizing = true, onPauseFertilizingChange = {},
+            adjustWatering = true, wateringFactor = 1.07, onAdjustWateringChange = {},
             notificationsOn = true, batteryUnrestricted = true,
             onBack = {}, onReminderTimeClick = {}, onLocationClick = {},
             onOpenNotificationSettings = {}, onOpenAppDetails = {},
@@ -348,6 +376,7 @@ private fun SettingsScreenProblemsPreview() {
     PlantWatchTheme {
         SettingsScreen(
             reminderTime = LocalTime.of(9, 0), location = null, pauseFertilizing = false, onPauseFertilizingChange = {},
+            adjustWatering = false, wateringFactor = 1.0, onAdjustWateringChange = {},
             notificationsOn = false, batteryUnrestricted = false,
             onBack = {}, onReminderTimeClick = {}, onLocationClick = {},
             onOpenNotificationSettings = {}, onOpenAppDetails = {},

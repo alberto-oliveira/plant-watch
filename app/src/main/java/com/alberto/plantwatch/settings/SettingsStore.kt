@@ -81,11 +81,27 @@ class SettingsStore(context: Context) {
         dataStore.edit { it[PAUSE_FERTILIZING] = enabled }
     }
 
+    /** Adjust watering intervals to the week's weather (off unless turned on). */
+    val adjustWateringToWeather: Flow<Boolean> = dataStore.data.map { it[ADJUST_WATERING] ?: false }
+
+    suspend fun setAdjustWateringToWeather(enabled: Boolean) {
+        dataStore.edit { it[ADJUST_WATERING] = enabled }
+    }
+
+    /** The latest watering factor from the daily weather job (1.0 = no change). */
+    val wateringFactor: Flow<Double> = dataStore.data.map { it[WATERING_FACTOR] ?: 1.0 }
+
+    suspend fun setWateringFactor(factor: Double) {
+        dataStore.edit { it[WATERING_FACTOR] = factor }
+    }
+
     private companion object {
         // Typed keys: the compiler knows each setting's type.
         val REMINDER_MINUTES = intPreferencesKey("reminder_minutes")
         val LATITUDE = doublePreferencesKey("latitude")
         val LONGITUDE = doublePreferencesKey("longitude")
         val PAUSE_FERTILIZING = booleanPreferencesKey("pause_fertilizing_in_winter")
+        val ADJUST_WATERING = booleanPreferencesKey("adjust_watering_to_weather")
+        val WATERING_FACTOR = doublePreferencesKey("watering_factor")
     }
 }

@@ -11,7 +11,8 @@ import java.io.IOException
 import java.time.LocalDate
 
 /**
- * The daily sunlight job: fetches the last 7 days of hourly sunshine for the
+ * The daily weather job. First it updates the weather-aware watering factor
+ * (daily ET0), then it fetches the last 7 days of hourly sunshine for the
  * saved location (one request), then stores, for each tracked plant and each
  * *complete* day (before today), the minutes of sun within its window, scaled
  * by its exposure. Rows already there are replaced (upsert), so re-fetching
@@ -25,12 +26,19 @@ class SunWorker(
     override suspend fun doWork(): Result {
         val container = (applicationContext as PlantWatchApplication).container
 
-        // Nothing to do without a location or without tracked plants.
+        // Nothing to do without a location.
         val location = container.settingsStore.location.first() ?: return Result.success()
-        val plants = container.database.plantDao().getSunTracked()
-        if (plants.isEmpty()) return Result.success()
 
+        val today = LocalDate.now()
+        val plants = container.database.plantDao().getSunTracked()
         val response = try {
+            // 1. Weather-aware watering: how fast pots dry this week vs usual.
+            //    Stored even when the setting is off, so it's ready when turned on.
+            val et0 = container.openMeteoApi.dailyEt0(location.latitude, location.longitude).toDailyEt0()
+            container.settingsStore.setWateringFactor(wateringFactor(et0, today))
+
+            // 2. Sunshine, only needed if some plant is tracked.
+            if (plants.isEmpty()) return Result.success()
             container.openMeteoApi.hourlySunshine(location.latitude, location.longitude)
         } catch (e: IOException) {
             // No network, timeout...: try again later (WorkManager waits longer each time).
@@ -41,7 +49,6 @@ class SunWorker(
         }
 
         val hours = response.toHourlySun()
-        val today = LocalDate.now()
         val completeDays = completeDays(hours, today)
 
         // `flatMap`: for each plant, a list of rows (one per day), all joined into one list.

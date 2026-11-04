@@ -31,6 +31,16 @@ interface OpenMeteoApi {
         @Query("longitude") longitude: Double,
     ): OpenMeteoResponse
 
+    /**
+     * Daily ET0 for the last 92 days (Open-Meteo's maximum) plus today, for
+     * weather-aware watering. A second small request, at most once a day.
+     */
+    @GET("v1/forecast?daily=et0_fao_evapotranspiration&timezone=auto&past_days=92&forecast_days=1")
+    suspend fun dailyEt0(
+        @Query("latitude") latitude: Double,
+        @Query("longitude") longitude: Double,
+    ): OpenMeteoDailyResponse
+
     companion object {
         /** Builds the client. Created once, lazily, in AppContainer. */
         fun create(): OpenMeteoApi = Retrofit.Builder()

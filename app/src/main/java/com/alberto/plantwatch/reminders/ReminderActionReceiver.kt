@@ -8,6 +8,8 @@ import com.alberto.plantwatch.PlantWatchApplication
 import com.alberto.plantwatch.plants.data.CareLog
 import com.alberto.plantwatch.plants.markedDone
 import com.alberto.plantwatch.plants.snoozed
+import com.alberto.plantwatch.weather.intervalWhenDone
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,9 +49,16 @@ class ReminderActionReceiver : BroadcastReceiver() {
                 // `!isAfter(today)` means "nextDue <= today".
                 val stillDue = dao.getByIds(taskIds.toList()).filter { !it.nextDue.isAfter(today) }
 
+                // Same weather adjustment for watering as when marking done in the app.
+                val settings = app.container.settingsStore
+                val factor = if (settings.adjustWateringToWeather.first()) settings.wateringFactor.first() else null
+
                 when (action) {
                     ACTION_DONE -> stillDue.forEach { task ->
-                        dao.markDone(markedDone(task, today), CareLog(taskId = task.id, doneOn = today))
+                        dao.markDone(
+                            markedDone(task, today, intervalWhenDone(task, factor)),
+                            CareLog(taskId = task.id, doneOn = today),
+                        )
                     }
                     ACTION_SNOOZE -> stillDue.forEach { task ->
                         dao.update(snoozed(task, today))

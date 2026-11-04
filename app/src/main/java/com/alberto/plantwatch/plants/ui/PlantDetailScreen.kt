@@ -54,6 +54,7 @@ import com.alberto.plantwatch.weather.SunSettings
 import com.alberto.plantwatch.weather.WindowDistance
 import com.alberto.plantwatch.weather.WindowPlacement
 import com.alberto.plantwatch.weather.WindowSettings
+import com.alberto.plantwatch.weather.adjustedInterval
 import com.alberto.plantwatch.weather.parseSunSettings
 import kotlin.math.roundToInt
 import java.time.LocalDate
@@ -74,6 +75,7 @@ fun PlantDetailRoute(
     val guideEntry by viewModel.guideEntry.collectAsStateWithLifecycle()
     val suggestedTasks by viewModel.suggestedTasks.collectAsStateWithLifecycle()
     val fertilizingPausedUntil by viewModel.fertilizingPausedUntil.collectAsStateWithLifecycle()
+    val wateringFactor by viewModel.wateringFactor.collectAsStateWithLifecycle()
 
     // Species picker: open or not, and the search text.
     var showSpeciesPicker by rememberSaveable { mutableStateOf(false) }
@@ -162,6 +164,7 @@ fun PlantDetailRoute(
         suggestedTasks = suggestedTasks,
         onAddSuggestedTasks = viewModel::addSuggestedTasks,
         fertilizingPausedUntil = fertilizingPausedUntil,
+        wateringFactor = wateringFactor,
         sunSettings = sunSettings,
         windowSettings = windowSettings,
         sunYesterday = sunYesterday,
@@ -292,6 +295,7 @@ fun PlantDetailScreen(
     suggestedTasks: List<CareTask>,
     onAddSuggestedTasks: () -> Unit,
     fertilizingPausedUntil: LocalDate?,
+    wateringFactor: Double?,
     sunSettings: SunSettings?,
     windowSettings: WindowSettings?,
     sunYesterday: Double?,
@@ -373,6 +377,8 @@ fun PlantDetailScreen(
                         today = today,
                         // Only fertilizer tasks are paused in winter.
                         pausedUntil = fertilizingPausedUntil.takeIf { task.type == TaskType.FERTILIZE },
+                        // Only watering is adjusted to the weather.
+                        wateringFactor = wateringFactor.takeIf { task.type == TaskType.WATER },
                         onClick = { onTaskClick(task) },
                         onDoneClick = { onDoneClick(task) },
                         onDeleteClick = { onDeleteClick(task) },
@@ -494,6 +500,7 @@ private fun TaskCard(
     task: CareTask,
     today: LocalDate,
     pausedUntil: LocalDate?,
+    wateringFactor: Double?,
     onClick: () -> Unit,
     onDoneClick: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -518,7 +525,15 @@ private fun TaskCard(
         days == 0L -> colors.tertiaryContainer to colors.onTertiaryContainer
         else -> colors.surfaceContainerHighest to colors.onSurfaceVariant
     }
-    val intervalText = pluralStringResource(R.plurals.task_interval, task.intervalDays, task.intervalDays)
+    val baseIntervalText = pluralStringResource(R.plurals.task_interval, task.intervalDays, task.intervalDays)
+    // With weather-aware watering, mention the interval actually used next time
+    // when it differs: "Every 7 days (now 6: warmer, drier week)".
+    val adjusted = wateringFactor?.let { adjustedInterval(task.intervalDays, it) }
+    val intervalText = when {
+        adjusted == null || adjusted == task.intervalDays -> baseIntervalText
+        adjusted < task.intervalDays -> stringResource(R.string.task_interval_adjusted_drier, baseIntervalText, adjusted)
+        else -> stringResource(R.string.task_interval_adjusted_wetter, baseIntervalText, adjusted)
+    }
     val lastDoneText = task.lastDone?.let { stringResource(R.string.task_last_done, formatDate(it)) }
         ?: stringResource(R.string.task_never_done)
     val (badgeBackground, badgeIcon) = taskBadgeColors(task.type)
@@ -679,7 +694,7 @@ private fun PlantDetailScreenPreview() {
         PlantDetailScreen(
             plantName = "Monstera", guideEntry = null, isSpeciesLinked = false,
             onLinkSpeciesClick = {}, onUnlinkSpecies = {},
-            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, sunSettings = null,
+            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, wateringFactor = null, sunSettings = null,
             windowSettings = WindowSettings(Compass.N, WindowDistance.FROM_1_TO_2M, WindowPlacement.IN_FRONT),
             sunYesterday = 135.0, sunLastWeek = 870.0,
             onSunClick = {}, tasks = sampleTasks, history = sampleHistory, today = previewToday,
@@ -695,7 +710,7 @@ private fun PlantDetailScreenEmptyPreview() {
         PlantDetailScreen(
             plantName = "Monstera", guideEntry = null, isSpeciesLinked = false,
             onLinkSpeciesClick = {}, onUnlinkSpecies = {},
-            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
+            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, wateringFactor = null, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
             onSunClick = {}, tasks = emptyList(), history = emptyList(), today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
