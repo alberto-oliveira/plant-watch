@@ -148,6 +148,36 @@
     <string name="location_hint">Only used to fetch sunshine data from Open-Meteo. To find it, long-press a spot in a map app.</string>
     <string name="location_invalid">Latitude from -90 to 90, longitude from -180 to 180</string>
 
+    <!-- Care guide -->
+    <string name="guide_title">Care guide</string>
+    <string name="guide_not_linked">Link a species to see care hints</string>
+    <string name="guide_unknown_species">Unknown species: link it again</string>
+    <string name="guide_menu_description">Care guide options</string>
+    <string name="guide_change_species">Change species</string>
+    <string name="guide_unlink">Unlink species</string>
+    <plurals name="guide_water_every">
+        <item quantity="one">Water · about every day</item>
+        <item quantity="other">Water · about every %1$d days</item>
+    </plurals>
+    <plurals name="guide_fertilize_every">
+        <item quantity="one">Fertilizer · about every day</item>
+        <item quantity="other">Fertilizer · about every %1$d days</item>
+    </plurals>
+    <string name="guide_fertilize_rarely">Fertilizer · rarely needed</string>
+    <string name="guide_problems">Common problems</string>
+    <!-- %1$d = number of problems -->
+    <string name="guide_show_all">Show all (%1$d)</string>
+    <string name="guide_show_less">Show less</string>
+    <string name="guide_toxic">Toxic to cats and dogs</string>
+    <string name="guide_generic_note">General guidance for this group: care varies by species.</string>
+    <string name="sun_need_full_sun">Sun · full sun</string>
+    <string name="sun_need_part_sun">Sun · part sun</string>
+    <string name="sun_need_bright_indirect">Sun · bright indirect light</string>
+    <string name="sun_need_low_light">Sun · low light</string>
+    <string name="species_picker_title">Which plant is it?</string>
+    <string name="species_picker_hint">Search in Portuguese or English</string>
+    <string name="species_picker_none">No match. Try another name, or the scientific name.</string>
+
     <!-- Shared -->
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
