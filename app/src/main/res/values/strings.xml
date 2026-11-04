@@ -243,6 +243,39 @@
     <string name="species_picker_hint">Search in Portuguese or English</string>
     <string name="species_picker_none">No match. Try another name, or the scientific name.</string>
 
+    <!-- Settings: backup -->
+    <string name="settings_section_backup">Backup</string>
+    <string name="settings_export">Export backup</string>
+    <string name="settings_export_hint">Plants, history, settings and photos, in one ZIP file</string>
+    <string name="settings_import">Import backup</string>
+    <string name="settings_import_hint">Replaces all data in the app</string>
+    <string name="backup_working">Working…</string>
+    <string name="backup_exported">Backup saved.</string>
+    <string name="backup_import_title">Replace all data?</string>
+    <!-- %1$s: the backup's date; %2$s: what it contains, e.g. "3 plants, 7 tasks" -->
+    <string name="backup_import_message">Everything in the app will be replaced with this backup from %1$s: %2$s.</string>
+    <string name="backup_import_confirm">Replace</string>
+    <string name="backup_imported">Backup imported.</string>
+    <string name="backup_refused">This file isn\'t a Plant Watch backup, or it comes from a newer version of the app.</string>
+    <string name="backup_failed">Something went wrong. Please try again.</string>
+    <string name="ok">OK</string>
+    <plurals name="backup_plants">
+        <item quantity="one">%d plant</item>
+        <item quantity="other">%d plants</item>
+    </plurals>
+    <plurals name="backup_tasks">
+        <item quantity="one">%d task</item>
+        <item quantity="other">%d tasks</item>
+    </plurals>
+    <plurals name="backup_logs">
+        <item quantity="one">%d history entry</item>
+        <item quantity="other">%d history entries</item>
+    </plurals>
+    <plurals name="backup_photos">
+        <item quantity="one">%d photo</item>
+        <item quantity="other">%d photos</item>
+    </plurals>
+
     <!-- Shared -->
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>

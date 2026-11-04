@@ -2,6 +2,7 @@ package com.alberto.plantwatch
 
 import android.content.Context
 import androidx.room.Room
+import com.alberto.plantwatch.backup.Backup
 import com.alberto.plantwatch.data.AppDatabase
 import com.alberto.plantwatch.guide.CareGuide
 import com.alberto.plantwatch.plants.PhotoStore
@@ -47,4 +48,7 @@ class AppContainer(private val context: Context) {
     val careGuide: CareGuide by lazy {
         CareGuide.parse(context.assets.open("care_guide.json").bufferedReader().use { it.readText() })
     }
+
+    /** Exporting and importing all data as a ZIP file. */
+    val backup: Backup by lazy { Backup(database, settingsStore, photoStore) }
 }
