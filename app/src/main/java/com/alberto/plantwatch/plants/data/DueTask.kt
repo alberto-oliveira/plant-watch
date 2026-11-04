@@ -7,6 +7,7 @@ package com.alberto.plantwatch.plants.data
  */
 data class DueTask(
     val taskId: Long,
+    val plantId: Long,
     val plantName: String,
     val type: TaskType,
     val customLabel: String?,

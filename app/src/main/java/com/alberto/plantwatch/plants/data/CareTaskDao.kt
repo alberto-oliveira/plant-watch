@@ -90,7 +90,7 @@ interface CareTaskDao {
      */
     @Query(
         """
-        SELECT care_tasks.id AS taskId, plants.name AS plantName, care_tasks.type, care_tasks.customLabel
+        SELECT care_tasks.id AS taskId, plants.id AS plantId, plants.name AS plantName, care_tasks.type, care_tasks.customLabel
         FROM care_tasks
         JOIN plants ON care_tasks.plantId = plants.id
         WHERE care_tasks.nextDue <= :today

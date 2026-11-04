@@ -52,6 +52,25 @@ fun groupDueTasks(due: List<DueTask>): List<DueGroup> =
             )
         }
 
+/** One plant's due tasks: one notification each. */
+data class PlantDue(
+    val plantId: Long,
+    val plantName: String,
+    val tasks: List<DueTask>,
+)
+
+/**
+ * Groups due tasks by plant, for one notification per plant. Plants are sorted
+ * by name (ignoring case); each plant's tasks keep the order of [due].
+ *
+ * Kotlin note: `sortedBy { }` sorts by the value the lambda returns; `.first()`
+ * is safe because groupBy never makes an empty group.
+ */
+fun groupDueByPlant(due: List<DueTask>): List<PlantDue> =
+    due.groupBy { it.plantId }
+        .map { (plantId, tasks) -> PlantDue(plantId, tasks.first().plantName, tasks) }
+        .sortedBy { it.plantName.lowercase() }
+
 /**
  * Whether a daily job that ran at [now] has drifted too far from its [target]
  * time of day and should be scheduled again. Periodic work slowly drifts (each

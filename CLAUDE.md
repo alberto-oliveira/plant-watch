@@ -32,8 +32,8 @@ Personal-use Android app to remind me to water and fertilize my plants. Not for 
 - Marking a task done sets `lastDone = today` and `nextDue = today + intervalDays` (adjusted by the seasonal multiplier, if enabled) and writes a `CareLog` row.
 ### Reminders (design is fixed, don't change without asking)
 - Store `nextDue` per task. Do **not** schedule one alarm per plant.
-- One `PeriodicWorkRequest` runs daily at a configurable time (default 09:00). It finds tasks with `nextDue <= today` and posts **one grouped notification** (e.g. "Water: Monstera, Fern / Fertilize: Pothos").
-- Notification actions: **Done** and **Snooze 1 day**, handled by a `BroadcastReceiver` that updates Room directly.
+- One `PeriodicWorkRequest` runs daily at a configurable time (default 09:00). It finds tasks with `nextDue <= today` and posts **one notification per plant** (e.g. "Basil: Water, Fertilize"), bundled in a notification group under a summary (e.g. "Water: Monstera, Fern / Fertilize: Pothos"). Only the summary makes a sound.
+- Notification actions per plant: **Done** and **Snooze 1 day** for that plant's due tasks, handled by a `BroadcastReceiver` that updates Room directly and then rebuilds the notifications from what is still due.
 - Request `POST_NOTIFICATIONS` at runtime (Android 13+). Create a notification channel on app start.
 - Exactness is not needed; approximate timing is fine.
 - Aggressive battery management on some phones can delay background work. If reminders arrive late, check battery optimization settings for the app before changing the design.
