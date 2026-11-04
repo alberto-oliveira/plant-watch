@@ -65,6 +65,16 @@ interface CareTaskDao {
     )
     fun observeHistoryForPlant(plantId: Long): Flow<List<CareHistoryEntry>>
 
+    /** The plant's log entries since [from], for the "you usually…" insights. */
+    @Query(
+        """
+        SELECT care_logs.* FROM care_logs
+        JOIN care_tasks ON care_logs.taskId = care_tasks.id
+        WHERE care_tasks.plantId = :plantId AND care_logs.doneOn >= :from
+        """,
+    )
+    fun observeLogsForPlantSince(plantId: Long, from: LocalDate): Flow<List<CareLog>>
+
     /**
      * Every task due on or before [today], with its plant's name, for the daily
      * reminder. Water first, then fertilize, then other tasks (by label); plants

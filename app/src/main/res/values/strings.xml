@@ -55,6 +55,12 @@
         <item quantity="one">Due tomorrow</item>
         <item quantity="other">Due in %1$d days</item>
     </plurals>
+    <!-- Under a task whose history differs from its interval; a button adopts it. -->
+    <plurals name="task_habit">
+        <item quantity="one">Lately you do this every day</item>
+        <item quantity="other">Lately you do this every %d days</item>
+    </plurals>
+    <string name="task_habit_use">Use it</string>
     <plurals name="task_overdue">
         <item quantity="one">Overdue by %1$d day</item>
         <item quantity="other">Overdue by %1$d days</item>
