@@ -59,5 +59,8 @@ class CareGuideDataTest {
         assertEquals("zamioculcas-zamiifolia", top("zamioculca"))
         assertEquals("ocimum-basilicum", top("manjericão"))
         assertEquals("nephrolepis-exaltata", top("samambaia"))
+        assertEquals("plumeria-pudica", top("jasmim do caribe"))
+        assertEquals("lantana-camara", top("cambara"))
+        assertEquals("dracaena-sanderiana", top("bambu da sorte"))
     }
 }

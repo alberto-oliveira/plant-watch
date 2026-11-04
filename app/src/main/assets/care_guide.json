@@ -547,5 +547,44 @@
       {"title": "Grey mould on flowers", "hint": "Remove spent flowers, improve airflow."}
     ],
     "toxicToPets": true
+  },
+  {
+    "id": "plumeria-pudica", "scientificName": "Plumeria pudica",
+    "namesPt": ["jasmim-do-caribe", "plumeria-pudica", "buquê-de-noiva"], "namesEn": ["bridal bouquet", "white frangipani", "fiddle-leaf plumeria"],
+    "waterEveryDays": 5, "water": "Water when the top few cm are dry; drought tolerant once established. Much less in cool weather, when it may drop leaves.",
+    "sun": "FULL_SUN", "sunHint": "Full sun, at least 6 hours, for abundant flowers; tolerates light shade but flowers less.",
+    "fertilizeEveryDays": 30, "fertilizer": "Bloom fertilizer richer in phosphorus (e.g. NPK 10-30-10 or 4-14-8) in the warm season; none in winter.",
+    "problems": [
+      {"title": "Few or no flowers", "hint": "Not enough sun, or too much nitrogen: move to full sun and use a bloom fertilizer."},
+      {"title": "Leaves dropping in winter", "hint": "Normal in cooler months; reduce watering until new growth appears."},
+      {"title": "Rust (orange powder under leaves)", "hint": "Remove affected leaves and fallen debris; improve airflow."},
+      {"title": "Mealybugs and whiteflies", "hint": "Check leaf undersides; wipe off or treat with neem oil or soapy water."}
+    ]
+  },
+  {
+    "id": "lantana-camara", "scientificName": "Lantana camara",
+    "namesPt": ["lantana", "cambará", "camará", "chumbinho"], "namesEn": ["lantana", "shrub verbena"],
+    "waterEveryDays": 5, "water": "Water when the soil is dry a few cm down; drought tolerant in the ground, pots need more frequent watering.",
+    "sun": "FULL_SUN", "sunHint": "Full sun; in shade it flowers poorly and gets powdery mildew.",
+    "fertilizeEveryDays": 45, "fertilizer": "Light feeding with a balanced or bloom fertilizer in the growing season; too much fertilizer gives leaves instead of flowers.",
+    "problems": [
+      {"title": "Powdery mildew", "hint": "White powder on leaves: more sun and airflow, water at the base."},
+      {"title": "Whiteflies and lace bugs", "hint": "Pale speckled leaves: rinse undersides, use soapy water or neem oil."},
+      {"title": "Spreads by seed", "hint": "Its berries spread easily (it's invasive in many regions): remove spent flower heads. The berries are poisonous."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "dracaena-sanderiana", "scientificName": "Dracaena sanderiana",
+    "namesPt": ["bambu-da-sorte", "dracena-bambu", "bambu-chinês"], "namesEn": ["lucky bamboo", "ribbon plant"],
+    "waterEveryDays": 7, "water": "In water: keep the roots covered and change the water every 1-2 weeks, using filtered or rain water. In soil: keep it lightly moist.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates low light. Direct sun yellows and scorches the leaves.",
+    "fertilizeEveryDays": 60, "fertilizer": "A drop of very diluted liquid fertilizer (made for lucky bamboo or houseplants) every 1-2 months; too much burns it.",
+    "problems": [
+      {"title": "Yellow leaves or stalks", "hint": "Too much sun, too much fertilizer, or chlorine/fluoride in tap water: use filtered water."},
+      {"title": "Green algae in the water", "hint": "Light reaching the water: use an opaque container and change the water more often."},
+      {"title": "Soft, rotting stalk", "hint": "Remove it so the rot doesn't spread; refresh the water and rinse the container."}
+    ],
+    "toxicToPets": true
   }
 ]
