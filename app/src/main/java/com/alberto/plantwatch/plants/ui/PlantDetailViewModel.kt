@@ -20,6 +20,7 @@ import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.plants.markedDone
 import com.alberto.plantwatch.plants.withNewInterval
 import com.alberto.plantwatch.weather.SunSettings
+import com.alberto.plantwatch.weather.WindowSettings
 import com.alberto.plantwatch.weather.data.SunDao
 import com.alberto.plantwatch.weather.fetchSunNow
 import kotlinx.coroutines.flow.SharingStarted
@@ -71,20 +72,48 @@ class PlantDetailViewModel(
     val sunLastWeek: StateFlow<Double?> = sunDao.observeTotal(plantId, today.minusDays(7), today)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
 
-    /**
-     * Turns sun tracking on (or changes it) with [settings], or off with null.
-     * After a change, fetches right away so the figures reflect it.
-     */
-    fun setSunSettings(settings: SunSettings?) {
-        val current = plant.value ?: return
-        val updated = current.copy(
-            sunStartHour = settings?.startHour,
-            sunEndHour = settings?.endHour,
-            sunExposurePercent = settings?.exposurePercent,
+    /** Window mode: sun estimated from the window's direction and the plant's position. */
+    fun setSunWindow(window: WindowSettings) = updateSun { plant ->
+        plant.copy(
+            windowDirection = window.direction,
+            windowDistance = window.distance,
+            windowPlacement = window.placement,
         )
+    }
+
+    /** Custom-hours mode: a fixed hour window and exposure (e.g. outdoor plants). */
+    fun setSunHours(settings: SunSettings) = updateSun { plant ->
+        plant.copy(
+            sunStartHour = settings.startHour,
+            sunEndHour = settings.endHour,
+            sunExposurePercent = settings.exposurePercent,
+            // Clear window mode, which would otherwise take precedence.
+            windowDirection = null,
+            windowDistance = null,
+            windowPlacement = null,
+        )
+    }
+
+    /** No sun tracking. */
+    fun turnOffSun() = updateSun { plant ->
+        plant.copy(
+            sunStartHour = null, sunEndHour = null, sunExposurePercent = null,
+            windowDirection = null, windowDistance = null, windowPlacement = null,
+        )
+    }
+
+    /**
+     * Saves the plant as changed by [change], then fetches right away if it's
+     * tracked, so the figures reflect the new settings.
+     *
+     * Kotlin note: `change: (Plant) -> Plant` takes a function, which the three
+     * methods above pass as trailing lambdas: "how to change the plant".
+     */
+    private fun updateSun(change: (Plant) -> Plant) {
+        val updated = change(plant.value ?: return)
         viewModelScope.launch {
             plantDao.update(updated)
-            if (settings != null) fetchSun()
+            if (updated.isSunTracked) fetchSun()
         }
     }
 

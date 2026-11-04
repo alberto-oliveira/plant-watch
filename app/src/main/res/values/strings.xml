@@ -78,6 +78,28 @@
     <string name="sun_end_label">To hour (1–24)</string>
     <string name="sun_invalid">Exposure 0–100, and the start hour must be before the end hour</string>
     <string name="sun_turn_off">Turn off</string>
+    <string name="sun_mode_window">By window</string>
+    <string name="sun_mode_hours">Custom hours</string>
+    <string name="sun_window_hint">Where does the plant\'s window face, and where is the plant? The app works out when the sun can shine in.</string>
+    <string name="sun_window_faces">Window faces</string>
+    <string name="sun_plant_distance">Plant distance from the window</string>
+    <string name="sun_plant_placement">Plant placement</string>
+    <!-- %1$s = direction, %2$s = distance, %3$s = placement, e.g. "North window · 1–2 m · in front" -->
+    <string name="sun_window_summary">%1$s window · %2$s · %3$s</string>
+    <string name="compass_n">North</string>
+    <string name="compass_ne">North-east</string>
+    <string name="compass_e">East</string>
+    <string name="compass_se">South-east</string>
+    <string name="compass_s">South</string>
+    <string name="compass_sw">South-west</string>
+    <string name="compass_w">West</string>
+    <string name="compass_nw">North-west</string>
+    <string name="distance_sill">On the sill</string>
+    <string name="distance_under_1m">Under 1 m</string>
+    <string name="distance_1_to_2m">1–2 m</string>
+    <string name="distance_over_2m">Over 2 m</string>
+    <string name="placement_in_front">In front</string>
+    <string name="placement_to_the_side">To the side</string>
     <!-- %1$s = task name, e.g. "Delete Water" -->
     <string name="task_delete_description">Delete %1$s</string>
 

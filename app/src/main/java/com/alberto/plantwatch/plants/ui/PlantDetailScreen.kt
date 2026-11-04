@@ -47,7 +47,11 @@ import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.ui.EmptyState
 import com.alberto.plantwatch.ui.IconBadge
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
+import com.alberto.plantwatch.weather.Compass
 import com.alberto.plantwatch.weather.SunSettings
+import com.alberto.plantwatch.weather.WindowDistance
+import com.alberto.plantwatch.weather.WindowPlacement
+import com.alberto.plantwatch.weather.WindowSettings
 import com.alberto.plantwatch.weather.parseSunSettings
 import kotlin.math.roundToInt
 import java.time.LocalDate
@@ -74,8 +78,17 @@ fun PlantDetailRoute(
         if (start != null && end != null && exposure != null) SunSettings(start, end, exposure) else null
     }
 
-    // Sun dialog: open or not, and its three texts.
+    // The plant's window settings, or null when not in window mode.
+    val windowSettings = plant?.windowSettings
+
+    // Sun dialog: open or not, its mode, the window choices (three enums, which
+    // rememberSaveable can store, unlike a whole WindowSettings object) and the
+    // custom-hours texts.
     var showSunDialog by rememberSaveable { mutableStateOf(false) }
+    var sunMode by rememberSaveable { mutableStateOf(SunMode.WINDOW) }
+    var draftDirection by rememberSaveable { mutableStateOf(Compass.N) }
+    var draftDistance by rememberSaveable { mutableStateOf(WindowDistance.SILL) }
+    var draftPlacement by rememberSaveable { mutableStateOf(WindowPlacement.IN_FRONT) }
     var sunExposureText by rememberSaveable { mutableStateOf("") }
     var sunStartText by rememberSaveable { mutableStateOf("") }
     var sunEndText by rememberSaveable { mutableStateOf("") }
@@ -113,6 +126,11 @@ fun PlantDetailRoute(
 
     fun openSunDialog() {
         // Prefill with the current settings, or sensible defaults when off.
+        // Window mode is the default for a plant that isn't tracked yet.
+        sunMode = if (windowSettings == null && sunSettings != null) SunMode.HOURS else SunMode.WINDOW
+        draftDirection = windowSettings?.direction ?: Compass.N
+        draftDistance = windowSettings?.distance ?: WindowDistance.SILL
+        draftPlacement = windowSettings?.placement ?: WindowPlacement.IN_FRONT
         sunExposureText = (sunSettings?.exposurePercent ?: 100).toString()
         sunStartText = (sunSettings?.startHour ?: 8).toString()
         sunEndText = (sunSettings?.endHour ?: 18).toString()
@@ -123,6 +141,7 @@ fun PlantDetailRoute(
         // `?.name ?: ""`: the name if the plant is loaded, empty text otherwise.
         plantName = plant?.name ?: "",
         sunSettings = sunSettings,
+        windowSettings = windowSettings,
         sunYesterday = sunYesterday,
         sunLastWeek = sunLastWeek,
         onSunClick = ::openSunDialog,
@@ -169,19 +188,30 @@ fun PlantDetailRoute(
 
     if (showSunDialog) {
         SunDialog(
+            mode = sunMode,
+            onModeChange = { sunMode = it },
+            window = WindowSettings(draftDirection, draftDistance, draftPlacement),
+            onWindowChange = { changed ->
+                draftDirection = changed.direction
+                draftDistance = changed.distance
+                draftPlacement = changed.placement
+            },
             exposure = sunExposureText,
             onExposureChange = { sunExposureText = it },
             startHour = sunStartText,
             onStartHourChange = { sunStartText = it },
             endHour = sunEndText,
             onEndHourChange = { sunEndText = it },
-            isTracked = sunSettings != null,
+            isTracked = windowSettings != null || sunSettings != null,
             onConfirm = {
-                parseSunSettings(sunStartText, sunEndText, sunExposureText)?.let(viewModel::setSunSettings)
+                when (sunMode) {
+                    SunMode.WINDOW -> viewModel.setSunWindow(WindowSettings(draftDirection, draftDistance, draftPlacement))
+                    SunMode.HOURS -> parseSunSettings(sunStartText, sunEndText, sunExposureText)?.let(viewModel::setSunHours)
+                }
                 showSunDialog = false
             },
             onTurnOff = {
-                viewModel.setSunSettings(null)
+                viewModel.turnOffSun()
                 showSunDialog = false
             },
             onDismiss = { showSunDialog = false },
@@ -218,6 +248,7 @@ fun PlantDetailRoute(
 fun PlantDetailScreen(
     plantName: String,
     sunSettings: SunSettings?,
+    windowSettings: WindowSettings?,
     sunYesterday: Double?,
     sunLastWeek: Double?,
     onSunClick: () -> Unit,
@@ -267,7 +298,7 @@ fun PlantDetailScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             item(key = "sun") {
-                SunCard(sunSettings, sunYesterday, sunLastWeek, onClick = onSunClick)
+                SunCard(sunSettings, windowSettings, sunYesterday, sunLastWeek, onClick = onSunClick)
             }
 
             if (tasks.isEmpty()) {
@@ -312,22 +343,36 @@ fun PlantDetailScreen(
 
 /**
  * The plant's sunlight as a card, e.g.
- *   (☀)  Sun
- *        Yesterday 2 h 15 min · Last 7 days 14 h 30 min
- *        08–18 h at 40%
+ *   (🪟)  Sun
+ *         Yesterday 2 h 15 min · Last 7 days 14 h 30 min
+ *         North window · 1–2 m · in front        (or "08–18 h at 40%")
  * or "Tracking off · Tap to set up". Tapping it opens the sun dialog.
  */
 @Composable
 private fun SunCard(
     settings: SunSettings?,
+    window: WindowSettings?,
     yesterday: Double?,
     lastWeek: Double?,
     onClick: () -> Unit,
 ) {
-    val text = if (settings == null) {
+    val text = if (settings == null && window == null) {
         stringResource(R.string.sun_off)
     } else {
-        val window = stringResource(R.string.sun_window, settings.startHour, settings.endHour, settings.exposurePercent)
+        // Window mode wins if both are set (it's what the sun job uses too).
+        // `replaceFirstChar { it.lowercase() }`: "In front" -> "in front" mid-sentence.
+        // A `when` without subject: the first true condition wins, and inside each
+        // branch Kotlin smart-casts the checked value to non-null.
+        val setup = when {
+            window != null -> stringResource(
+                R.string.sun_window_summary,
+                compassName(window.direction),
+                distanceName(window.distance).replaceFirstChar { it.lowercase() },
+                placementName(window.placement).replaceFirstChar { it.lowercase() },
+            )
+            settings != null -> stringResource(R.string.sun_window, settings.startHour, settings.endHour, settings.exposurePercent)
+            else -> ""
+        }
         val figures = if (yesterday == null && lastWeek == null) {
             stringResource(R.string.sun_no_data)
         } else {
@@ -337,7 +382,7 @@ private fun SunCard(
                 formatSunMinutes(lastWeek ?: 0.0),
             )
         }
-        "$figures\n$window"
+        "$figures\n$setup"
     }
     Card(
         onClick = onClick,
@@ -350,7 +395,7 @@ private fun SunCard(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             IconBadge(
-                icon = R.drawable.ic_sunny,
+                icon = if (window != null) R.drawable.ic_window else R.drawable.ic_sunny,
                 containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                 contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
             )
@@ -572,7 +617,9 @@ private val sampleHistory = listOf(
 private fun PlantDetailScreenPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", sunSettings = SunSettings(8, 18, 40), sunYesterday = 135.0, sunLastWeek = 870.0,
+            plantName = "Monstera", sunSettings = null,
+            windowSettings = WindowSettings(Compass.N, WindowDistance.FROM_1_TO_2M, WindowPlacement.IN_FRONT),
+            sunYesterday = 135.0, sunLastWeek = 870.0,
             onSunClick = {}, tasks = sampleTasks, history = sampleHistory, today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
@@ -584,7 +631,7 @@ private fun PlantDetailScreenPreview() {
 private fun PlantDetailScreenEmptyPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", sunSettings = null, sunYesterday = null, sunLastWeek = null,
+            plantName = "Monstera", sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
             onSunClick = {}, tasks = emptyList(), history = emptyList(), today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
