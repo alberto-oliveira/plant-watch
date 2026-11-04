@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.toRoute
 import com.alberto.plantwatch.PlantDetail
 import com.alberto.plantwatch.PlantWatchApplication
+import com.alberto.plantwatch.plants.data.CareHistoryEntry
 import com.alberto.plantwatch.plants.data.CareLog
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.CareTaskDao
@@ -17,6 +18,7 @@ import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.plants.markedDone
+import com.alberto.plantwatch.plants.withNewInterval
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -49,6 +51,10 @@ class PlantDetailViewModel(
     val tasks: StateFlow<List<CareTask>> = careTaskDao.observeForPlant(plantId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
 
+    /** Recent care history (newest first), updated whenever a task is done or deleted. */
+    val history: StateFlow<List<CareHistoryEntry>> = careTaskDao.observeHistoryForPlant(plantId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
+
     /**
      * Adds a task to this plant. It's due today: marking it done starts the
      * cycle. The label is only kept for OTHER tasks.
@@ -63,6 +69,21 @@ class PlantDetailViewModel(
         )
         viewModelScope.launch {
             careTaskDao.insert(task)
+        }
+    }
+
+    /**
+     * Saves changes to a task. A new interval recalculates the due date from the
+     * last time it was done ([withNewInterval], unit-tested). The history is
+     * kept, even if the type changes.
+     */
+    fun editTask(task: CareTask, type: TaskType, label: String, intervalDays: Int) {
+        val updated = withNewInterval(task, intervalDays).copy(
+            type = type,
+            customLabel = if (type == TaskType.OTHER) label.trim() else null,
+        )
+        viewModelScope.launch {
+            careTaskDao.update(updated)
         }
     }
 
