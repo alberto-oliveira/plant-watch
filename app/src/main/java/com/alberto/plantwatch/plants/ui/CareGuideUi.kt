@@ -1,6 +1,7 @@
 package com.alberto.plantwatch.plants.ui
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -120,23 +121,42 @@ private fun LinkedGuide(
     onUnlinkClick: () -> Unit,
     onAddSuggestedTasks: () -> Unit,
 ) {
-    // UI-only state kept across rotation: is the overflow menu open, are all
-    // problems shown.
+    // UI-only state kept across rotation: is the overflow menu open, are the
+    // full hints shown (collapsed by default, so the tasks below stay in view),
+    // are all problems shown.
     var menuOpen by rememberSaveable { mutableStateOf(false) }
+    var expanded by rememberSaveable { mutableStateOf(false) }
     var showAllProblems by rememberSaveable { mutableStateOf(false) }
 
-    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(
+        // `animateContentSize()`: when the content grows or shrinks (expanding
+        // and collapsing), the card resizes smoothly instead of jumping.
+        modifier = Modifier
+            .animateContentSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            GuideBadge()
-            Column(modifier = Modifier.weight(1f)) {
-                Text(stringResource(R.string.guide_title), style = MaterialTheme.typography.titleMedium)
-                Text(displayName(entry), style = MaterialTheme.typography.bodyLarge)
-                Text(
-                    entry.scientificName,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontStyle = FontStyle.Italic,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+            // Tapping the badge and names toggles the hints; the menu button
+            // handles its own taps.
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { expanded = !expanded },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                GuideBadge()
+                Column {
+                    Text(stringResource(R.string.guide_title), style = MaterialTheme.typography.titleMedium)
+                    Text(displayName(entry), style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        entry.scientificName,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontStyle = FontStyle.Italic,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
             // A Box anchors the drop-down menu to the button.
             Box {
@@ -156,6 +176,51 @@ private fun LinkedGuide(
             }
         }
 
+        if (expanded) {
+            GuideDetails(entry, showAllProblems, onToggleProblems = { showAllProblems = !showAllProblems })
+        } else {
+            // Collapsed: the essentials in one line.
+            Text(
+                guideSummary(entry),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+
+        // Always visible: the suggested-tasks action and the safety warning.
+        if (suggestedTasks.isNotEmpty()) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                FilledTonalButton(onClick = onAddSuggestedTasks) {
+                    Text(stringResource(R.string.guide_add_suggested))
+                }
+                Text(
+                    text = suggestedTasks.map { task ->
+                        pluralStringResource(R.plurals.guide_suggested_task, task.intervalDays, taskName(task), task.intervalDays)
+                    }.joinToString(" · "),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+
+        if (entry.toxicToPets == true) {
+            Text(
+                stringResource(R.string.guide_toxic),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
+
+        TextButton(onClick = { expanded = !expanded }) {
+            Text(stringResource(if (expanded) R.string.guide_hide_hints else R.string.guide_show_hints))
+        }
+    }
+}
+
+/** The full hints (water, sun, fertilizer) and the common problems. */
+@Composable
+private fun GuideDetails(entry: CareGuideEntry, showAllProblems: Boolean, onToggleProblems: () -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         if (entry.generic) {
             Text(
                 stringResource(R.string.guide_generic_note),
@@ -179,43 +244,36 @@ private fun LinkedGuide(
             body = entry.fertilizer,
         )
 
-        // Only when the guide suggests tasks the plant doesn't have yet.
-        if (suggestedTasks.isNotEmpty()) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                FilledTonalButton(onClick = onAddSuggestedTasks) {
-                    Text(stringResource(R.string.guide_add_suggested))
-                }
-                Text(
-                    text = suggestedTasks.map { task ->
-                        pluralStringResource(R.plurals.guide_suggested_task, task.intervalDays, taskName(task), task.intervalDays)
-                    }.joinToString(" · "),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-
         HorizontalDivider()
         Text(stringResource(R.string.guide_problems), style = MaterialTheme.typography.titleSmall)
         val shown = if (showAllProblems) entry.problems else entry.problems.take(2)
         shown.forEach { ProblemRow(it) }
         if (entry.problems.size > 2) {
-            TextButton(onClick = { showAllProblems = !showAllProblems }) {
+            TextButton(onClick = onToggleProblems) {
                 Text(
                     if (showAllProblems) stringResource(R.string.guide_show_less)
                     else stringResource(R.string.guide_show_all, entry.problems.size),
                 )
             }
         }
-
-        if (entry.toxicToPets == true) {
-            Text(
-                stringResource(R.string.guide_toxic),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.error,
-            )
-        }
     }
+}
+
+/** One line for the collapsed card: "Water ~7 days · Bright indirect light · Fertilize ~30 days". */
+@Composable
+private fun guideSummary(entry: CareGuideEntry): String {
+    val water = pluralStringResource(R.plurals.guide_summary_water, entry.waterEveryDays, entry.waterEveryDays)
+    val sun = stringResource(
+        when (entry.sun) {
+            SunNeed.FULL_SUN -> R.string.sun_short_full_sun
+            SunNeed.PART_SUN -> R.string.sun_short_part_sun
+            SunNeed.BRIGHT_INDIRECT -> R.string.sun_short_bright_indirect
+            SunNeed.LOW_LIGHT -> R.string.sun_short_low_light
+        },
+    )
+    val fertilize = entry.fertilizeEveryDays?.let { pluralStringResource(R.plurals.guide_summary_fertilize, it, it) }
+        ?: stringResource(R.string.guide_summary_fertilize_rarely)
+    return listOf(water, sun, fertilize).joinToString(" · ")
 }
 
 /** One hint: a small icon, a bold title line and the explanation. */

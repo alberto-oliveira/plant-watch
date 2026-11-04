@@ -170,6 +170,22 @@
     <string name="guide_show_all">Show all (%1$d)</string>
     <string name="guide_show_less">Show less</string>
     <string name="guide_toxic">Toxic to cats and dogs</string>
+    <string name="guide_show_hints">Show care hints</string>
+    <string name="guide_hide_hints">Hide care hints</string>
+    <!-- Collapsed card summary, e.g. "Water ~7 days · Bright indirect light · Fertilize ~30 days" -->
+    <plurals name="guide_summary_water">
+        <item quantity="one">Water daily</item>
+        <item quantity="other">Water ~%1$d days</item>
+    </plurals>
+    <plurals name="guide_summary_fertilize">
+        <item quantity="one">Fertilize daily</item>
+        <item quantity="other">Fertilize ~%1$d days</item>
+    </plurals>
+    <string name="guide_summary_fertilize_rarely">Fertilize rarely</string>
+    <string name="sun_short_full_sun">Full sun</string>
+    <string name="sun_short_part_sun">Part sun</string>
+    <string name="sun_short_bright_indirect">Bright indirect light</string>
+    <string name="sun_short_low_light">Low light</string>
     <string name="guide_add_suggested">Add suggested tasks</string>
     <!-- %1$s = task name, %2$d = days, e.g. "Water every 7 days" -->
     <plurals name="guide_suggested_task">
