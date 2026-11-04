@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 /**
  * Queries for care tasks and their log.
@@ -59,6 +60,40 @@ interface CareTaskDao {
         """,
     )
     fun observeHistoryForPlant(plantId: Long): Flow<List<CareHistoryEntry>>
+
+    /**
+     * Every task due on or before [today], with its plant's name, for the daily
+     * reminder. Water first, then fertilize, then other tasks (by label); plants
+     * alphabetically within each.
+     *
+     * Unlike the `observe...` queries this is a one-shot read: a plain `suspend`
+     * function returning a List (no Flow), because the reminder job runs once
+     * and finishes. `:today` is converted to an epoch day by the type converter,
+     * so `nextDue <= :today` is an integer comparison.
+     *
+     * SQL: `CASE ... END` maps each type to a number, to sort in our own order
+     * rather than alphabetically.
+     */
+    @Query(
+        """
+        SELECT care_tasks.id AS taskId, plants.name AS plantName, care_tasks.type, care_tasks.customLabel
+        FROM care_tasks
+        JOIN plants ON care_tasks.plantId = plants.id
+        WHERE care_tasks.nextDue <= :today
+        ORDER BY CASE care_tasks.type WHEN 'WATER' THEN 0 WHEN 'FERTILIZE' THEN 1 ELSE 2 END,
+                 care_tasks.customLabel,
+                 plants.name COLLATE NOCASE
+        """,
+    )
+    suspend fun getDueTasks(today: LocalDate): List<DueTask>
+
+    /**
+     * The tasks with these ids (those still existing), read fresh from the
+     * database by the notification's Done/Snooze actions.
+     * `IN (:ids)`: Room expands the list into `IN (?, ?, ?)`, one per id.
+     */
+    @Query("SELECT * FROM care_tasks WHERE id IN (:ids)")
+    suspend fun getByIds(ids: List<Long>): List<CareTask>
 
     /**
      * Saves a task that was just done and records it in the log, as one unit:
