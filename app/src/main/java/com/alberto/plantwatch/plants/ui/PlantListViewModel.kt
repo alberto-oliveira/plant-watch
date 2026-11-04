@@ -15,14 +15,18 @@ import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.plants.fertilizingPausedUntil
+import com.alberto.plantwatch.plants.PhotoStore
 import com.alberto.plantwatch.plants.mostUrgentTasks
 import com.alberto.plantwatch.settings.SettingsStore
+import java.io.File
 import java.time.LocalDate
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * One plant in the list, with its most urgent tasks for the next-care line and
@@ -32,6 +36,8 @@ data class PlantSummary(
     val plant: Plant,
     val nextTasks: List<CareTask>,
     val scientificName: String? = null,
+    /** The plant's photo file, shown as its avatar; null if none. */
+    val photo: File? = null,
 )
 
 /**
@@ -49,6 +55,7 @@ class PlantListViewModel(
     careTaskDao: CareTaskDao,
     private val careGuide: CareGuide,
     settingsStore: SettingsStore,
+    private val photoStore: PhotoStore,
 ) : ViewModel() {
 
     /**
@@ -82,6 +89,7 @@ class PlantListViewModel(
                 plant = plant,
                 nextTasks = mostUrgentTasks(tasksByPlant[plant.id].orEmpty()),
                 scientificName = plant.speciesId?.let(careGuide::byId)?.scientificName,
+                photo = plant.photoFile?.let(photoStore::fileFor),
             )
         }
     }
@@ -114,6 +122,8 @@ class PlantListViewModel(
     fun deletePlant(plant: Plant) {
         viewModelScope.launch {
             plantDao.delete(plant)
+            // The photo file isn't in the database, so it's removed separately.
+            withContext(Dispatchers.IO) { photoStore.delete(plant.photoFile) }
         }
     }
 
@@ -136,6 +146,7 @@ class PlantListViewModel(
                     careTaskDao = app.container.database.careTaskDao(),
                     careGuide = app.container.careGuide,
                     settingsStore = app.container.settingsStore,
+                    photoStore = app.container.photoStore,
                 )
             }
         }
