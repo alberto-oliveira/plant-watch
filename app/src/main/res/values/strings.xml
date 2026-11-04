@@ -70,6 +70,7 @@
     <!-- %1$d = start hour, %2$d = end hour, %3$d = exposure percent -->
     <string name="sun_window">%1$02d–%2$02d h at %3$d%%</string>
     <string name="sun_duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="sun_duration_hours">%1$d h</string>
     <string name="sun_duration_minutes">%1$d min</string>
     <string name="sun_dialog_title">Sun tracking</string>
     <string name="sun_dialog_hint">Exposure: how much of the outdoor sun the plant gets (100 outdoors, about 40 by a window). Hours: when the sun can reach it.</string>
@@ -78,8 +79,9 @@
     <string name="sun_end_label">To hour (1–24)</string>
     <string name="sun_invalid">Exposure 0–100, and the start hour must be before the end hour</string>
     <string name="sun_turn_off">Turn off</string>
-    <string name="sun_mode_window">By window</string>
-    <string name="sun_mode_hours">Custom hours</string>
+    <!-- Short: the two segments share the dialog's width equally. -->
+    <string name="sun_mode_window">Window</string>
+    <string name="sun_mode_hours">Hours</string>
     <string name="sun_window_hint">Where does the plant\'s window face, and where is the plant? The app works out when the sun can shine in.</string>
     <string name="sun_window_faces">Window faces</string>
     <string name="sun_plant_distance">Plant distance from the window</string>

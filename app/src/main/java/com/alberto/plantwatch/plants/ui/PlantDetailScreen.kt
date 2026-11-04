@@ -412,17 +412,17 @@ private fun SunCard(
 }
 
 /**
- * Minutes as "2 h 15 min", or "45 min" under an hour.
+ * Minutes as "2 h 15 min", "3 h" for whole hours, or "45 min" under an hour.
  * `roundToInt()` rounds to the nearest whole minute; `/` and `%` on Ints are
  * integer division and remainder.
  */
 @Composable
 private fun formatSunMinutes(minutes: Double): String {
     val total = minutes.roundToInt()
-    return if (total >= 60) {
-        stringResource(R.string.sun_duration_hours_minutes, total / 60, total % 60)
-    } else {
-        stringResource(R.string.sun_duration_minutes, total)
+    return when {
+        total < 60 -> stringResource(R.string.sun_duration_minutes, total)
+        total % 60 == 0 -> stringResource(R.string.sun_duration_hours, total / 60)
+        else -> stringResource(R.string.sun_duration_hours_minutes, total / 60, total % 60)
     }
 }
 
