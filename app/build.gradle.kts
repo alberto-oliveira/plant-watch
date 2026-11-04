@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
 }
@@ -61,6 +62,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
 
     // platform(...) imports the BOM so the Compose libraries below need no versions.
     implementation(platform(libs.androidx.compose.bom))
@@ -75,4 +77,7 @@ dependencies {
 
     // Only in debug builds: renders @Preview and the layout inspector.
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Unit tests (app/src/test): run on the computer's JVM, no phone needed.
+    testImplementation(libs.junit)
 }

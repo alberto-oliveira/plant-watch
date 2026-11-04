@@ -1,5 +1,6 @@
 package com.alberto.plantwatch.plants.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,6 +52,7 @@ import com.alberto.plantwatch.ui.theme.PlantWatchTheme
  */
 @Composable
 fun PlantListRoute(
+    onPlantClick: (Plant) -> Unit,
     viewModel: PlantListViewModel = viewModel(factory = PlantListViewModel.Factory),
 ) {
     val plants by viewModel.plants.collectAsStateWithLifecycle()
@@ -67,6 +69,7 @@ fun PlantListRoute(
 
     PlantListScreen(
         plants = plants,
+        onPlantClick = onPlantClick,
         onAddClick = { showAddDialog = true },
         onDeleteClick = { plant -> plantIdToDelete = plant.id },
     )
@@ -125,6 +128,7 @@ fun PlantListRoute(
 @Composable
 fun PlantListScreen(
     plants: List<Plant>,
+    onPlantClick: (Plant) -> Unit,
     onAddClick: () -> Unit,
     onDeleteClick: (Plant) -> Unit,
     modifier: Modifier = Modifier,
@@ -168,6 +172,7 @@ fun PlantListScreen(
                 items(plants, key = { it.id }) { plant ->
                     PlantRow(
                         plant = plant,
+                        onClick = { onPlantClick(plant) },
                         onDeleteClick = { onDeleteClick(plant) },
                     )
                 }
@@ -176,13 +181,20 @@ fun PlantListScreen(
     }
 }
 
-/** One row: the plant's name and a trash icon. `private` = visible only in this file. */
+/**
+ * One row: the plant's name and a trash icon. Tapping the row opens the plant.
+ * `private` = visible only in this file.
+ */
 @Composable
 private fun PlantRow(
     plant: Plant,
+    onClick: () -> Unit,
     onDeleteClick: () -> Unit,
 ) {
     ListItem(
+        // `clickable` makes the whole row tappable (with the ripple effect).
+        // The trash icon handles its own taps, so it doesn't open the plant.
+        modifier = Modifier.clickable(onClick = onClick),
         headlineContent = { Text(plant.name) },
         trailingContent = {
             IconButton(onClick = onDeleteClick) {
@@ -209,7 +221,7 @@ private val samplePlants = listOf(
 private fun PlantListScreenPreview() {
     PlantWatchTheme {
         // `{}` is an empty lambda: in a preview, taps do nothing.
-        PlantListScreen(plants = samplePlants, onAddClick = {}, onDeleteClick = {})
+        PlantListScreen(plants = samplePlants, onPlantClick = {}, onAddClick = {}, onDeleteClick = {})
     }
 }
 
@@ -217,6 +229,6 @@ private fun PlantListScreenPreview() {
 @Composable
 private fun PlantListScreenEmptyPreview() {
     PlantWatchTheme {
-        PlantListScreen(plants = emptyList(), onAddClick = {}, onDeleteClick = {})
+        PlantListScreen(plants = emptyList(), onPlantClick = {}, onAddClick = {}, onDeleteClick = {})
     }
 }

@@ -29,6 +29,13 @@ interface PlantDao {
     @Query("SELECT * FROM plants ORDER BY name COLLATE NOCASE")
     fun observeAll(): Flow<List<Plant>>
 
+    /**
+     * One plant, for the detail screen. `Plant?` because the plant may not exist
+     * (e.g. deleted): the Flow then emits null instead of failing.
+     */
+    @Query("SELECT * FROM plants WHERE id = :id")
+    fun observeById(id: Long): Flow<Plant?>
+
     /** Inserts a plant and returns its generated id. */
     @Insert
     suspend fun insert(plant: Plant): Long

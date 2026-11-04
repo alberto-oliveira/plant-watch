@@ -17,6 +17,47 @@
     <string name="delete_plant_message">Its care tasks and history will be deleted too. This can\'t be undone.</string>
     <string name="delete_plant_confirm">Delete</string>
 
+    <!-- Task types (OTHER shows the task's own label) -->
+    <string name="task_type_water">Water</string>
+    <string name="task_type_fertilize">Fertilize</string>
+    <string name="task_type_other">Other</string>
+
+    <!-- Plant detail: task list.
+         <plurals>: Android picks the right form for the number
+         ("one" = 1, "other" = everything else in English). -->
+    <string name="tasks_empty">No care tasks yet. Tap + to add one.</string>
+    <string name="tasks_add">Add care task</string>
+    <plurals name="task_interval">
+        <item quantity="one">Every day</item>
+        <item quantity="other">Every %1$d days</item>
+    </plurals>
+    <string name="task_due_today">Due today</string>
+    <plurals name="task_due_in">
+        <item quantity="one">Due tomorrow</item>
+        <item quantity="other">Due in %1$d days</item>
+    </plurals>
+    <plurals name="task_overdue">
+        <item quantity="one">Overdue by %1$d day</item>
+        <item quantity="other">Overdue by %1$d days</item>
+    </plurals>
+    <!-- %1$s = date -->
+    <string name="task_last_done">Last done %1$s</string>
+    <string name="task_never_done">Not done yet</string>
+    <string name="task_done">Done</string>
+    <!-- %1$s = task name, e.g. "Delete Water" -->
+    <string name="task_delete_description">Delete %1$s</string>
+
+    <!-- Add/edit task dialog -->
+    <string name="add_task_title">Add care task</string>
+    <string name="task_label_label">Task name</string>
+    <string name="task_interval_label">Every how many days?</string>
+    <string name="task_interval_error">Enter a number from 1 to 365</string>
+
+    <!-- Delete task dialog. %1$s = task name. -->
+    <string name="delete_task_title">Delete \"%1$s\"?</string>
+    <string name="delete_task_message">Its history will be deleted too. This can\'t be undone.</string>
+
     <!-- Shared -->
     <string name="cancel">Cancel</string>
+    <string name="navigate_back">Back</string>
 </resources>

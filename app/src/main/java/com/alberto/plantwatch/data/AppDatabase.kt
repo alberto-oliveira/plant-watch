@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.alberto.plantwatch.plants.data.CareLog
 import com.alberto.plantwatch.plants.data.CareTask
+import com.alberto.plantwatch.plants.data.CareTaskDao
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
 
@@ -30,4 +31,5 @@ import com.alberto.plantwatch.plants.data.PlantDao
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun plantDao(): PlantDao
+    abstract fun careTaskDao(): CareTaskDao
 }
