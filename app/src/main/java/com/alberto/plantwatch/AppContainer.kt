@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.alberto.plantwatch.data.AppDatabase
 import com.alberto.plantwatch.guide.CareGuide
+import com.alberto.plantwatch.plants.PhotoStore
 import com.alberto.plantwatch.settings.SettingsStore
 import com.alberto.plantwatch.weather.OpenMeteoApi
 
@@ -34,6 +35,9 @@ class AppContainer(private val context: Context) {
     val settingsStore: SettingsStore by lazy { SettingsStore(context) }
 
     val openMeteoApi: OpenMeteoApi by lazy { OpenMeteoApi.create() }
+
+    /** Plant photos in the app's private files folder. */
+    val photoStore: PhotoStore by lazy { PhotoStore(java.io.File(context.filesDir, "photos")) }
 
     /**
      * The care guide bundled in app/src/main/assets, read and parsed on first use.

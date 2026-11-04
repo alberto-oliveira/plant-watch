@@ -51,6 +51,14 @@ data class Plant(
      * an unknown species.
      */
     val speciesId: String? = null,
+    /** Free-text notes (schema v5), e.g. "Gift from Ana; repotted March 2026". */
+    val notes: String? = null,
+    /**
+     * File name of the plant's photo (schema v5) inside the app's private
+     * "photos" folder, or null. Only the name is stored, not the full path, so
+     * it stays valid if Android moves the app's storage.
+     */
+    val photoFile: String? = null,
 ) {
     /**
      * The window settings, or null if the plant isn't in window mode.
