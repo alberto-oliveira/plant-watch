@@ -10,6 +10,11 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.toRoute
 import com.alberto.plantwatch.PlantDetail
 import com.alberto.plantwatch.PlantWatchApplication
+import com.alberto.plantwatch.guide.CareGuide
+import com.alberto.plantwatch.guide.CareGuideEntry
+import com.alberto.plantwatch.guide.SpeciesMatch
+import com.alberto.plantwatch.guide.searchSpecies
+import com.alberto.plantwatch.guide.suggestedTasks
 import com.alberto.plantwatch.plants.data.CareHistoryEntry
 import com.alberto.plantwatch.plants.data.CareLog
 import com.alberto.plantwatch.plants.data.CareTask
@@ -25,6 +30,8 @@ import com.alberto.plantwatch.weather.data.SunDao
 import com.alberto.plantwatch.weather.fetchSunNow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -43,6 +50,7 @@ class PlantDetailViewModel(
     private val careTaskDao: CareTaskDao,
     sunDao: SunDao,
     private val fetchSun: () -> Unit,
+    private val careGuide: CareGuide,
 ) : ViewModel() {
 
     // `toRoute<PlantDetail>()`: `<PlantDetail>` is a type argument, telling the
@@ -60,6 +68,42 @@ class PlantDetailViewModel(
     /** Recent care history (newest first), updated whenever a task is done or deleted. */
     val history: StateFlow<List<CareHistoryEntry>> = careTaskDao.observeHistoryForPlant(plantId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
+
+    /**
+     * The care-guide entry of the plant's linked species: null if not linked, or
+     * if the id isn't in the guide (the card then shows "unknown species").
+     * `map` transforms each value the Flow emits.
+     */
+    val guideEntry: StateFlow<CareGuideEntry?> = plant
+        .map { it?.speciesId?.let(careGuide::byId) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
+
+    /**
+     * Tasks the guide suggests that the plant doesn't have yet (empty when not
+     * linked, or nothing is missing). Recomputed when the species or the tasks change.
+     */
+    val suggestedTasks: StateFlow<List<CareTask>> = combine(guideEntry, tasks) { entry, existing ->
+        if (entry == null) emptyList() else suggestedTasks(entry, plantId, existing, LocalDate.now())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
+
+    /** Adds the suggested tasks (each due today). */
+    fun addSuggestedTasks() {
+        val toAdd = suggestedTasks.value
+        viewModelScope.launch {
+            toAdd.forEach { careTaskDao.insert(it) }
+        }
+    }
+
+    /** Species matching [query], best first (the guide is small, so this is instant). */
+    fun searchSpecies(query: String): List<SpeciesMatch> = searchSpecies(careGuide.entries, query)
+
+    /** Links the plant to a guide species, or unlinks it with null. */
+    fun setSpecies(speciesId: String?) {
+        val current = plant.value ?: return
+        viewModelScope.launch {
+            plantDao.update(current.copy(speciesId = speciesId))
+        }
+    }
 
     // The day the screen was opened; "yesterday" and "last 7 days" count from it.
     private val today = LocalDate.now()
@@ -183,6 +227,7 @@ class PlantDetailViewModel(
                     careTaskDao = app.container.database.careTaskDao(),
                     sunDao = app.container.database.sunDao(),
                     fetchSun = { fetchSunNow(app) },
+                    careGuide = app.container.careGuide,
                 )
             }
         }

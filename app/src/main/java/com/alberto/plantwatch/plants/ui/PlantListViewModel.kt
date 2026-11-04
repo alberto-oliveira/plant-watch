@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.alberto.plantwatch.PlantWatchApplication
+import com.alberto.plantwatch.guide.CareGuide
+import com.alberto.plantwatch.guide.SpeciesMatch
+import com.alberto.plantwatch.guide.searchSpecies
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.CareTaskDao
 import com.alberto.plantwatch.plants.data.Plant
@@ -17,10 +20,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-/** One plant in the list, with its most urgent tasks for the next-care line. */
+/**
+ * One plant in the list, with its most urgent tasks for the next-care line and
+ * the scientific name of its linked species (null if none).
+ */
 data class PlantSummary(
     val plant: Plant,
     val nextTasks: List<CareTask>,
+    val scientificName: String? = null,
 )
 
 /**
@@ -36,6 +43,7 @@ data class PlantSummary(
 class PlantListViewModel(
     private val plantDao: PlantDao,
     careTaskDao: CareTaskDao,
+    private val careGuide: CareGuide,
 ) : ViewModel() {
 
     /**
@@ -57,7 +65,13 @@ class PlantListViewModel(
     // `orEmpty()` = an empty list for a plant without tasks).
     val plants: StateFlow<List<PlantSummary>> = combine(plantDao.observeAll(), careTaskDao.observeAll()) { plants, tasks ->
         val tasksByPlant = tasks.groupBy { it.plantId }
-        plants.map { plant -> PlantSummary(plant, mostUrgentTasks(tasksByPlant[plant.id].orEmpty())) }
+        plants.map { plant ->
+            PlantSummary(
+                plant = plant,
+                nextTasks = mostUrgentTasks(tasksByPlant[plant.id].orEmpty()),
+                scientificName = plant.speciesId?.let(careGuide::byId)?.scientificName,
+            )
+        }
     }
         .stateIn(
             scope = viewModelScope,
@@ -66,16 +80,23 @@ class PlantListViewModel(
         )
 
     /** Adds a plant. Surrounding spaces are removed; a blank name is ignored. */
-    fun addPlant(name: String) {
+    fun addPlant(name: String, speciesId: String? = null) {
         val trimmed = name.trim()
         if (trimmed.isEmpty()) return
         // `viewModelScope.launch { }` starts a coroutine: a lightweight task
         // that can call `suspend` functions such as `insert`. It's cancelled
         // automatically when the ViewModel is destroyed.
         viewModelScope.launch {
-            plantDao.insert(Plant(name = trimmed)) // named argument; `id` keeps its default 0
+            plantDao.insert(Plant(name = trimmed, speciesId = speciesId)) // named arguments; `id` keeps its default 0
         }
     }
+
+    /**
+     * Up to 3 species matching a name being typed, for the add dialog's
+     * suggestions. Nothing for very short text, to avoid noisy matches.
+     */
+    fun speciesSuggestions(name: String): List<SpeciesMatch> =
+        if (name.trim().length < 3) emptyList() else searchSpecies(careGuide.entries, name, limit = 3)
 
     /** Deletes the plant; its tasks and history go with it (database CASCADE). */
     fun deletePlant(plant: Plant) {
@@ -101,6 +122,7 @@ class PlantListViewModel(
                 PlantListViewModel(
                     plantDao = app.container.database.plantDao(),
                     careTaskDao = app.container.database.careTaskDao(),
+                    careGuide = app.container.careGuide,
                 )
             }
         }

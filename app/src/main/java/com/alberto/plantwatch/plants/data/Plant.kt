@@ -44,6 +44,13 @@ data class Plant(
     val windowDirection: Compass? = null,
     val windowDistance: WindowDistance? = null,
     val windowPlacement: WindowPlacement? = null,
+    /**
+     * The care-guide species this plant is (schema v4), e.g. "epipremnum-aureum",
+     * or null if not linked. It refers to an entry of the bundled guide, not to a
+     * table, so it isn't a foreign key; an id missing from the guide is shown as
+     * an unknown species.
+     */
+    val speciesId: String? = null,
 ) {
     /**
      * The window settings, or null if the plant isn't in window mode.

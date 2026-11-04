@@ -27,6 +27,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,6 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alberto.plantwatch.R
 import com.alberto.plantwatch.plants.daysUntilDue
 import com.alberto.plantwatch.plants.data.CareHistoryEntry
+import com.alberto.plantwatch.guide.CareGuideEntry
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.ui.EmptyState
@@ -69,6 +71,12 @@ fun PlantDetailRoute(
     val history by viewModel.history.collectAsStateWithLifecycle()
     val sunYesterday by viewModel.sunYesterday.collectAsStateWithLifecycle()
     val sunLastWeek by viewModel.sunLastWeek.collectAsStateWithLifecycle()
+    val guideEntry by viewModel.guideEntry.collectAsStateWithLifecycle()
+    val suggestedTasks by viewModel.suggestedTasks.collectAsStateWithLifecycle()
+
+    // Species picker: open or not, and the search text.
+    var showSpeciesPicker by rememberSaveable { mutableStateOf(false) }
+    var speciesQuery by rememberSaveable { mutableStateOf("") }
 
     // The plant's current sun settings, or null when tracking is off.
     val sunSettings = plant?.let { p ->
@@ -137,9 +145,21 @@ fun PlantDetailRoute(
         showSunDialog = true
     }
 
+    fun openSpeciesPicker() {
+        // Start with the plant's own name: "Jiboia da sala" already finds jiboia.
+        speciesQuery = plant?.name ?: ""
+        showSpeciesPicker = true
+    }
+
     PlantDetailScreen(
         // `?.name ?: ""`: the name if the plant is loaded, empty text otherwise.
         plantName = plant?.name ?: "",
+        guideEntry = guideEntry,
+        isSpeciesLinked = plant?.speciesId != null,
+        onLinkSpeciesClick = ::openSpeciesPicker,
+        onUnlinkSpecies = { viewModel.setSpecies(null) },
+        suggestedTasks = suggestedTasks,
+        onAddSuggestedTasks = viewModel::addSuggestedTasks,
         sunSettings = sunSettings,
         windowSettings = windowSettings,
         sunYesterday = sunYesterday,
@@ -183,6 +203,22 @@ fun PlantDetailRoute(
                 showTaskDialog = false
             },
             onDismiss = { showTaskDialog = false },
+        )
+    }
+
+    if (showSpeciesPicker) {
+        // `remember(speciesQuery) { ... }` re-runs the search only when the query
+        // changes, not on every recomposition of this screen.
+        val results = remember(speciesQuery) { viewModel.searchSpecies(speciesQuery) }
+        SpeciesPickerDialog(
+            query = speciesQuery,
+            onQueryChange = { speciesQuery = it },
+            results = results,
+            onPick = { entry ->
+                viewModel.setSpecies(entry.id)
+                showSpeciesPicker = false
+            },
+            onDismiss = { showSpeciesPicker = false },
         )
     }
 
@@ -247,6 +283,12 @@ fun PlantDetailRoute(
 @Composable
 fun PlantDetailScreen(
     plantName: String,
+    guideEntry: CareGuideEntry?,
+    isSpeciesLinked: Boolean,
+    onLinkSpeciesClick: () -> Unit,
+    onUnlinkSpecies: () -> Unit,
+    suggestedTasks: List<CareTask>,
+    onAddSuggestedTasks: () -> Unit,
     sunSettings: SunSettings?,
     windowSettings: WindowSettings?,
     sunYesterday: Double?,
@@ -299,6 +341,16 @@ fun PlantDetailScreen(
         ) {
             item(key = "sun") {
                 SunCard(sunSettings, windowSettings, sunYesterday, sunLastWeek, onClick = onSunClick)
+            }
+            item(key = "guide") {
+                CareGuideCard(
+                    entry = guideEntry,
+                    isLinked = isSpeciesLinked,
+                    suggestedTasks = suggestedTasks,
+                    onLinkClick = onLinkSpeciesClick,
+                    onUnlinkClick = onUnlinkSpecies,
+                    onAddSuggestedTasks = onAddSuggestedTasks,
+                )
             }
 
             if (tasks.isEmpty()) {
@@ -617,7 +669,9 @@ private val sampleHistory = listOf(
 private fun PlantDetailScreenPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", sunSettings = null,
+            plantName = "Monstera", guideEntry = null, isSpeciesLinked = false,
+            onLinkSpeciesClick = {}, onUnlinkSpecies = {},
+            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, sunSettings = null,
             windowSettings = WindowSettings(Compass.N, WindowDistance.FROM_1_TO_2M, WindowPlacement.IN_FRONT),
             sunYesterday = 135.0, sunLastWeek = 870.0,
             onSunClick = {}, tasks = sampleTasks, history = sampleHistory, today = previewToday,
@@ -631,7 +685,9 @@ private fun PlantDetailScreenPreview() {
 private fun PlantDetailScreenEmptyPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
+            plantName = "Monstera", guideEntry = null, isSpeciesLinked = false,
+            onLinkSpeciesClick = {}, onUnlinkSpecies = {},
+            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
             onSunClick = {}, tasks = emptyList(), history = emptyList(), today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
