@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Portuguese (Brazil). Used when the phone's or the app's language is
+     Portuguese; same keys as values/strings.xml. Note: in Portuguese, Android's
+     plural form "one" covers 0 and 1 ("many" is for numbers like a million).
+     tools:ignore="ImpliedQuantity": those plurals' "one" text has no number
+     ("amanhã"), which is fine because they're never shown for 0. -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Plant Watch</string>
+
+    <!-- Plant list -->
+    <string name="plants_empty_title">Nenhuma planta ainda</string>
+    <string name="plants_empty_message">Toque em + para adicionar sua primeira planta.</string>
+    <string name="plants_no_tasks">Sem cuidados</string>
+    <string name="next_care_today">%1$s hoje</string>
+    <plurals tools:ignore="ImpliedQuantity" name="next_care_in">
+        <item quantity="one">%1$s amanhã</item>
+        <item quantity="other">%1$s em %2$d dias</item>
+        <item quantity="many">%1$s em %2$d dias</item>
+    </plurals>
+    <plurals name="next_care_overdue">
+        <item quantity="one">%1$s atrasado há %2$d dia</item>
+        <item quantity="other">%1$s atrasado há %2$d dias</item>
+        <item quantity="many">%1$s atrasado há %2$d dias</item>
+    </plurals>
+    <string name="plants_add">Adicionar planta</string>
+    <string name="plants_delete_description">Excluir %1$s</string>
+
+    <!-- Add plant dialog -->
+    <string name="add_plant_title">Adicionar planta</string>
+    <string name="add_plant_name_label">Nome</string>
+    <string name="add_plant_species_hint">É uma destas? (opcional)</string>
+    <string name="add_plant_confirm">Adicionar</string>
+
+    <!-- Delete plant dialog -->
+    <string name="delete_plant_title">Excluir %1$s?</string>
+    <string name="delete_plant_message">Os cuidados e o histórico também serão excluídos. Não dá para desfazer.</string>
+    <string name="delete_plant_confirm">Excluir</string>
+
+    <!-- Task types -->
+    <string name="task_type_water">Regar</string>
+    <string name="task_type_fertilize">Adubar</string>
+    <string name="task_type_other">Outro</string>
+
+    <!-- Plant detail: task list -->
+    <string name="tasks_empty_title">Nenhum cuidado ainda</string>
+    <string name="tasks_empty_message">Toque em + para adicionar rega, adubação ou o que mais esta planta precisar.</string>
+    <string name="tasks_add">Adicionar cuidado</string>
+    <plurals tools:ignore="ImpliedQuantity" name="task_interval">
+        <item quantity="one">Todo dia</item>
+        <item quantity="other">A cada %1$d dias</item>
+        <item quantity="many">A cada %1$d dias</item>
+    </plurals>
+    <string name="task_due_today">Para hoje</string>
+    <string name="task_interval_adjusted_drier">%1$s (agora %2$d: semana mais quente e seca)</string>
+    <string name="task_interval_adjusted_wetter">%1$s (agora %2$d: semana mais fria e úmida)</string>
+    <string name="task_paused_winter">Pausado no inverno · até %1$s</string>
+    <plurals tools:ignore="ImpliedQuantity" name="task_due_in">
+        <item quantity="one">Para amanhã</item>
+        <item quantity="other">Em %1$d dias</item>
+        <item quantity="many">Em %1$d dias</item>
+    </plurals>
+    <plurals tools:ignore="ImpliedQuantity" name="task_habit">
+        <item quantity="one">Ultimamente você faz isso todo dia</item>
+        <item quantity="other">Ultimamente você faz isso a cada %d dias</item>
+        <item quantity="many">Ultimamente você faz isso a cada %d dias</item>
+    </plurals>
+    <string name="task_habit_use">Usar</string>
+    <plurals name="task_overdue">
+        <item quantity="one">Atrasado há %1$d dia</item>
+        <item quantity="other">Atrasado há %1$d dias</item>
+        <item quantity="many">Atrasado há %1$d dias</item>
+    </plurals>
+    <string name="task_last_done">Feito em %1$s</string>
+    <string name="task_never_done">Ainda não feito</string>
+    <string name="task_done">Feito</string>
+    <string name="task_mark_done_description">Marcar %1$s como feito</string>
+    <string name="history_title">Histórico</string>
+
+    <!-- Plant detail: sun -->
+    <string name="sun_title">Sol</string>
+    <string name="sun_off">Desligado · Toque para configurar</string>
+    <string name="sun_summary">Ontem %1$s · Últimos 7 dias %2$s</string>
+    <string name="sun_no_data">Sem dados ainda (precisa de uma localização nas Configurações e de internet)</string>
+    <string name="sun_window">%1$02d–%2$02d h a %3$d%%</string>
+    <string name="sun_duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="sun_duration_hours">%1$d h</string>
+    <string name="sun_duration_minutes">%1$d min</string>
+    <string name="sun_dialog_title">Acompanhar o sol</string>
+    <string name="sun_dialog_hint">Exposição: quanto do sol de fora a planta recebe (100 ao ar livre, cerca de 40 junto a uma janela). Horas: quando o sol consegue alcançá-la.</string>
+    <string name="sun_exposure_label">Exposição (%)</string>
+    <string name="sun_start_label">Da hora (0–23)</string>
+    <string name="sun_end_label">Até a hora (1–24)</string>
+    <string name="sun_invalid">Exposição de 0 a 100, e a hora inicial deve ser antes da final</string>
+    <string name="sun_turn_off">Desligar</string>
+    <string name="sun_mode_window">Janela</string>
+    <string name="sun_mode_hours">Horas</string>
+    <string name="sun_window_hint">Para onde a janela da planta está virada, e onde fica a planta? O app calcula quando o sol pode entrar.</string>
+    <string name="sun_window_faces">Janela virada para</string>
+    <string name="sun_plant_distance">Distância da planta à janela</string>
+    <string name="sun_plant_placement">Posição da planta</string>
+    <string name="sun_window_summary">Janela %1$s · %2$s · %3$s</string>
+    <string name="compass_n">Norte</string>
+    <string name="compass_ne">Nordeste</string>
+    <string name="compass_e">Leste</string>
+    <string name="compass_se">Sudeste</string>
+    <string name="compass_s">Sul</string>
+    <string name="compass_sw">Sudoeste</string>
+    <string name="compass_w">Oeste</string>
+    <string name="compass_nw">Noroeste</string>
+    <string name="distance_sill">No parapeito</string>
+    <string name="distance_under_1m">Menos de 1 m</string>
+    <string name="distance_1_to_2m">1–2 m</string>
+    <string name="distance_over_2m">Mais de 2 m</string>
+    <string name="placement_in_front">Em frente</string>
+    <string name="placement_to_the_side">Ao lado</string>
+    <string name="task_delete_description">Excluir %1$s</string>
+
+    <!-- Add/edit task dialog -->
+    <string name="add_task_title">Adicionar cuidado</string>
+    <string name="edit_task_title">Editar cuidado</string>
+    <string name="task_label_label">Nome do cuidado</string>
+    <string name="task_interval_label">A cada quantos dias?</string>
+    <string name="task_interval_error">Digite um número de 1 a 365</string>
+
+    <!-- Delete task dialog -->
+    <string name="delete_task_title">Excluir \"%1$s\"?</string>
+    <string name="delete_task_message">O histórico também será excluído. Não dá para desfazer.</string>
+
+    <!-- Reminder notification -->
+    <string name="reminder_channel_name">Lembretes de cuidados</string>
+    <string name="reminder_channel_description">Lembrete diário das plantas que precisam de cuidado</string>
+    <plurals name="reminder_title">
+        <item quantity="one">%1$d cuidado para hoje</item>
+        <item quantity="other">%1$d cuidados para hoje</item>
+        <item quantity="many">%1$d cuidados para hoje</item>
+    </plurals>
+    <string name="reminder_line">%1$s: %2$s</string>
+    <string name="reminder_action_snooze">Adiar 1 dia</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Configurações</string>
+    <string name="settings_section_reminders">Lembretes</string>
+    <string name="settings_reminder_time">Horário do lembrete diário</string>
+    <string name="settings_reminder_time_dialog_title">Horário do lembrete</string>
+    <string name="settings_notifications">Notificações</string>
+    <string name="settings_notifications_on">Ativadas</string>
+    <string name="settings_notifications_off">Desativadas: os lembretes não aparecerão</string>
+    <string name="settings_battery">Otimização de bateria</string>
+    <string name="settings_battery_unrestricted">Sem restrições</string>
+    <string name="settings_battery_optimized">Otimizada: os lembretes podem atrasar. Em Informações do app, defina Bateria como Sem restrições.</string>
+    <string name="settings_open_system">Abrir</string>
+    <string name="settings_section_care">Cuidados</string>
+    <string name="settings_pause_fertilizing">Pausar adubação no inverno</string>
+    <string name="settings_pause_fertilizing_south">Sem lembretes de adubo de junho a agosto (hemisfério sul)</string>
+    <string name="settings_pause_fertilizing_north">Sem lembretes de adubo de dezembro a fevereiro (hemisfério norte)</string>
+    <string name="settings_pause_fertilizing_needs_location">Precisa de uma localização (abaixo) para saber quando é inverno</string>
+    <string name="settings_adjust_watering">Ajustar a rega ao clima</string>
+    <string name="settings_adjust_watering_hint" formatted="false">Rega até 15% antes em semanas quentes e secas, e depois nas frias e úmidas (precisa de uma localização)</string>
+    <string name="settings_adjust_watering_now_sooner">Esta semana: cerca de %1$d%% antes</string>
+    <string name="settings_adjust_watering_now_later">Esta semana: cerca de %1$d%% depois</string>
+    <string name="settings_adjust_watering_now_same">Esta semana: sem mudança</string>
+    <string name="settings_section_sunlight">Sol</string>
+    <string name="settings_location">Localização</string>
+    <string name="settings_location_not_set">Não definida</string>
+    <string name="location_dialog_title">Localização para os dados de sol</string>
+    <string name="location_latitude">Latitude</string>
+    <string name="location_longitude">Longitude</string>
+    <string name="location_hint">Usada só para buscar dados de sol no Open-Meteo. Para descobri-la, toque e segure um ponto num app de mapas.</string>
+    <string name="location_invalid">Latitude de -90 a 90, longitude de -180 a 180</string>
+
+    <!-- Plant photo and notes -->
+    <string name="plant_photo_description">Foto da planta</string>
+    <string name="plant_photo_add">Adicionar foto</string>
+    <string name="plant_photo_change">Trocar foto</string>
+    <string name="plant_photo_remove">Remover foto</string>
+    <string name="plant_notes_empty">Adicionar notas (de onde veio, quando foi replantada…)</string>
+    <string name="plant_notes_title">Notas</string>
+
+    <!-- Rooms -->
+    <string name="plant_room">Cômodo: %1$s</string>
+    <string name="room_none">Sem cômodo</string>
+    <string name="room_picker_title">Cômodo</string>
+    <string name="room_new">Novo cômodo</string>
+    <string name="room_add_title">Adicionar cômodo</string>
+    <string name="room_edit_title">Editar cômodo</string>
+    <string name="room_name_label">Nome</string>
+    <string name="room_window_label">A janela está virada para</string>
+    <string name="room_window_unknown">Não definido</string>
+    <string name="settings_section_rooms">Cômodos</string>
+    <string name="settings_add_room">Adicionar cômodo</string>
+    <string name="settings_rooms_empty">Nenhum cômodo ainda. Os cômodos agrupam suas plantas na lista.</string>
+    <string name="settings_room_window">Janela virada para %1$s</string>
+    <string name="settings_room_no_window">Direção da janela não definida</string>
+
+    <!-- Care guide -->
+    <string name="guide_title">Guia de cuidados</string>
+    <string name="guide_not_linked">Vincule uma espécie para ver dicas de cuidado</string>
+    <string name="guide_unknown_species">Espécie desconhecida: vincule de novo</string>
+    <string name="guide_menu_description">Opções do guia de cuidados</string>
+    <string name="guide_change_species">Trocar espécie</string>
+    <string name="guide_unlink">Desvincular espécie</string>
+    <plurals tools:ignore="ImpliedQuantity" name="guide_water_every">
+        <item quantity="one">Rega · cerca de todo dia</item>
+        <item quantity="other">Rega · cerca de a cada %1$d dias</item>
+        <item quantity="many">Rega · cerca de a cada %1$d dias</item>
+    </plurals>
+    <plurals tools:ignore="ImpliedQuantity" name="guide_fertilize_every">
+        <item quantity="one">Adubo · cerca de todo dia</item>
+        <item quantity="other">Adubo · cerca de a cada %1$d dias</item>
+        <item quantity="many">Adubo · cerca de a cada %1$d dias</item>
+    </plurals>
+    <string name="guide_fertilize_rarely">Adubo · raramente necessário</string>
+    <string name="guide_problems">Problemas comuns</string>
+    <string name="guide_show_all">Mostrar todos (%1$d)</string>
+    <string name="guide_show_less">Mostrar menos</string>
+    <string name="guide_toxic">Tóxica para cães e gatos</string>
+    <string name="guide_show_hints">Mostrar dicas</string>
+    <string name="guide_hide_hints">Esconder dicas</string>
+    <plurals tools:ignore="ImpliedQuantity" name="guide_summary_water">
+        <item quantity="one">Regar todo dia</item>
+        <item quantity="other">Regar ~%1$d dias</item>
+        <item quantity="many">Regar ~%1$d dias</item>
+    </plurals>
+    <plurals tools:ignore="ImpliedQuantity" name="guide_summary_fertilize">
+        <item quantity="one">Adubar todo dia</item>
+        <item quantity="other">Adubar ~%1$d dias</item>
+        <item quantity="many">Adubar ~%1$d dias</item>
+    </plurals>
+    <string name="guide_summary_fertilize_rarely">Adubar raramente</string>
+    <string name="sun_short_full_sun">Sol pleno</string>
+    <string name="sun_short_part_sun">Meia-sombra</string>
+    <string name="sun_short_bright_indirect">Luz indireta forte</string>
+    <string name="sun_short_low_light">Pouca luz</string>
+    <string name="guide_add_suggested">Adicionar cuidados sugeridos</string>
+    <plurals tools:ignore="ImpliedQuantity" name="guide_suggested_task">
+        <item quantity="one">%1$s todo dia</item>
+        <item quantity="other">%1$s a cada %2$d dias</item>
+        <item quantity="many">%1$s a cada %2$d dias</item>
+    </plurals>
+    <string name="guide_generic_note">Orientação geral para este grupo: o cuidado varia conforme a espécie.</string>
+    <string name="sun_need_full_sun">Sol · sol pleno</string>
+    <string name="sun_need_part_sun">Sol · meia-sombra</string>
+    <string name="sun_need_bright_indirect">Sol · luz indireta forte</string>
+    <string name="sun_need_low_light">Sol · pouca luz</string>
+    <string name="species_picker_title">Qual é a planta?</string>
+    <string name="species_picker_hint">Busque em português ou inglês</string>
+    <string name="species_picker_none">Nada encontrado. Tente outro nome, ou o nome científico.</string>
+
+    <!-- Settings: backup -->
+    <string name="settings_section_backup">Backup</string>
+    <string name="settings_export">Exportar backup</string>
+    <string name="settings_export_hint">Plantas, histórico, configurações e fotos, num único arquivo ZIP</string>
+    <string name="settings_import">Importar backup</string>
+    <string name="settings_import_hint">Substitui todos os dados do app</string>
+    <string name="backup_working">Processando…</string>
+    <string name="backup_exported">Backup salvo.</string>
+    <string name="backup_import_title">Substituir todos os dados?</string>
+    <string name="backup_import_message">Tudo no app será substituído por este backup de %1$s: %2$s.</string>
+    <string name="backup_import_confirm">Substituir</string>
+    <string name="backup_imported">Backup importado.</string>
+    <string name="backup_refused">Este arquivo não é um backup do Plant Watch, ou vem de uma versão mais nova do app.</string>
+    <string name="backup_failed">Algo deu errado. Tente de novo.</string>
+    <string name="ok">OK</string>
+    <plurals name="backup_plants">
+        <item quantity="one">%d planta</item>
+        <item quantity="other">%d plantas</item>
+        <item quantity="many">%d plantas</item>
+    </plurals>
+    <plurals name="backup_tasks">
+        <item quantity="one">%d cuidado</item>
+        <item quantity="other">%d cuidados</item>
+        <item quantity="many">%d cuidados</item>
+    </plurals>
+    <plurals name="backup_logs">
+        <item quantity="one">%d registro no histórico</item>
+        <item quantity="other">%d registros no histórico</item>
+        <item quantity="many">%d registros no histórico</item>
+    </plurals>
+    <plurals name="backup_photos">
+        <item quantity="one">%d foto</item>
+        <item quantity="other">%d fotos</item>
+        <item quantity="many">%d fotos</item>
+    </plurals>
+
+    <!-- Home-screen widget -->
+    <string name="widget_title">Para hoje</string>
+    <string name="widget_description">As plantas que precisam de cuidado hoje</string>
+    <string name="widget_all_done">Tudo feito por hoje</string>
+    <plurals name="widget_more">
+        <item quantity="one">+%d planta</item>
+        <item quantity="other">+%d plantas</item>
+        <item quantity="many">+%d plantas</item>
+    </plurals>
+
+    <!-- Shared -->
+    <string name="cancel">Cancelar</string>
+    <string name="save">Salvar</string>
+    <string name="navigate_back">Voltar</string>
+</resources>
