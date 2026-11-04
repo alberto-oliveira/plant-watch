@@ -4,6 +4,7 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.alberto.plantwatch.backup.BackupDao
 import com.alberto.plantwatch.plants.data.CareLog
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.CareTaskDao
@@ -55,4 +56,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun careTaskDao(): CareTaskDao
     abstract fun sunDao(): SunDao
     abstract fun roomDao(): RoomDao
+    abstract fun backupDao(): BackupDao
 }
