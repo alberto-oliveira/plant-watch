@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -80,6 +81,7 @@ fun PlantDetailRoute(
     val suggestedTasks by viewModel.suggestedTasks.collectAsStateWithLifecycle()
     val fertilizingPausedUntil by viewModel.fertilizingPausedUntil.collectAsStateWithLifecycle()
     val wateringFactor by viewModel.wateringFactor.collectAsStateWithLifecycle()
+    val suggestedIntervals by viewModel.suggestedIntervals.collectAsStateWithLifecycle()
     val photo by viewModel.photo.collectAsStateWithLifecycle()
     val rooms by viewModel.rooms.collectAsStateWithLifecycle()
     val room by viewModel.room.collectAsStateWithLifecycle()
@@ -199,6 +201,8 @@ fun PlantDetailRoute(
         onAddSuggestedTasks = viewModel::addSuggestedTasks,
         fertilizingPausedUntil = fertilizingPausedUntil,
         wateringFactor = wateringFactor,
+        suggestedIntervals = suggestedIntervals,
+        onUseSuggestedInterval = viewModel::useSuggestedInterval,
         sunSettings = sunSettings,
         windowSettings = windowSettings,
         sunYesterday = sunYesterday,
@@ -367,6 +371,8 @@ fun PlantDetailScreen(
     onAddSuggestedTasks: () -> Unit,
     fertilizingPausedUntil: LocalDate?,
     wateringFactor: Double?,
+    suggestedIntervals: Map<Long, Int>,
+    onUseSuggestedInterval: (CareTask, Int) -> Unit,
     sunSettings: SunSettings?,
     windowSettings: WindowSettings?,
     sunYesterday: Double?,
@@ -461,6 +467,8 @@ fun PlantDetailScreen(
                         pausedUntil = fertilizingPausedUntil.takeIf { task.type == TaskType.FERTILIZE },
                         // Only watering is adjusted to the weather.
                         wateringFactor = wateringFactor.takeIf { task.type == TaskType.WATER },
+                        suggestedInterval = suggestedIntervals[task.id],
+                        onUseSuggestedInterval = { days -> onUseSuggestedInterval(task, days) },
                         onClick = { onTaskClick(task) },
                         onDoneClick = { onDoneClick(task) },
                         onDeleteClick = { onDeleteClick(task) },
@@ -583,6 +591,8 @@ private fun TaskCard(
     today: LocalDate,
     pausedUntil: LocalDate?,
     wateringFactor: Double?,
+    suggestedInterval: Int?,
+    onUseSuggestedInterval: (Int) -> Unit,
     onClick: () -> Unit,
     onDoneClick: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -651,6 +661,21 @@ private fun TaskCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = colors.onSurfaceVariant,
                 )
+                // The habit differs from the setting: offer to adopt it.
+                // `?.let`: only when there's a suggestion.
+                suggestedInterval?.let { days ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = pluralStringResource(R.plurals.task_habit, days, days),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colors.primary,
+                            modifier = Modifier.weight(1f, fill = false),
+                        )
+                        TextButton(onClick = { onUseSuggestedInterval(days) }) {
+                            Text(stringResource(R.string.task_habit_use))
+                        }
+                    }
+                }
             }
             // Disabled once done today, so a double tap can't log it twice.
             FilledTonalIconButton(onClick = onDoneClick, enabled = task.lastDone != today) {
@@ -778,7 +803,7 @@ private fun PlantDetailScreenPreview() {
             onPickPhoto = {}, onRemovePhoto = {}, onEditNotes = {},
             roomName = null, onRoomClick = {}, guideEntry = null, isSpeciesLinked = false,
             onLinkSpeciesClick = {}, onUnlinkSpecies = {},
-            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, wateringFactor = null, sunSettings = null,
+            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, wateringFactor = null, suggestedIntervals = mapOf(1L to 5), onUseSuggestedInterval = { _, _ -> }, sunSettings = null,
             windowSettings = WindowSettings(Compass.N, WindowDistance.FROM_1_TO_2M, WindowPlacement.IN_FRONT),
             sunYesterday = 135.0, sunLastWeek = 870.0,
             onSunClick = {}, tasks = sampleTasks, history = sampleHistory, today = previewToday,
@@ -796,7 +821,7 @@ private fun PlantDetailScreenEmptyPreview() {
             onPickPhoto = {}, onRemovePhoto = {}, onEditNotes = {},
             roomName = null, onRoomClick = {}, guideEntry = null, isSpeciesLinked = false,
             onLinkSpeciesClick = {}, onUnlinkSpecies = {},
-            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, wateringFactor = null, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
+            suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, wateringFactor = null, suggestedIntervals = mapOf(1L to 5), onUseSuggestedInterval = { _, _ -> }, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
             onSunClick = {}, tasks = emptyList(), history = emptyList(), today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )

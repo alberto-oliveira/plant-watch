@@ -30,7 +30,10 @@ import com.alberto.plantwatch.plants.PhotoStore
 import com.alberto.plantwatch.plants.fertilizingPausedUntil
 import com.alberto.plantwatch.settings.SettingsStore
 import com.alberto.plantwatch.weather.intervalWhenDone
+import com.alberto.plantwatch.plants.INSIGHT_WINDOW_DAYS
 import com.alberto.plantwatch.plants.markedDone
+import com.alberto.plantwatch.plants.suggestedInterval
+import com.alberto.plantwatch.plants.typicalIntervalDays
 import com.alberto.plantwatch.plants.withNewInterval
 import com.alberto.plantwatch.weather.SunSettings
 import com.alberto.plantwatch.weather.WindowSettings
@@ -215,6 +218,23 @@ class PlantDetailViewModel(
     val sunLastWeek: StateFlow<Double?> = sunDao.observeTotal(plantId, today.minusDays(7), today)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
 
+    /**
+     * Per task id, the interval its history suggests ("you usually water every
+     * 5 days"), for tasks whose habit clearly differs from their setting
+     * ([typicalIntervalDays] and [suggestedInterval], unit-tested).
+     *
+     * Kotlin notes: `groupBy` turns the log list into a Map from task id to that
+     * task's logs; `mapNotNull` + `toMap()` keeps only tasks with a suggestion.
+     */
+    val suggestedIntervals: StateFlow<Map<Long, Int>> =
+        combine(tasks, careTaskDao.observeLogsForPlantSince(plantId, today.minusDays(INSIGHT_WINDOW_DAYS))) { tasks, logs ->
+            val datesByTask = logs.groupBy({ it.taskId }, { it.doneOn })
+            tasks.mapNotNull { task ->
+                val typical = typicalIntervalDays(datesByTask[task.id].orEmpty(), today)
+                suggestedInterval(task.intervalDays, typical)?.let { task.id to it }
+            }.toMap()
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyMap())
+
     /** Window mode: sun estimated from the window's direction and the plant's position. */
     fun setSunWindow(window: WindowSettings) = updateSun { plant ->
         plant.copy(
@@ -293,6 +313,11 @@ class PlantDetailViewModel(
         viewModelScope.launch {
             careTaskDao.update(updated)
         }
+    }
+
+    /** Adopts the interval suggested by the task's history. */
+    fun useSuggestedInterval(task: CareTask, intervalDays: Int) {
+        viewModelScope.launch { careTaskDao.update(withNewInterval(task, intervalDays)) }
     }
 
     /**
