@@ -3,6 +3,7 @@ package com.alberto.plantwatch
 import android.app.Application
 import com.alberto.plantwatch.reminders.ReminderNotifications
 import com.alberto.plantwatch.reminders.scheduleDailyReminder
+import com.alberto.plantwatch.weather.scheduleDailySunFetch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -50,5 +51,7 @@ class PlantWatchApplication : Application() {
             val time = container.settingsStore.reminderTime.first()
             scheduleDailyReminder(this@PlantWatchApplication, time, replace = false)
         }
+        // The daily sunlight fetch (does nothing if it's already scheduled).
+        scheduleDailySunFetch(this)
     }
 }

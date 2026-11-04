@@ -19,6 +19,9 @@ import com.alberto.plantwatch.plants.data.PlantDao
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.plants.markedDone
 import com.alberto.plantwatch.plants.withNewInterval
+import com.alberto.plantwatch.weather.SunSettings
+import com.alberto.plantwatch.weather.data.SunDao
+import com.alberto.plantwatch.weather.fetchSunNow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -35,8 +38,10 @@ import java.time.LocalDate
  */
 class PlantDetailViewModel(
     savedStateHandle: SavedStateHandle,
-    plantDao: PlantDao,
+    private val plantDao: PlantDao,
     private val careTaskDao: CareTaskDao,
+    sunDao: SunDao,
+    private val fetchSun: () -> Unit,
 ) : ViewModel() {
 
     // `toRoute<PlantDetail>()`: `<PlantDetail>` is a type argument, telling the
@@ -54,6 +59,34 @@ class PlantDetailViewModel(
     /** Recent care history (newest first), updated whenever a task is done or deleted. */
     val history: StateFlow<List<CareHistoryEntry>> = careTaskDao.observeHistoryForPlant(plantId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
+
+    // The day the screen was opened; "yesterday" and "last 7 days" count from it.
+    private val today = LocalDate.now()
+
+    /** Minutes of sun yesterday; null if not fetched (or not tracked). */
+    val sunYesterday: StateFlow<Double?> = sunDao.observeDay(plantId, today.minusDays(1))
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
+
+    /** Total minutes of sun over the 7 days before today (a SUM query, not stored). */
+    val sunLastWeek: StateFlow<Double?> = sunDao.observeTotal(plantId, today.minusDays(7), today)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
+
+    /**
+     * Turns sun tracking on (or changes it) with [settings], or off with null.
+     * After a change, fetches right away so the figures reflect it.
+     */
+    fun setSunSettings(settings: SunSettings?) {
+        val current = plant.value ?: return
+        val updated = current.copy(
+            sunStartHour = settings?.startHour,
+            sunEndHour = settings?.endHour,
+            sunExposurePercent = settings?.exposurePercent,
+        )
+        viewModelScope.launch {
+            plantDao.update(updated)
+            if (settings != null) fetchSun()
+        }
+    }
 
     /**
      * Adds a task to this plant. It's due today: marking it done starts the
@@ -119,6 +152,8 @@ class PlantDetailViewModel(
                     savedStateHandle = createSavedStateHandle(),
                     plantDao = app.container.database.plantDao(),
                     careTaskDao = app.container.database.careTaskDao(),
+                    sunDao = app.container.database.sunDao(),
+                    fetchSun = { fetchSunNow(app) },
                 )
             }
         }

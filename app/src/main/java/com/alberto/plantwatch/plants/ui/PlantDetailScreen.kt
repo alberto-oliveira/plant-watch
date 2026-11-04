@@ -1,7 +1,6 @@
 package com.alberto.plantwatch.plants.ui
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +37,9 @@ import com.alberto.plantwatch.plants.data.CareHistoryEntry
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
+import com.alberto.plantwatch.weather.SunSettings
+import com.alberto.plantwatch.weather.parseSunSettings
+import kotlin.math.roundToInt
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -51,6 +53,22 @@ fun PlantDetailRoute(
     val plant by viewModel.plant.collectAsStateWithLifecycle()
     val tasks by viewModel.tasks.collectAsStateWithLifecycle()
     val history by viewModel.history.collectAsStateWithLifecycle()
+    val sunYesterday by viewModel.sunYesterday.collectAsStateWithLifecycle()
+    val sunLastWeek by viewModel.sunLastWeek.collectAsStateWithLifecycle()
+
+    // The plant's current sun settings, or null when tracking is off.
+    val sunSettings = plant?.let { p ->
+        val start = p.sunStartHour
+        val end = p.sunEndHour
+        val exposure = p.sunExposurePercent
+        if (start != null && end != null && exposure != null) SunSettings(start, end, exposure) else null
+    }
+
+    // Sun dialog: open or not, and its three texts.
+    var showSunDialog by rememberSaveable { mutableStateOf(false) }
+    var sunExposureText by rememberSaveable { mutableStateOf("") }
+    var sunStartText by rememberSaveable { mutableStateOf("") }
+    var sunEndText by rememberSaveable { mutableStateOf("") }
 
     // Which task is waiting for delete confirmation (null = none); same pattern
     // as the plant list.
@@ -83,9 +101,21 @@ fun PlantDetailRoute(
         showTaskDialog = true
     }
 
+    fun openSunDialog() {
+        // Prefill with the current settings, or sensible defaults when off.
+        sunExposureText = (sunSettings?.exposurePercent ?: 100).toString()
+        sunStartText = (sunSettings?.startHour ?: 8).toString()
+        sunEndText = (sunSettings?.endHour ?: 18).toString()
+        showSunDialog = true
+    }
+
     PlantDetailScreen(
         // `?.name ?: ""`: the name if the plant is loaded, empty text otherwise.
         plantName = plant?.name ?: "",
+        sunSettings = sunSettings,
+        sunYesterday = sunYesterday,
+        sunLastWeek = sunLastWeek,
+        onSunClick = ::openSunDialog,
         tasks = tasks,
         history = history,
         // Read on every recomposition, e.g. after marking a task done.
@@ -127,6 +157,27 @@ fun PlantDetailRoute(
         )
     }
 
+    if (showSunDialog) {
+        SunDialog(
+            exposure = sunExposureText,
+            onExposureChange = { sunExposureText = it },
+            startHour = sunStartText,
+            onStartHourChange = { sunStartText = it },
+            endHour = sunEndText,
+            onEndHourChange = { sunEndText = it },
+            isTracked = sunSettings != null,
+            onConfirm = {
+                parseSunSettings(sunStartText, sunEndText, sunExposureText)?.let(viewModel::setSunSettings)
+                showSunDialog = false
+            },
+            onTurnOff = {
+                viewModel.setSunSettings(null)
+                showSunDialog = false
+            },
+            onDismiss = { showSunDialog = false },
+        )
+    }
+
     val taskToDelete = tasks.find { it.id == taskIdToDelete }
     if (taskToDelete != null) {
         DeleteTaskDialog(
@@ -141,9 +192,9 @@ fun PlantDetailRoute(
 }
 
 /**
- * One plant's screen: top bar with a back arrow and the plant's name, the list
- * of its care tasks (or a message when there are none), and below them the
- * recent care history.
+ * One plant's screen: top bar with a back arrow and the plant's name, a Sun row,
+ * the list of its care tasks (or a message when there are none), and below them
+ * the recent care history.
  *
  * Tapping a task opens it for editing.
  *
@@ -156,6 +207,10 @@ fun PlantDetailRoute(
 @Composable
 fun PlantDetailScreen(
     plantName: String,
+    sunSettings: SunSettings?,
+    sunYesterday: Double?,
+    sunLastWeek: Double?,
+    onSunClick: () -> Unit,
     tasks: List<CareTask>,
     history: List<CareHistoryEntry>,
     today: LocalDate,
@@ -190,23 +245,25 @@ fun PlantDetailScreen(
             }
         },
     ) { innerPadding ->
-        if (tasks.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(stringResource(R.string.tasks_empty))
+        // Extra bottom space so the last item can scroll out from under the "+".
+        LazyColumn(
+            contentPadding = PaddingValues(
+                top = innerPadding.calculateTopPadding(),
+                bottom = innerPadding.calculateBottomPadding() + 88.dp,
+            ),
+        ) {
+            item(key = "sun") {
+                SunRow(sunSettings, sunYesterday, sunLastWeek, onClick = onSunClick)
             }
-        } else {
-            // Extra bottom space so the last task can scroll out from under the "+".
-            LazyColumn(
-                contentPadding = PaddingValues(
-                    top = innerPadding.calculateTopPadding(),
-                    bottom = innerPadding.calculateBottomPadding() + 88.dp,
-                ),
-            ) {
+
+            if (tasks.isEmpty()) {
+                item(key = "tasks-empty") {
+                    Text(
+                        text = stringResource(R.string.tasks_empty),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
+                    )
+                }
+            } else {
                 // Keys must be unique across the whole list; tasks and log entries
                 // both have numeric ids, so each gets a prefix.
                 items(tasks, key = { "task-${it.id}" }) { task ->
@@ -235,6 +292,57 @@ fun PlantDetailScreen(
                 }
             }
         }
+    }
+}
+
+/**
+ * The plant's sunlight, e.g.
+ *   Sun
+ *   Yesterday 2 h 15 min · Last 7 days 14 h 30 min
+ *   08–18 h at 40%
+ * or "Tracking off · Tap to set up". Tapping it opens the sun dialog.
+ */
+@Composable
+private fun SunRow(
+    settings: SunSettings?,
+    yesterday: Double?,
+    lastWeek: Double?,
+    onClick: () -> Unit,
+) {
+    val text = if (settings == null) {
+        stringResource(R.string.sun_off)
+    } else {
+        val window = stringResource(R.string.sun_window, settings.startHour, settings.endHour, settings.exposurePercent)
+        val figures = if (yesterday == null && lastWeek == null) {
+            stringResource(R.string.sun_no_data)
+        } else {
+            stringResource(
+                R.string.sun_summary,
+                formatSunMinutes(yesterday ?: 0.0),
+                formatSunMinutes(lastWeek ?: 0.0),
+            )
+        }
+        "$figures\n$window"
+    }
+    ListItem(
+        modifier = Modifier.clickable(onClick = onClick),
+        headlineContent = { Text(stringResource(R.string.sun_title)) },
+        supportingContent = { Text(text) },
+    )
+}
+
+/**
+ * Minutes as "2 h 15 min", or "45 min" under an hour.
+ * `roundToInt()` rounds to the nearest whole minute; `/` and `%` on Ints are
+ * integer division and remainder.
+ */
+@Composable
+private fun formatSunMinutes(minutes: Double): String {
+    val total = minutes.roundToInt()
+    return if (total >= 60) {
+        stringResource(R.string.sun_duration_hours_minutes, total / 60, total % 60)
+    } else {
+        stringResource(R.string.sun_duration_minutes, total)
     }
 }
 
@@ -359,7 +467,8 @@ private val sampleHistory = listOf(
 private fun PlantDetailScreenPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", tasks = sampleTasks, history = sampleHistory, today = previewToday,
+            plantName = "Monstera", sunSettings = SunSettings(8, 18, 40), sunYesterday = 135.0, sunLastWeek = 870.0,
+            onSunClick = {}, tasks = sampleTasks, history = sampleHistory, today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
     }
@@ -370,7 +479,8 @@ private fun PlantDetailScreenPreview() {
 private fun PlantDetailScreenEmptyPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", tasks = emptyList(), history = emptyList(), today = previewToday,
+            plantName = "Monstera", sunSettings = null, sunYesterday = null, sunLastWeek = null,
+            onSunClick = {}, tasks = emptyList(), history = emptyList(), today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
     }

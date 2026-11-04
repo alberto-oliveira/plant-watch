@@ -45,6 +45,24 @@
     <string name="task_never_done">Not done yet</string>
     <string name="task_done">Done</string>
     <string name="history_title">History</string>
+
+    <!-- Plant detail: sun -->
+    <string name="sun_title">Sun</string>
+    <string name="sun_off">Tracking off · Tap to set up</string>
+    <!-- %1$s = yesterday's duration, %2$s = last 7 days, e.g. "Yesterday 2 h 15 min · Last 7 days 14 h" -->
+    <string name="sun_summary">Yesterday %1$s · Last 7 days %2$s</string>
+    <string name="sun_no_data">No data yet (needs a location in Settings and a network connection)</string>
+    <!-- %1$d = start hour, %2$d = end hour, %3$d = exposure percent -->
+    <string name="sun_window">%1$02d–%2$02d h at %3$d%%</string>
+    <string name="sun_duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="sun_duration_minutes">%1$d min</string>
+    <string name="sun_dialog_title">Sun tracking</string>
+    <string name="sun_dialog_hint">Exposure: how much of the outdoor sun the plant gets (100 outdoors, about 40 by a window). Hours: when the sun can reach it.</string>
+    <string name="sun_exposure_label">Exposure (%)</string>
+    <string name="sun_start_label">From hour (0–23)</string>
+    <string name="sun_end_label">To hour (1–24)</string>
+    <string name="sun_invalid">Exposure 0–100, and the start hour must be before the end hour</string>
+    <string name="sun_turn_off">Turn off</string>
     <!-- %1$s = task name, e.g. "Delete Water" -->
     <string name="task_delete_description">Delete %1$s</string>
 
@@ -82,6 +100,14 @@
     <string name="settings_battery_unrestricted">Unrestricted</string>
     <string name="settings_battery_optimized">Optimized: reminders may arrive late. In App info, set Battery to Unrestricted.</string>
     <string name="settings_open_system">Open settings</string>
+    <string name="settings_section_sunlight">Sunlight</string>
+    <string name="settings_location">Location</string>
+    <string name="settings_location_not_set">Not set</string>
+    <string name="location_dialog_title">Location for sunlight data</string>
+    <string name="location_latitude">Latitude</string>
+    <string name="location_longitude">Longitude</string>
+    <string name="location_hint">Only used to fetch sunshine data from Open-Meteo. To find it, long-press a spot in a map app.</string>
+    <string name="location_invalid">Latitude from -90 to 90, longitude from -180 to 180</string>
 
     <!-- Shared -->
     <string name="cancel">Cancel</string>
