@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.alberto.plantwatch.PlantWatchApplication
+import com.alberto.plantwatch.plants.data.DueTask
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.plants.fertilizingPausedUntil
 import kotlinx.coroutines.flow.first
@@ -31,16 +32,7 @@ class ReminderWorker(
 
     override suspend fun doWork(): Result {
         val app = applicationContext as PlantWatchApplication
-        val today = LocalDate.now()
-        val settings = app.container.settingsStore
-        val paused = fertilizingPausedUntil(
-            today,
-            settings.location.first()?.latitude,
-            settings.pauseFertilizingInWinter.first(),
-        ) != null
-        // In winter (if the pause is on), fertilizer tasks are left out of the reminder.
-        val due = app.container.database.careTaskDao().getDueTasks(today)
-            .filterNot { paused && it.type == TaskType.FERTILIZE }
+        val due = loadReminderTasks(app, LocalDate.now())
 
         if (due.isEmpty()) {
             // Nothing due: remove yesterday's reminder if it's still there.
@@ -59,4 +51,20 @@ class ReminderWorker(
         }
         return Result.success()
     }
+}
+
+/**
+ * The tasks the reminder shows today: those due, minus fertilizer tasks while
+ * they're paused for winter. Shared by the daily job and the notification
+ * buttons (which rebuild the reminders after acting).
+ */
+suspend fun loadReminderTasks(app: PlantWatchApplication, today: LocalDate): List<DueTask> {
+    val settings = app.container.settingsStore
+    val paused = fertilizingPausedUntil(
+        today,
+        settings.location.first()?.latitude,
+        settings.pauseFertilizingInWinter.first(),
+    ) != null
+    return app.container.database.careTaskDao().getDueTasks(today)
+        .filterNot { paused && it.type == TaskType.FERTILIZE }
 }

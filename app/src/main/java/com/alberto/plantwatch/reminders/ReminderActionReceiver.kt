@@ -16,9 +16,10 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 /**
- * Handles the reminder notification's **Done** and **Snooze 1 day** buttons,
- * updating Room directly without opening the app. Both act on every task listed
- * in the notification.
+ * Handles the reminder notifications' **Done** and **Snooze 1 day** buttons,
+ * updating Room directly without opening the app. Each plant's buttons act on
+ * that plant's due tasks; afterwards the reminders are rebuilt from the
+ * database, so the plant's notification disappears and the summary is updated.
  *
  * Android notes:
  * - A BroadcastReceiver is a small entry point the system calls with an Intent.
@@ -64,7 +65,11 @@ class ReminderActionReceiver : BroadcastReceiver() {
                         dao.update(snoozed(task, today))
                     }
                 }
-                ReminderNotifications.cancel(context)
+                // Rebuild the reminders from what's still due (silently: the
+                // user just pressed a button, no need for another sound).
+                val due = loadReminderTasks(app, today)
+                if (due.isEmpty()) ReminderNotifications.cancel(context)
+                else ReminderNotifications.show(context, due, silent = true)
             } finally {
                 // `finally` runs even if something above throws, so the system is
                 // always told we're done.
@@ -86,17 +91,19 @@ class ReminderActionReceiver : BroadcastReceiver() {
          * - FLAG_IMMUTABLE: the notification system can't alter the intent.
          * - FLAG_UPDATE_CURRENT: a new reminder replaces the extras (the task ids)
          *   of the previous one instead of reusing stale ones.
-         * - Done and Snooze have different actions, so Android treats them as two
-         *   separate PendingIntents.
+         * - Android considers two PendingIntents the same if their action and
+         *   [requestCode] match (the extras don't count!). Done and Snooze have
+         *   different actions, and each plant's notification passes its own
+         *   request code, so every button keeps its own task ids.
          */
-        fun pendingIntent(context: Context, action: String, taskIds: List<Long>): PendingIntent {
+        fun pendingIntent(context: Context, action: String, taskIds: List<Long>, requestCode: Int): PendingIntent {
             val intent = Intent(context, ReminderActionReceiver::class.java).apply {
                 this.action = action
                 putExtra(EXTRA_TASK_IDS, taskIds.toLongArray())
             }
             return PendingIntent.getBroadcast(
                 context,
-                0,
+                requestCode,
                 intent,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
             )

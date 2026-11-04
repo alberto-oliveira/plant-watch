@@ -46,11 +46,11 @@ class ReminderScheduleTest {
     @Test
     fun `due tasks are grouped by task, keeping plant order and separate labels`() {
         val due = listOf(
-            DueTask(taskId = 1, plantName = "Basil", type = TaskType.WATER, customLabel = null),
-            DueTask(taskId = 2, plantName = "Fern", type = TaskType.WATER, customLabel = null),
-            DueTask(taskId = 3, plantName = "Pothos", type = TaskType.FERTILIZE, customLabel = null),
-            DueTask(taskId = 4, plantName = "Fern", type = TaskType.OTHER, customLabel = "Mist leaves"),
-            DueTask(taskId = 5, plantName = "Basil", type = TaskType.OTHER, customLabel = "Pinch tips"),
+            DueTask(taskId = 1, plantId = 1, plantName = "Basil", type = TaskType.WATER, customLabel = null),
+            DueTask(taskId = 2, plantId = 2, plantName = "Fern", type = TaskType.WATER, customLabel = null),
+            DueTask(taskId = 3, plantId = 3, plantName = "Pothos", type = TaskType.FERTILIZE, customLabel = null),
+            DueTask(taskId = 4, plantId = 2, plantName = "Fern", type = TaskType.OTHER, customLabel = "Mist leaves"),
+            DueTask(taskId = 5, plantId = 1, plantName = "Basil", type = TaskType.OTHER, customLabel = "Pinch tips"),
         )
 
         assertEquals(
@@ -62,5 +62,19 @@ class ReminderScheduleTest {
             ),
             groupDueTasks(due),
         )
+    }
+
+    @Test
+    fun `due tasks are grouped per plant, plants alphabetically`() {
+        val due = listOf(
+            DueTask(taskId = 1, plantId = 2, plantName = "fern", type = TaskType.WATER, customLabel = null),
+            DueTask(taskId = 2, plantId = 1, plantName = "Basil", type = TaskType.WATER, customLabel = null),
+            DueTask(taskId = 3, plantId = 2, plantName = "fern", type = TaskType.FERTILIZE, customLabel = null),
+        )
+
+        val plants = groupDueByPlant(due)
+
+        assertEquals(listOf("Basil", "fern"), plants.map { it.plantName })
+        assertEquals(listOf(1L, 3L), plants[1].tasks.map { it.taskId })
     }
 }
