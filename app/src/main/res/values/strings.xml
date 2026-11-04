@@ -173,6 +173,24 @@
     <string name="plant_notes_empty">Add notes (where it came from, when it was repotted…)</string>
     <string name="plant_notes_title">Notes</string>
 
+    <!-- Rooms -->
+    <!-- %1$s = room name, e.g. "Room: Sala" -->
+    <string name="plant_room">Room: %1$s</string>
+    <string name="room_none">No room</string>
+    <string name="room_picker_title">Room</string>
+    <string name="room_new">New room</string>
+    <string name="room_add_title">Add room</string>
+    <string name="room_edit_title">Edit room</string>
+    <string name="room_name_label">Name</string>
+    <string name="room_window_label">Its window faces</string>
+    <string name="room_window_unknown">Not set</string>
+    <string name="settings_section_rooms">Rooms</string>
+    <string name="settings_add_room">Add room</string>
+    <string name="settings_rooms_empty">No rooms yet. Rooms group your plants in the list.</string>
+    <!-- %1$s = direction, e.g. "Window faces North" -->
+    <string name="settings_room_window">Window faces %1$s</string>
+    <string name="settings_room_no_window">Window direction not set</string>
+
     <!-- Care guide -->
     <string name="guide_title">Care guide</string>
     <string name="guide_not_linked">Link a species to see care hints</string>

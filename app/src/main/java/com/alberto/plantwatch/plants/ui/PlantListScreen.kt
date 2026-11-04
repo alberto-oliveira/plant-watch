@@ -237,13 +237,32 @@ fun PlantListScreen(
             ) {
                 // `key`: lets Compose track rows by plant id, so deleting one row
                 // doesn't make the following rows look like "changed" items.
-                items(plants, key = { it.plant.id }) { summary ->
-                    PlantCard(
-                        summary = summary,
-                        today = today,
-                        onClick = { onPlantClick(summary.plant) },
-                        onDeleteClick = { onDeleteClick(summary.plant) },
-                    )
+                // Grouped by room (rooms alphabetically, "No room" last), with a
+                // header per group, but only once at least one plant has a room.
+                val showRooms = plants.any { it.roomName != null }
+                val groups = plants
+                    .groupBy { it.roomName }
+                    .toList()
+                    .sortedWith(compareBy({ it.first == null }, { it.first?.lowercase() }))
+                groups.forEach { (roomName, roomPlants) ->
+                    if (showRooms) {
+                        item(key = "room-${roomName ?: ""}") {
+                            Text(
+                                text = roomName ?: stringResource(R.string.room_none),
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(start = 4.dp, top = 8.dp),
+                            )
+                        }
+                    }
+                    items(roomPlants, key = { it.plant.id }) { summary ->
+                        PlantCard(
+                            summary = summary,
+                            today = today,
+                            onClick = { onPlantClick(summary.plant) },
+                            onDeleteClick = { onDeleteClick(summary.plant) },
+                        )
+                    }
                 }
             }
         }

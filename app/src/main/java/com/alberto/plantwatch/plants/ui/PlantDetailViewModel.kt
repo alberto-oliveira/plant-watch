@@ -21,6 +21,8 @@ import com.alberto.plantwatch.plants.data.CareHistoryEntry
 import com.alberto.plantwatch.plants.data.CareLog
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.CareTaskDao
+import com.alberto.plantwatch.plants.data.HomeRoom
+import com.alberto.plantwatch.plants.data.RoomDao
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
 import com.alberto.plantwatch.plants.data.TaskType
@@ -63,6 +65,7 @@ class PlantDetailViewModel(
     settingsStore: SettingsStore,
     private val photoStore: PhotoStore,
     private val contentResolver: ContentResolver,
+    private val roomDao: RoomDao,
 ) : ViewModel() {
 
     // `toRoute<PlantDetail>()`: `<PlantDetail>` is a type argument, telling the
@@ -134,6 +137,31 @@ class PlantDetailViewModel(
         combine(settingsStore.adjustWateringToWeather, settingsStore.wateringFactor) { enabled, factor ->
             if (enabled) factor else null
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
+
+    /** All rooms, for the room picker. */
+    val rooms: StateFlow<List<HomeRoom>> = roomDao.observeAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
+
+    /** The plant's room, or null. `combine` re-evaluates when the plant or the rooms change. */
+    val room: StateFlow<HomeRoom?> = combine(plant, rooms) { p, all -> all.find { it.id == p?.roomId } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = null)
+
+    /** Moves the plant to a room, or to no room with null. */
+    fun setRoom(roomId: Long?) {
+        val current = plant.value ?: return
+        viewModelScope.launch { plantDao.update(current.copy(roomId = roomId)) }
+    }
+
+    /** Creates a room with this name and puts the plant in it. */
+    fun createRoomAndAssign(name: String) {
+        val trimmed = name.trim()
+        if (trimmed.isEmpty()) return
+        val current = plant.value ?: return
+        viewModelScope.launch {
+            val id = roomDao.insert(HomeRoom(name = trimmed))
+            plantDao.update(current.copy(roomId = id))
+        }
+    }
 
     /** The plant's photo file, or null if it has none. */
     val photo: StateFlow<File?> = plant
@@ -306,6 +334,7 @@ class PlantDetailViewModel(
                     settingsStore = app.container.settingsStore,
                     photoStore = app.container.photoStore,
                     contentResolver = app.contentResolver,
+                    roomDao = app.container.database.roomDao(),
                 )
             }
         }

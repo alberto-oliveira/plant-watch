@@ -7,6 +7,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.alberto.plantwatch.PlantWatchApplication
 import com.alberto.plantwatch.reminders.scheduleDailyReminder
+import com.alberto.plantwatch.plants.data.HomeRoom
+import com.alberto.plantwatch.plants.data.RoomDao
 import com.alberto.plantwatch.settings.Location
 import com.alberto.plantwatch.settings.SettingsStore
 import com.alberto.plantwatch.weather.fetchSunNow
@@ -28,6 +30,7 @@ class SettingsViewModel(
     private val settingsStore: SettingsStore,
     private val reschedule: (LocalTime) -> Unit,
     private val fetchSun: () -> Unit,
+    private val roomDao: RoomDao,
 ) : ViewModel() {
 
     /** The stored reminder time; null until DataStore has been read (a few ms). */
@@ -60,6 +63,22 @@ class SettingsViewModel(
         }
     }
 
+    /** All rooms, alphabetically. */
+    val rooms: StateFlow<List<HomeRoom>> = roomDao.observeAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
+
+    /** Adds a room (id 0) or saves changes to an existing one. */
+    fun saveRoom(room: HomeRoom) {
+        if (room.name.isBlank()) return
+        val cleaned = room.copy(name = room.name.trim())
+        viewModelScope.launch { if (cleaned.id == 0L) roomDao.insert(cleaned) else roomDao.update(cleaned) }
+    }
+
+    /** Deletes a room; its plants keep existing, without a room. */
+    fun deleteRoom(room: HomeRoom) {
+        viewModelScope.launch { roomDao.delete(room) }
+    }
+
     fun setLocation(location: Location) {
         viewModelScope.launch {
             settingsStore.setLocation(location)
@@ -84,6 +103,7 @@ class SettingsViewModel(
                     settingsStore = app.container.settingsStore,
                     reschedule = { time -> scheduleDailyReminder(app, time, replace = true) },
                     fetchSun = { fetchSunNow(app) },
+                    roomDao = app.container.database.roomDao(),
                 )
             }
         }

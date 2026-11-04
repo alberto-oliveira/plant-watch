@@ -81,6 +81,10 @@ fun PlantDetailRoute(
     val fertilizingPausedUntil by viewModel.fertilizingPausedUntil.collectAsStateWithLifecycle()
     val wateringFactor by viewModel.wateringFactor.collectAsStateWithLifecycle()
     val photo by viewModel.photo.collectAsStateWithLifecycle()
+    val rooms by viewModel.rooms.collectAsStateWithLifecycle()
+    val room by viewModel.room.collectAsStateWithLifecycle()
+    var showRoomPicker by rememberSaveable { mutableStateOf(false) }
+    var newRoomName by rememberSaveable { mutableStateOf("") }
 
     // Android's photo picker: no storage permission needed, the user picks one
     // image and only that image is shared with the app. The lambda receives its
@@ -153,7 +157,8 @@ fun PlantDetailRoute(
         // Prefill with the current settings, or sensible defaults when off.
         // Window mode is the default for a plant that isn't tracked yet.
         sunMode = if (windowSettings == null && sunSettings != null) SunMode.HOURS else SunMode.WINDOW
-        draftDirection = windowSettings?.direction ?: Compass.N
+        // No window set yet: start from the room's window direction, if known.
+        draftDirection = windowSettings?.direction ?: room?.windowDirection ?: Compass.N
         draftDistance = windowSettings?.distance ?: WindowDistance.SILL
         draftPlacement = windowSettings?.placement ?: WindowPlacement.IN_FRONT
         sunExposureText = (sunSettings?.exposurePercent ?: 100).toString()
@@ -180,6 +185,11 @@ fun PlantDetailRoute(
         onEditNotes = {
             notesText = plant?.notes ?: ""
             showNotesDialog = true
+        },
+        roomName = room?.name,
+        onRoomClick = {
+            newRoomName = ""
+            showRoomPicker = true
         },
         guideEntry = guideEntry,
         isSpeciesLinked = plant?.speciesId != null,
@@ -232,6 +242,24 @@ fun PlantDetailRoute(
                 showTaskDialog = false
             },
             onDismiss = { showTaskDialog = false },
+        )
+    }
+
+    if (showRoomPicker) {
+        RoomPickerDialog(
+            rooms = rooms,
+            currentRoomId = plant?.roomId,
+            newRoomName = newRoomName,
+            onNewRoomNameChange = { newRoomName = it },
+            onPick = { id ->
+                viewModel.setRoom(id)
+                showRoomPicker = false
+            },
+            onCreate = {
+                viewModel.createRoomAndAssign(newRoomName)
+                showRoomPicker = false
+            },
+            onDismiss = { showRoomPicker = false },
         )
     }
 
@@ -329,6 +357,8 @@ fun PlantDetailScreen(
     onPickPhoto: () -> Unit,
     onRemovePhoto: () -> Unit,
     onEditNotes: () -> Unit,
+    roomName: String?,
+    onRoomClick: () -> Unit,
     guideEntry: CareGuideEntry?,
     isSpeciesLinked: Boolean,
     onLinkSpeciesClick: () -> Unit,
@@ -394,6 +424,8 @@ fun PlantDetailScreen(
                     onPickPhoto = onPickPhoto,
                     onRemovePhoto = onRemovePhoto,
                     onEditNotes = onEditNotes,
+                    roomName = roomName,
+                    onRoomClick = onRoomClick,
                 )
             }
             item(key = "sun") {
@@ -743,7 +775,8 @@ private fun PlantDetailScreenPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
             plantName = "Monstera", photo = null, notes = "Gift from Ana.",
-            onPickPhoto = {}, onRemovePhoto = {}, onEditNotes = {}, guideEntry = null, isSpeciesLinked = false,
+            onPickPhoto = {}, onRemovePhoto = {}, onEditNotes = {},
+            roomName = null, onRoomClick = {}, guideEntry = null, isSpeciesLinked = false,
             onLinkSpeciesClick = {}, onUnlinkSpecies = {},
             suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, wateringFactor = null, sunSettings = null,
             windowSettings = WindowSettings(Compass.N, WindowDistance.FROM_1_TO_2M, WindowPlacement.IN_FRONT),
@@ -760,7 +793,8 @@ private fun PlantDetailScreenEmptyPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
             plantName = "Monstera", photo = null, notes = "Gift from Ana.",
-            onPickPhoto = {}, onRemovePhoto = {}, onEditNotes = {}, guideEntry = null, isSpeciesLinked = false,
+            onPickPhoto = {}, onRemovePhoto = {}, onEditNotes = {},
+            roomName = null, onRoomClick = {}, guideEntry = null, isSpeciesLinked = false,
             onLinkSpeciesClick = {}, onUnlinkSpecies = {},
             suggestedTasks = emptyList(), onAddSuggestedTasks = {}, fertilizingPausedUntil = null, wateringFactor = null, sunSettings = SunSettings(8, 18, 40), windowSettings = null, sunYesterday = null, sunLastWeek = null,
             onSunClick = {}, tasks = emptyList(), history = emptyList(), today = previewToday,
