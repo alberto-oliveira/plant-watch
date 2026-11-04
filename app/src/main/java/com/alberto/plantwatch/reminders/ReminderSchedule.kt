@@ -51,3 +51,19 @@ fun groupDueTasks(due: List<DueTask>): List<DueGroup> =
                 plantNames = tasks.map { it.plantName },
             )
         }
+
+/**
+ * Whether a daily job that ran at [now] has drifted too far from its [target]
+ * time of day and should be scheduled again. Periodic work slowly drifts (each
+ * run is measured from the previous one, and Android may run it late), and a
+ * daylight-saving change shifts it by an hour at once.
+ *
+ * The difference is measured around the clock: 23:50 vs 00:10 is 20 minutes,
+ * not 23 h 40 min.
+ */
+fun needsRealignment(now: LocalTime, target: LocalTime, toleranceMinutes: Long = 45): Boolean {
+    val secondsPerDay = 24 * 60 * 60
+    val diff = kotlin.math.abs(now.toSecondOfDay() - target.toSecondOfDay())
+    val aroundTheClock = minOf(diff, secondsPerDay - diff)
+    return aroundTheClock > toleranceMinutes * 60
+}

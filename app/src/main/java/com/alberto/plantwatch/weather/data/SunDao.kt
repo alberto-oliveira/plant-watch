@@ -17,6 +17,13 @@ interface SunDao {
     @Upsert
     suspend fun upsert(rows: List<SunDaily>)
 
+    /**
+     * Removes all of a plant's sun rows: used when its sun settings change, so
+     * days computed with the old settings don't linger (re-fetched right after).
+     */
+    @Query("DELETE FROM sun_daily WHERE plantId = :plantId")
+    suspend fun deleteForPlant(plantId: Long)
+
     /** Minutes of sun on one day, or null if that day hasn't been fetched yet. */
     @Query("SELECT sunMinutes FROM sun_daily WHERE plantId = :plantId AND date = :date")
     fun observeDay(plantId: Long, date: LocalDate): Flow<Double?>

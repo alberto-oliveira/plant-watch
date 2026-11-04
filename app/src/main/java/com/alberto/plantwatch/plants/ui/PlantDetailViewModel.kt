@@ -48,7 +48,7 @@ class PlantDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val plantDao: PlantDao,
     private val careTaskDao: CareTaskDao,
-    sunDao: SunDao,
+    private val sunDao: SunDao,
     private val fetchSun: () -> Unit,
     private val careGuide: CareGuide,
 ) : ViewModel() {
@@ -147,8 +147,8 @@ class PlantDetailViewModel(
     }
 
     /**
-     * Saves the plant as changed by [change], then fetches right away if it's
-     * tracked, so the figures reflect the new settings.
+     * Saves the plant as changed by [change], clears its old sun rows, then
+     * fetches right away if it's tracked, so the figures reflect the new settings.
      *
      * Kotlin note: `change: (Plant) -> Plant` takes a function, which the three
      * methods above pass as trailing lambdas: "how to change the plant".
@@ -157,6 +157,9 @@ class PlantDetailViewModel(
         val updated = change(plant.value ?: return)
         viewModelScope.launch {
             plantDao.update(updated)
+            // Old rows were computed with the old settings: drop them; the fetch
+            // below recomputes the last 7 days with the new ones.
+            sunDao.deleteForPlant(updated.id)
             if (updated.isSunTracked) fetchSun()
         }
     }
