@@ -21,4 +21,22 @@ data class Plant(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val name: String,
-)
+    /*
+     * Sun tracking (added in schema v2). All three null = the plant isn't
+     * tracked (e.g. indoors away from windows). Otherwise its sun is counted
+     * from sunStartHour (included) to sunEndHour (excluded), scaled by
+     * sunExposurePercent (100 outdoors, ~40 by a window).
+     * Nullable columns need no default for existing rows: they simply become
+     * NULL when the database is migrated.
+     */
+    val sunStartHour: Int? = null,
+    val sunEndHour: Int? = null,
+    val sunExposurePercent: Int? = null,
+) {
+    /**
+     * A computed property (it has a getter, no stored value), so Room doesn't
+     * turn it into a column.
+     */
+    val isSunTracked: Boolean
+        get() = sunStartHour != null && sunEndHour != null && sunExposurePercent != null
+}
