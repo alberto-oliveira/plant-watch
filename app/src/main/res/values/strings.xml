@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">Plant Watch</string>
+
+    <!-- Plant list -->
+    <string name="plants_empty">No plants yet. Tap + to add one.</string>
+    <string name="plants_add">Add plant</string>
+    <!-- %1$s = plant name. Read by screen readers for the trash icon. -->
+    <string name="plants_delete_description">Delete %1$s</string>
+
+    <!-- Add plant dialog -->
+    <string name="add_plant_title">Add plant</string>
+    <string name="add_plant_name_label">Name</string>
+    <string name="add_plant_confirm">Add</string>
+
+    <!-- Delete plant dialog. %1$s = plant name. -->
+    <string name="delete_plant_title">Delete %1$s?</string>
+    <string name="delete_plant_message">Its care tasks and history will be deleted too. This can\'t be undone.</string>
+    <string name="delete_plant_confirm">Delete</string>
+
+    <!-- Task types (OTHER shows the task's own label) -->
+    <string name="task_type_water">Water</string>
+    <string name="task_type_fertilize">Fertilize</string>
+    <string name="task_type_other">Other</string>
+
+    <!-- Plant detail: task list.
+         <plurals>: Android picks the right form for the number
+         ("one" = 1, "other" = everything else in English). -->
+    <string name="tasks_empty">No care tasks yet. Tap + to add one.</string>
+    <string name="tasks_add">Add care task</string>
+    <plurals name="task_interval">
+        <item quantity="one">Every day</item>
+        <item quantity="other">Every %1$d days</item>
+    </plurals>
+    <string name="task_due_today">Due today</string>
+    <plurals name="task_due_in">
+        <item quantity="one">Due tomorrow</item>
+        <item quantity="other">Due in %1$d days</item>
+    </plurals>
+    <plurals name="task_overdue">
+        <item quantity="one">Overdue by %1$d day</item>
+        <item quantity="other">Overdue by %1$d days</item>
+    </plurals>
+    <!-- %1$s = date -->
+    <string name="task_last_done">Last done %1$s</string>
+    <string name="task_never_done">Not done yet</string>
+    <string name="task_done">Done</string>
+    <string name="history_title">History</string>
+    <!-- %1$s = task name, e.g. "Delete Water" -->
+    <string name="task_delete_description">Delete %1$s</string>
+
+    <!-- Add/edit task dialog -->
+    <string name="add_task_title">Add care task</string>
+    <string name="edit_task_title">Edit care task</string>
+    <string name="task_label_label">Task name</string>
+    <string name="task_interval_label">Every how many days?</string>
+    <string name="task_interval_error">Enter a number from 1 to 365</string>
+
+    <!-- Delete task dialog. %1$s = task name. -->
+    <string name="delete_task_title">Delete \"%1$s\"?</string>
+    <string name="delete_task_message">Its history will be deleted too. This can\'t be undone.</string>
+
+    <!-- Reminder notification -->
+    <string name="reminder_channel_name">Care reminders</string>
+    <string name="reminder_channel_description">Daily reminder of the plants that need care</string>
+    <plurals name="reminder_title">
+        <item quantity="one">%1$d care task due</item>
+        <item quantity="other">%1$d care tasks due</item>
+    </plurals>
+    <!-- One line per task kind. %1$s = task name, %2$s = plant names, e.g. "Water: Basil, Fern" -->
+    <string name="reminder_line">%1$s: %2$s</string>
+    <string name="reminder_action_snooze">Snooze 1 day</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_reminders">Reminders</string>
+    <string name="settings_reminder_time">Daily reminder time</string>
+    <string name="settings_reminder_time_dialog_title">Reminder time</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_on">On</string>
+    <string name="settings_notifications_off">Off: reminders won\'t be shown</string>
+    <string name="settings_battery">Battery optimization</string>
+    <string name="settings_battery_unrestricted">Unrestricted</string>
+    <string name="settings_battery_optimized">Optimized: reminders may arrive late. In App info, set Battery to Unrestricted.</string>
+    <string name="settings_open_system">Open settings</string>
+
+    <!-- Shared -->
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="navigate_back">Back</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A simple white leaf. Adaptive icon foregrounds are 108x108dp, and only the
+     central ~66dp circle is guaranteed visible, so the leaf stays near the center. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Leaf blade -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M74,34 C50,34 36,46 36,64 C36,68 37,71 38,74 C42,60 52,50 64,46 C54,52 46,62 42,76 C45,77 48,78 52,78 C68,78 76,62 74,34 Z" />
+</vector>

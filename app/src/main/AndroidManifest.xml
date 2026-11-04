@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The manifest tells Android what the app contains (activities, receivers, ...)
+     and which permissions it needs. The package name comes from `namespace`
+     in app/build.gradle.kts, so it is not repeated here. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Needed to show the daily reminder (Android 13+ also asks the user at runtime). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- android:name: our Application subclass, created once at process start.
+         Backup: no cloud backup of app data to the Google account (no cloud sync;
+         backups will come from a JSON export instead).
+         - dataExtractionRules: the Android 12+ rules (see res/xml/data_extraction_rules.xml).
+         - allowBackup="false": the older switch, kept as an explicit opt-out. -->
+    <application
+        android:name=".PlantWatchApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PlantWatch">
+
+        <!-- The single activity. The intent filter makes it the launcher entry. -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Handles the reminder's Done / Snooze buttons. exported="false": only
+             this app's own notification can trigger it. -->
+        <receiver
+            android:name=".reminders.ReminderActionReceiver"
+            android:exported="false" />
+    </application>
+
+</manifest>
