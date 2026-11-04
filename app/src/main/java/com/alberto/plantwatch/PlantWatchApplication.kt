@@ -1,6 +1,7 @@
 package com.alberto.plantwatch
 
 import android.app.Application
+import com.alberto.plantwatch.reminders.ReminderNotifications
 
 /**
  * Custom Application class: Android creates exactly one instance when the app
@@ -27,5 +28,7 @@ class PlantWatchApplication : Application() {
         // `this` is the Application, a Context that lives as long as the app,
         // so the database never holds on to a short-lived Activity.
         container = AppContainer(this)
+        // The reminder notification's channel must exist before anything posts to it.
+        ReminderNotifications.createChannel(this)
     }
 }

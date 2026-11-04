@@ -4,6 +4,9 @@
      in app/build.gradle.kts, so it is not repeated here. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Needed to show the daily reminder (Android 13+ also asks the user at runtime). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <!-- android:name: our Application subclass, created once at process start.
          Backup: no cloud backup of app data to the Google account (no cloud sync;
          backups will come from a JSON export instead).
