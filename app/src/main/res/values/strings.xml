@@ -68,6 +68,7 @@
     </plurals>
     <!-- One line per task kind. %1$s = task name, %2$s = plant names, e.g. "Water: Basil, Fern" -->
     <string name="reminder_line">%1$s: %2$s</string>
+    <string name="reminder_action_snooze">Snooze 1 day</string>
 
     <!-- Shared -->
     <string name="cancel">Cancel</string>

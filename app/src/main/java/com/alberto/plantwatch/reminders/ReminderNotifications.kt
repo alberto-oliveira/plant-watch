@@ -54,6 +54,7 @@ object ReminderNotifications {
      *   3 care tasks due
      *   Water: Basil, Fern
      *   Fertilize: Pothos
+     *   [Done] [Snooze 1 day]
      * Does nothing if notifications aren't allowed.
      */
     fun show(context: Context, due: List<DueTask>) {
@@ -71,6 +72,8 @@ object ReminderNotifications {
             )
         }
         val title = context.resources.getQuantityString(R.plurals.reminder_title, due.size, due.size)
+        // The buttons act on exactly the tasks shown in this notification.
+        val taskIds = due.map { it.taskId }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
@@ -81,6 +84,17 @@ object ReminderNotifications {
             .setStyle(NotificationCompat.BigTextStyle().bigText(lines.joinToString("\n")))
             .setContentIntent(openAppIntent(context))
             .setAutoCancel(true) // tapping it opens the app and removes it
+            // Action buttons (the icon argument is unused on current Android, hence 0).
+            .addAction(
+                0,
+                context.getString(R.string.task_done),
+                ReminderActionReceiver.pendingIntent(context, ReminderActionReceiver.ACTION_DONE, taskIds),
+            )
+            .addAction(
+                0,
+                context.getString(R.string.reminder_action_snooze),
+                ReminderActionReceiver.pendingIntent(context, ReminderActionReceiver.ACTION_SNOOZE, taskIds),
+            )
             .build()
 
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)

@@ -30,6 +30,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Handles the reminder's Done / Snooze buttons. exported="false": only
+             this app's own notification can trigger it. -->
+        <receiver
+            android:name=".reminders.ReminderActionReceiver"
+            android:exported="false" />
     </application>
 
 </manifest>
