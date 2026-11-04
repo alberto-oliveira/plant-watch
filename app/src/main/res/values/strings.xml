@@ -25,7 +25,8 @@
     <!-- Plant detail: task list.
          <plurals>: Android picks the right form for the number
          ("one" = 1, "other" = everything else in English). -->
-    <string name="tasks_empty">No care tasks yet.</string>
+    <string name="tasks_empty">No care tasks yet. Tap + to add one.</string>
+    <string name="tasks_add">Add care task</string>
     <plurals name="task_interval">
         <item quantity="one">Every day</item>
         <item quantity="other">Every %1$d days</item>
@@ -45,6 +46,12 @@
     <string name="task_done">Done</string>
     <!-- %1$s = task name, e.g. "Delete Water" -->
     <string name="task_delete_description">Delete %1$s</string>
+
+    <!-- Add/edit task dialog -->
+    <string name="add_task_title">Add care task</string>
+    <string name="task_label_label">Task name</string>
+    <string name="task_interval_label">Every how many days?</string>
+    <string name="task_interval_error">Enter a number from 1 to 365</string>
 
     <!-- Delete task dialog. %1$s = task name. -->
     <string name="delete_task_title">Delete \"%1$s\"?</string>

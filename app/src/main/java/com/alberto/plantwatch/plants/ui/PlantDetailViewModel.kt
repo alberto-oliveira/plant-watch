@@ -15,6 +15,7 @@ import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.CareTaskDao
 import com.alberto.plantwatch.plants.data.Plant
 import com.alberto.plantwatch.plants.data.PlantDao
+import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.plants.markedDone
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -47,6 +48,23 @@ class PlantDetailViewModel(
     /** The plant's care tasks, most urgent first. */
     val tasks: StateFlow<List<CareTask>> = careTaskDao.observeForPlant(plantId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
+
+    /**
+     * Adds a task to this plant. It's due today: marking it done starts the
+     * cycle. The label is only kept for OTHER tasks.
+     */
+    fun addTask(type: TaskType, label: String, intervalDays: Int) {
+        val task = CareTask(
+            plantId = plantId,
+            type = type,
+            customLabel = if (type == TaskType.OTHER) label.trim() else null,
+            intervalDays = intervalDays,
+            nextDue = LocalDate.now(),
+        )
+        viewModelScope.launch {
+            careTaskDao.insert(task)
+        }
+    }
 
     /**
      * Marks the task done today: the scheduling rule ([markedDone], unit-tested)

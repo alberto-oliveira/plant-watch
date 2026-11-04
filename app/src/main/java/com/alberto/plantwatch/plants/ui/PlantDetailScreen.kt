@@ -1,6 +1,7 @@
 package com.alberto.plantwatch.plants.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -8,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -26,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alberto.plantwatch.R
@@ -50,6 +53,14 @@ fun PlantDetailRoute(
     // as the plant list.
     var taskIdToDelete by rememberSaveable { mutableStateOf<Long?>(null) }
 
+    // Add-task dialog: open or not, and what has been entered so far. All three
+    // values survive rotation. (An enum can be saved because Kotlin enums are
+    // Serializable in the Java sense.)
+    var showAddDialog by rememberSaveable { mutableStateOf(false) }
+    var newType by rememberSaveable { mutableStateOf(TaskType.WATER) }
+    var newLabel by rememberSaveable { mutableStateOf("") }
+    var newInterval by rememberSaveable { mutableStateOf("7") }
+
     PlantDetailScreen(
         // `?.name ?: ""`: the name if the plant is loaded, empty text otherwise.
         plantName = plant?.name ?: "",
@@ -57,9 +68,41 @@ fun PlantDetailRoute(
         // Read on every recomposition, e.g. after marking a task done.
         today = LocalDate.now(),
         onBack = onBack,
+        onAddClick = { showAddDialog = true },
         onDoneClick = viewModel::markDone,
         onDeleteClick = { task -> taskIdToDelete = task.id },
     )
+
+    if (showAddDialog) {
+        fun close() {
+            showAddDialog = false
+            // Reset for the next time the dialog opens.
+            newType = TaskType.WATER
+            newLabel = ""
+            newInterval = "7"
+        }
+        TaskDialog(
+            title = stringResource(R.string.add_task_title),
+            confirmText = stringResource(R.string.add_plant_confirm),
+            type = newType,
+            onTypeChange = { newType = it },
+            label = newLabel,
+            onLabelChange = { newLabel = it },
+            intervalText = newInterval,
+            onIntervalTextChange = { newInterval = it },
+            onConfirm = {
+                // The dialog only enables confirm for a valid interval, but the
+                // type system doesn't know that: parseIntervalDays returns Int?.
+                // `?.let { days -> ... }` runs only for a non-null value. (The
+                // alternative `!!` asserts non-null and crashes if wrong.)
+                parseIntervalDays(newInterval)?.let { days ->
+                    viewModel.addTask(newType, newLabel, days)
+                }
+                close()
+            },
+            onDismiss = { close() },
+        )
+    }
 
     val taskToDelete = tasks.find { it.id == taskIdToDelete }
     if (taskToDelete != null) {
@@ -89,6 +132,7 @@ fun PlantDetailScreen(
     tasks: List<CareTask>,
     today: LocalDate,
     onBack: () -> Unit,
+    onAddClick: () -> Unit,
     onDoneClick: (CareTask) -> Unit,
     onDeleteClick: (CareTask) -> Unit,
     modifier: Modifier = Modifier,
@@ -108,6 +152,14 @@ fun PlantDetailScreen(
                 },
             )
         },
+        floatingActionButton = {
+            FloatingActionButton(onClick = onAddClick) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_add),
+                    contentDescription = stringResource(R.string.tasks_add),
+                )
+            }
+        },
     ) { innerPadding ->
         if (tasks.isEmpty()) {
             Box(
@@ -119,7 +171,13 @@ fun PlantDetailScreen(
                 Text(stringResource(R.string.tasks_empty))
             }
         } else {
-            LazyColumn(contentPadding = innerPadding) {
+            // Extra bottom space so the last task can scroll out from under the "+".
+            LazyColumn(
+                contentPadding = PaddingValues(
+                    top = innerPadding.calculateTopPadding(),
+                    bottom = innerPadding.calculateBottomPadding() + 88.dp,
+                ),
+            ) {
                 items(tasks, key = { it.id }) { task ->
                     TaskRow(
                         task = task,
@@ -188,14 +246,23 @@ private fun TaskRow(
 
 /**
  * The name shown for a task: the type's name, or the custom label for OTHER.
- * Kotlin notes: `when (x)` with a subject checks it against each value; with an
- * enum, the compiler makes sure every value is covered (no `else` needed).
+ * Kotlin notes: `when (x)` with a subject checks it against each value. In
+ * [taskTypeName] all enum values are listed, so the compiler knows the `when`
+ * is complete (no `else` needed, and adding a new TaskType fails the build
+ * until it's handled there).
  */
 @Composable
 fun taskName(task: CareTask): String = when (task.type) {
+    TaskType.OTHER -> task.customLabel ?: taskTypeName(TaskType.OTHER)
+    else -> taskTypeName(task.type)
+}
+
+/** The display name of a task type ("Water", "Fertilize", "Other"). */
+@Composable
+fun taskTypeName(type: TaskType): String = when (type) {
     TaskType.WATER -> stringResource(R.string.task_type_water)
     TaskType.FERTILIZE -> stringResource(R.string.task_type_fertilize)
-    TaskType.OTHER -> task.customLabel ?: stringResource(R.string.task_type_other)
+    TaskType.OTHER -> stringResource(R.string.task_type_other)
 }
 
 /** A date in the phone's language and format, e.g. "3 Nov 2026" or "3 de nov. de 2026". */
@@ -221,7 +288,7 @@ private fun PlantDetailScreenPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
             plantName = "Monstera", tasks = sampleTasks, today = previewToday,
-            onBack = {}, onDoneClick = {}, onDeleteClick = {},
+            onBack = {}, onAddClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
     }
 }
@@ -232,7 +299,7 @@ private fun PlantDetailScreenEmptyPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
             plantName = "Monstera", tasks = emptyList(), today = previewToday,
-            onBack = {}, onDoneClick = {}, onDeleteClick = {},
+            onBack = {}, onAddClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
     }
 }
