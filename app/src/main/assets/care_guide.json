@@ -1,0 +1,590 @@
+[
+  {
+    "id": "epipremnum-aureum", "scientificName": "Epipremnum aureum",
+    "namesPt": ["jiboia", "jibóia", "hera-do-diabo"], "namesEn": ["pothos", "golden pothos", "devil's ivy"],
+    "waterEveryDays": 7, "water": "Water when the top 2-3 cm of soil is dry; less in winter. Never leave it standing in water.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates low light but grows slower. Direct midday sun scorches the leaves.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer (e.g. NPK 10-10-10) at half strength, spring to summer; none in winter.",
+    "problems": [
+      {"title": "Yellow leaves", "hint": "Usually overwatering: let the soil dry more between waterings."},
+      {"title": "Brown, crispy leaf edges", "hint": "Dry air or underwatering."},
+      {"title": "Mealybugs", "hint": "White cottony spots: wipe off with cotton and rubbing alcohol, repeat weekly."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "monstera-deliciosa", "scientificName": "Monstera deliciosa",
+    "namesPt": ["costela-de-adão", "monstera"], "namesEn": ["swiss cheese plant", "split-leaf philodendron"],
+    "waterEveryDays": 7, "water": "Water when the top 3-5 cm of soil is dry; reduce in winter.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light gives bigger, more split leaves; avoid harsh direct sun.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in spring and summer.",
+    "problems": [
+      {"title": "Leaves without splits", "hint": "Too little light, or a young plant: move it to brighter indirect light."},
+      {"title": "Yellow lower leaves", "hint": "Overwatering or poor drainage; check the pot has holes."},
+      {"title": "Brown spots with yellow halo", "hint": "Often fungal from wet leaves or soil: water the soil, not the leaves, and improve airflow."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "dracaena-trifasciata", "scientificName": "Dracaena trifasciata",
+    "namesPt": ["espada-de-são-jorge", "espada-de-santa-bárbara", "língua-de-sogra"], "namesEn": ["snake plant", "mother-in-law's tongue", "sansevieria"],
+    "waterEveryDays": 14, "water": "Let the soil dry out completely between waterings; every 3-4 weeks in winter.",
+    "sun": "PART_SUN", "sunHint": "Very adaptable: from low light to some direct sun. Grows best in bright light.",
+    "fertilizeEveryDays": 60, "fertilizer": "Cactus/succulent fertilizer or diluted balanced fertilizer, only in the warm months.",
+    "problems": [
+      {"title": "Soft, mushy base", "hint": "Root rot from overwatering: remove rotten parts, repot in dry, fast-draining soil."},
+      {"title": "Leaves falling over", "hint": "Too much water or too little light."},
+      {"title": "Wrinkled leaves", "hint": "Thirsty: water thoroughly once."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "zamioculcas-zamiifolia", "scientificName": "Zamioculcas zamiifolia",
+    "namesPt": ["zamioculca", "zamioculcas", "zz"], "namesEn": ["zz plant", "zanzibar gem"],
+    "waterEveryDays": 14, "water": "Water only when the soil is completely dry; its thick rhizomes store water.",
+    "sun": "LOW_LIGHT", "sunHint": "Tolerates low light well; bright indirect light makes it grow faster. Avoid direct sun.",
+    "fertilizeEveryDays": 60, "fertilizer": "Balanced liquid fertilizer at half strength, 2-3 times in spring and summer.",
+    "problems": [
+      {"title": "Yellow leaves", "hint": "Almost always overwatering: let it dry out and water less often."},
+      {"title": "Stems collapsing", "hint": "Rotting rhizome from wet soil: check roots, repot in fast-draining mix."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "spathiphyllum-wallisii", "scientificName": "Spathiphyllum wallisii",
+    "namesPt": ["lírio-da-paz", "espatifilo"], "namesEn": ["peace lily"],
+    "waterEveryDays": 5, "water": "Keep the soil lightly moist; it droops when thirsty and recovers quickly after watering.",
+    "sun": "LOW_LIGHT", "sunHint": "Medium to low indirect light; more light means more flowers. No direct sun.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in spring and summer.",
+    "problems": [
+      {"title": "Drooping plant", "hint": "Thirsty: water well. If the soil is wet, check for root rot."},
+      {"title": "Brown leaf tips", "hint": "Dry air, too much fertilizer, or chlorine/fluoride in tap water."},
+      {"title": "No flowers", "hint": "Too little light: move it to brighter indirect light."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "nephrolepis-exaltata", "scientificName": "Nephrolepis exaltata", "generic": true,
+    "namesPt": ["samambaia", "samambaia-americana", "samambaia-de-boston"], "namesEn": ["fern", "boston fern", "sword fern"],
+    "waterEveryDays": 3, "water": "Keep the soil constantly moist, never soggy. Ferns dislike drying out. (Care varies among fern species.)",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light or light shade; direct sun burns the fronds.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at quarter to half strength in the growing season.",
+    "problems": [
+      {"title": "Fronds turning brown and dry", "hint": "Low humidity or soil drying out: water more regularly, mist or group plants."},
+      {"title": "Leaflets dropping", "hint": "Dry air, drafts or too little light."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "anthurium-andraeanum", "scientificName": "Anthurium andraeanum",
+    "namesPt": ["antúrio"], "namesEn": ["anthurium", "flamingo flower"],
+    "waterEveryDays": 5, "water": "Water when the top 2-3 cm are dry; likes humidity but not soggy roots.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light for flowering; direct sun burns the leaves.",
+    "fertilizeEveryDays": 30, "fertilizer": "Fertilizer richer in phosphorus (e.g. NPK 10-30-10) at half strength to encourage flowers.",
+    "problems": [
+      {"title": "No new flowers", "hint": "Too little light or not enough nutrients."},
+      {"title": "Yellow leaves", "hint": "Overwatering or old leaves aging naturally."},
+      {"title": "Brown leaf tips", "hint": "Low humidity or salt build-up: flush the soil with water now and then."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "dieffenbachia-seguine", "scientificName": "Dieffenbachia seguine",
+    "namesPt": ["comigo-ninguém-pode", "difembáquia"], "namesEn": ["dumb cane", "dieffenbachia"],
+    "waterEveryDays": 7, "water": "Water when the top few cm are dry; less in winter.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates shade. Avoid direct sun.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in spring and summer.",
+    "problems": [
+      {"title": "Lower leaves yellowing", "hint": "Normal aging, or overwatering if many at once."},
+      {"title": "Leggy stem", "hint": "Too little light; the top can be cut and rooted."},
+      {"title": "Irritating sap", "hint": "The sap irritates mouth and skin: wear gloves when pruning."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "maranta-leuconeura", "scientificName": "Maranta leuconeura",
+    "namesPt": ["maranta", "maranta-tricolor", "planta-que-reza"], "namesEn": ["prayer plant", "maranta"],
+    "waterEveryDays": 4, "water": "Keep the soil lightly moist; use rain or filtered water if tap water browns the tips.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Medium indirect light; direct sun fades and burns the leaves.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the growing season.",
+    "problems": [
+      {"title": "Crispy brown edges", "hint": "Low humidity or hard tap water."},
+      {"title": "Curled leaves", "hint": "Underwatering or dry air."},
+      {"title": "Spider mites", "hint": "Fine webbing under leaves: shower the plant, raise humidity, repeat."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "goeppertia", "scientificName": "Goeppertia (Calathea)", "generic": true,
+    "namesPt": ["calatéia", "calathea", "maranta-zebra"], "namesEn": ["calathea", "zebra plant", "rattlesnake plant"],
+    "waterEveryDays": 4, "water": "Keep the soil evenly moist, never soggy; prefers filtered or rain water. (Care varies among species.)",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Medium indirect light; no direct sun.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in spring and summer.",
+    "problems": [
+      {"title": "Brown, crispy edges", "hint": "Low humidity or minerals in tap water."},
+      {"title": "Leaves curling", "hint": "Thirsty or air too dry."},
+      {"title": "Spider mites", "hint": "Check leaf undersides; wash leaves and increase humidity."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "philodendron-hederaceum", "scientificName": "Philodendron hederaceum",
+    "namesPt": ["filodendro", "filodendro-brasil", "filodendro-cordato"], "namesEn": ["heartleaf philodendron", "philodendron"],
+    "waterEveryDays": 7, "water": "Water when the top half of the soil is dry.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Medium to bright indirect light; tolerates lower light.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength, spring to summer.",
+    "problems": [
+      {"title": "Yellow leaves", "hint": "Overwatering: let the soil dry more."},
+      {"title": "Small leaves, long gaps on stems", "hint": "Not enough light."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "philodendron-martianum", "scientificName": "Philodendron martianum",
+    "namesPt": ["pacová"], "namesEn": ["flask philodendron"],
+    "waterEveryDays": 7, "water": "Water when the top few cm are dry; its thick petioles store some water.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light or light shade; morning sun is fine.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the warm months.",
+    "problems": [
+      {"title": "Yellow leaves", "hint": "Overwatering or poor drainage."},
+      {"title": "Burnt patches", "hint": "Too much direct afternoon sun."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "syngonium-podophyllum", "scientificName": "Syngonium podophyllum",
+    "namesPt": ["singônio", "planta-seta"], "namesEn": ["arrowhead plant", "syngonium"],
+    "waterEveryDays": 6, "water": "Keep the soil lightly moist, letting the top dry slightly between waterings.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light keeps the colours; no harsh sun.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the growing season.",
+    "problems": [
+      {"title": "Leggy growth", "hint": "Too little light; pinch back to keep it bushy."},
+      {"title": "Yellow leaves", "hint": "Overwatering."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "peperomia-obtusifolia", "scientificName": "Peperomia obtusifolia",
+    "namesPt": ["peperômia", "peperômia-obtusifolia"], "namesEn": ["baby rubber plant", "peperomia"],
+    "waterEveryDays": 10, "water": "Semi-succulent: let the soil dry well between waterings.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Medium to bright indirect light.",
+    "fertilizeEveryDays": 45, "fertilizer": "Balanced liquid fertilizer at half strength, a few times in spring and summer.",
+    "problems": [
+      {"title": "Wilting with wet soil", "hint": "Root rot from overwatering: let it dry, repot if needed."},
+      {"title": "Leaves dropping", "hint": "Cold drafts or sudden changes."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "pilea-peperomioides", "scientificName": "Pilea peperomioides",
+    "namesPt": ["pilea", "planta-chinesa-do-dinheiro"], "namesEn": ["chinese money plant", "pilea"],
+    "waterEveryDays": 7, "water": "Water when the top half of the soil is dry.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; rotate the pot weekly so it grows straight.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in spring and summer.",
+    "problems": [
+      {"title": "Leaves curling down (doming)", "hint": "Too much light or too little water."},
+      {"title": "Leaning plant", "hint": "Growing towards the light: turn the pot regularly."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "chlorophytum-comosum", "scientificName": "Chlorophytum comosum",
+    "namesPt": ["clorofito", "gravatinha", "paulistinha"], "namesEn": ["spider plant"],
+    "waterEveryDays": 7, "water": "Water when the top few cm are dry; its fleshy roots store water.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates some morning sun.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the growing season.",
+    "problems": [
+      {"title": "Brown leaf tips", "hint": "Fluoride/chlorine in tap water or dry air; trim the tips."},
+      {"title": "No baby plants", "hint": "Too little light or pot too large."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "dracaena-fragrans", "scientificName": "Dracaena fragrans",
+    "namesPt": ["dracena", "pau-d'água", "coqueiro-de-vênus"], "namesEn": ["corn plant", "dracaena"],
+    "waterEveryDays": 10, "water": "Water when the top half of the soil is dry.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates lower light.",
+    "fertilizeEveryDays": 45, "fertilizer": "Balanced liquid fertilizer at half strength, spring to summer.",
+    "problems": [
+      {"title": "Brown leaf tips", "hint": "Sensitive to fluoride in tap water and dry air."},
+      {"title": "Yellow lower leaves", "hint": "Normal shedding, or overwatering if many."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "ficus-lyrata", "scientificName": "Ficus lyrata",
+    "namesPt": ["figueira-lira", "fícus-lira"], "namesEn": ["fiddle-leaf fig"],
+    "waterEveryDays": 7, "water": "Water thoroughly when the top 5 cm are dry; keep a steady routine.",
+    "sun": "PART_SUN", "sunHint": "Lots of bright light, some gentle direct sun; dislikes being moved.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced or nitrogen-rich liquid fertilizer (e.g. NPK 3-1-2) in spring and summer.",
+    "problems": [
+      {"title": "Brown spots on leaves", "hint": "Overwatering (spots from the centre) or underwatering (from the edges)."},
+      {"title": "Leaves dropping", "hint": "Moved, drafts or sudden light change: keep it in one spot."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "ficus-elastica", "scientificName": "Ficus elastica",
+    "namesPt": ["falsa-seringueira", "fícus-elástica", "fícus"], "namesEn": ["rubber plant", "rubber fig"],
+    "waterEveryDays": 10, "water": "Water when the top few cm are dry; less in winter.",
+    "sun": "PART_SUN", "sunHint": "Bright light with some direct morning sun.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the growing season.",
+    "problems": [
+      {"title": "Lower leaves dropping", "hint": "Overwatering or too little light."},
+      {"title": "Dusty leaves", "hint": "Wipe with a damp cloth so they can photosynthesize."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "dypsis-lutescens", "scientificName": "Dypsis lutescens",
+    "namesPt": ["palmeira-areca", "areca-bambu", "areca"], "namesEn": ["areca palm", "butterfly palm"],
+    "waterEveryDays": 5, "water": "Keep the soil lightly moist in summer; let the top dry a little in winter.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; outdoors, partial shade.",
+    "fertilizeEveryDays": 30, "fertilizer": "Palm fertilizer or balanced fertilizer with micronutrients (magnesium, iron) in spring and summer.",
+    "problems": [
+      {"title": "Brown frond tips", "hint": "Dry air, salt build-up or irregular watering."},
+      {"title": "Yellowing fronds", "hint": "Nutrient deficiency (often magnesium) or overwatering."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "rhapis-excelsa", "scientificName": "Rhapis excelsa",
+    "namesPt": ["ráfis", "palmeira-ráfis", "palmeira-dama"], "namesEn": ["lady palm", "broadleaf lady palm"],
+    "waterEveryDays": 7, "water": "Water when the top few cm are dry.",
+    "sun": "LOW_LIGHT", "sunHint": "Medium to low indirect light; direct sun yellows the leaves.",
+    "fertilizeEveryDays": 45, "fertilizer": "Palm or balanced liquid fertilizer at half strength in the warm months.",
+    "problems": [
+      {"title": "Brown tips", "hint": "Dry air or salts in the soil: flush with water occasionally."},
+      {"title": "Scale insects", "hint": "Small brown bumps on stems: scrape off, treat with neem oil."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "begonia", "scientificName": "Begonia", "generic": true,
+    "namesPt": ["begônia"], "namesEn": ["begonia"],
+    "waterEveryDays": 5, "water": "Water when the top 2 cm are dry; avoid wetting the leaves. (Care varies among begonias.)",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; some morning sun for flowering types.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength; bloom fertilizer for flowering types.",
+    "problems": [
+      {"title": "Powdery mildew", "hint": "White powder on leaves: improve airflow, avoid wet leaves, remove affected leaves."},
+      {"title": "Stem rot", "hint": "Overwatering: let the soil dry more."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "saintpaulia", "scientificName": "Saintpaulia (Streptocarpus sect. Saintpaulia)",
+    "namesPt": ["violeta-africana", "violeta"], "namesEn": ["african violet"],
+    "waterEveryDays": 5, "water": "Water from below or at the soil with room-temperature water; keep leaves dry.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light, e.g. near an east window.",
+    "fertilizeEveryDays": 14, "fertilizer": "African violet fertilizer (higher phosphorus) at low strength.",
+    "problems": [
+      {"title": "Spots on leaves", "hint": "Cold water on the leaves: water the soil only."},
+      {"title": "No flowers", "hint": "Not enough light or fertilizer."},
+      {"title": "Crown rot", "hint": "Soggy soil: let it dry slightly, use a light mix."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "phalaenopsis", "scientificName": "Phalaenopsis", "generic": true,
+    "namesPt": ["orquídea", "orquídea-borboleta", "falenópsis"], "namesEn": ["orchid", "moth orchid"],
+    "waterEveryDays": 7, "water": "Water when the roots turn silvery (about weekly); drain completely. Grow in bark, not soil. (Other orchids differ.)",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; no midday sun.",
+    "fertilizeEveryDays": 14, "fertilizer": "Orchid fertilizer at quarter to half strength ('weakly, weekly' style).",
+    "problems": [
+      {"title": "Wrinkled, limp leaves", "hint": "Root problems: check for rotten (brown, mushy) roots."},
+      {"title": "No new flower spike", "hint": "A slight night-time temperature drop in autumn helps it rebloom."},
+      {"title": "Crown rot", "hint": "Water left in the leaf base: water in the morning and tilt to drain."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "guzmania", "scientificName": "Guzmania (bromeliads)", "generic": true,
+    "namesPt": ["bromélia", "guzmânia"], "namesEn": ["bromeliad", "guzmania"],
+    "waterEveryDays": 7, "water": "Keep a little water in the central cup (refresh it weekly) and keep the mix barely moist.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; no strong direct sun.",
+    "fertilizeEveryDays": 60, "fertilizer": "Very diluted liquid fertilizer, rarely; bromeliads need little feeding.",
+    "problems": [
+      {"title": "Mother plant dying after flowering", "hint": "Normal: it produces pups; grow those on."},
+      {"title": "Rotting base", "hint": "Soil too wet: water the cup, not the soil."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "hedera-helix", "scientificName": "Hedera helix",
+    "namesPt": ["hera", "hera-inglesa"], "namesEn": ["english ivy", "ivy"],
+    "waterEveryDays": 5, "water": "Keep the soil lightly moist; let the top dry slightly.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates shade. Prefers cooler spots.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced liquid fertilizer at half strength in the growing season.",
+    "problems": [
+      {"title": "Spider mites", "hint": "Common in warm, dry air: shower the leaves regularly."},
+      {"title": "Crispy leaves", "hint": "Too hot or too dry."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "aloe-vera", "scientificName": "Aloe vera",
+    "namesPt": ["babosa", "aloe-vera"], "namesEn": ["aloe vera", "aloe"],
+    "waterEveryDays": 14, "water": "Water deeply only when the soil is completely dry; much less in winter.",
+    "sun": "FULL_SUN", "sunHint": "Full sun to bright light; a sunny window or outdoors.",
+    "fertilizeEveryDays": 90, "fertilizer": "Cactus/succulent fertilizer at half strength, a couple of times in the warm season.",
+    "problems": [
+      {"title": "Soft, translucent leaves", "hint": "Overwatering: stop watering until dry."},
+      {"title": "Thin, curling leaves", "hint": "Thirsty, or too little light."},
+      {"title": "Brown/red leaves", "hint": "Sun stress after a sudden move to strong sun: acclimate gradually."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "crassula-ovata", "scientificName": "Crassula ovata",
+    "namesPt": ["planta-jade", "jade", "árvore-da-amizade"], "namesEn": ["jade plant", "money tree (crassula)"],
+    "waterEveryDays": 14, "water": "Let the soil dry completely; water less in winter.",
+    "sun": "FULL_SUN", "sunHint": "Several hours of sun; red leaf edges are normal in strong light.",
+    "fertilizeEveryDays": 90, "fertilizer": "Succulent fertilizer at half strength in spring and summer.",
+    "problems": [
+      {"title": "Shriveled leaves", "hint": "Underwatering: water deeply."},
+      {"title": "Leaves dropping", "hint": "Overwatering or sudden cold."},
+      {"title": "Mealybugs", "hint": "White fluff in leaf joints: dab with alcohol."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "echeveria", "scientificName": "Echeveria", "generic": true,
+    "namesPt": ["echevéria", "suculenta", "rosa-de-pedra"], "namesEn": ["echeveria", "succulent"],
+    "waterEveryDays": 14, "water": "Soak and dry: water thoroughly, then wait until the soil is fully dry. Keep water off the rosette.",
+    "sun": "FULL_SUN", "sunHint": "Lots of direct sun; indoors, the sunniest window.",
+    "fertilizeEveryDays": 90, "fertilizer": "Succulent fertilizer at low strength in the growing season.",
+    "problems": [
+      {"title": "Stretched, pale growth", "hint": "Etiolation from too little light: move to more sun."},
+      {"title": "Mushy leaves", "hint": "Overwatering or water in the rosette."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "kalanchoe-blossfeldiana", "scientificName": "Kalanchoe blossfeldiana",
+    "namesPt": ["kalanchoe", "calanchoê", "flor-da-fortuna"], "namesEn": ["flaming katy", "kalanchoe"],
+    "waterEveryDays": 10, "water": "Let the soil dry between waterings; it's a succulent.",
+    "sun": "FULL_SUN", "sunHint": "Bright light with some direct sun for flowering.",
+    "fertilizeEveryDays": 30, "fertilizer": "Bloom fertilizer (higher phosphorus) at half strength during growth.",
+    "problems": [
+      {"title": "Not reblooming", "hint": "Needs short days: about 6 weeks of 14 hours of darkness each night."},
+      {"title": "Rotting stems", "hint": "Overwatering."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "cactaceae", "scientificName": "Cactaceae (cacti)", "generic": true,
+    "namesPt": ["cacto", "cactus", "mandacaru"], "namesEn": ["cactus", "cacti"],
+    "waterEveryDays": 21, "water": "Water deeply only when the soil is bone dry; almost none in winter. (Forest cacti like Christmas cactus need more.)",
+    "sun": "FULL_SUN", "sunHint": "As much direct sun as possible.",
+    "fertilizeEveryDays": 60, "fertilizer": "Cactus fertilizer (low nitrogen) at half strength in the warm season.",
+    "problems": [
+      {"title": "Soft, dark base", "hint": "Rot from overwatering: usually fatal, cut and re-root healthy parts."},
+      {"title": "Leaning or thin growth", "hint": "Not enough sun."}
+    ]
+  },
+  {
+    "id": "ocimum-basilicum", "scientificName": "Ocimum basilicum",
+    "namesPt": ["manjericão", "alfavaca"], "namesEn": ["basil", "sweet basil"],
+    "waterEveryDays": 2, "water": "Keep the soil moist but not soggy; water at the base in the morning.",
+    "sun": "FULL_SUN", "sunHint": "At least 6 hours of sun.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced or nitrogen-rich organic fertilizer (e.g. worm castings) monthly.",
+    "problems": [
+      {"title": "Flowering and fewer leaves", "hint": "Pinch off flower buds and harvest tips often to keep it bushy."},
+      {"title": "Black spots / wilting", "hint": "Fungal disease from wet leaves or cold: water the soil, give airflow."},
+      {"title": "Aphids", "hint": "Small insects on tips: hose off or use soapy water."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "salvia-rosmarinus", "scientificName": "Salvia rosmarinus",
+    "namesPt": ["alecrim"], "namesEn": ["rosemary"],
+    "waterEveryDays": 5, "water": "Let the soil dry between waterings; it hates soggy roots.",
+    "sun": "FULL_SUN", "sunHint": "Full sun, at least 6 hours.",
+    "fertilizeEveryDays": 60, "fertilizer": "Light feeding only: a little organic fertilizer in spring.",
+    "problems": [
+      {"title": "Needles browning from the base", "hint": "Root rot from overwatering or poor drainage."},
+      {"title": "Powdery mildew", "hint": "Too humid and shaded: more sun and airflow."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "mentha-spicata", "scientificName": "Mentha spicata",
+    "namesPt": ["hortelã", "hortelã-comum", "menta"], "namesEn": ["mint", "spearmint"],
+    "waterEveryDays": 2, "water": "Keep the soil consistently moist.",
+    "sun": "PART_SUN", "sunHint": "Sun to part shade; afternoon shade helps in hot weather.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced organic fertilizer monthly in the growing season.",
+    "problems": [
+      {"title": "Spreads aggressively", "hint": "Grow it in its own pot."},
+      {"title": "Rust (orange spots)", "hint": "Remove affected leaves, avoid wetting foliage."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "allium-fistulosum", "scientificName": "Allium fistulosum",
+    "namesPt": ["cebolinha", "cebolinha-verde"], "namesEn": ["green onion", "scallion", "welsh onion"],
+    "waterEveryDays": 3, "water": "Keep the soil lightly moist.",
+    "sun": "FULL_SUN", "sunHint": "Full sun to part shade.",
+    "fertilizeEveryDays": 30, "fertilizer": "Nitrogen-rich organic fertilizer after harvests.",
+    "problems": [
+      {"title": "Yellow tips", "hint": "Irregular watering or lack of nitrogen."},
+      {"title": "Thrips", "hint": "Silvery streaks on leaves: rinse, use soapy water."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "petroselinum-crispum", "scientificName": "Petroselinum crispum",
+    "namesPt": ["salsinha", "salsa"], "namesEn": ["parsley"],
+    "waterEveryDays": 3, "water": "Keep the soil evenly moist.",
+    "sun": "PART_SUN", "sunHint": "Sun to part shade.",
+    "fertilizeEveryDays": 30, "fertilizer": "Balanced organic fertilizer monthly.",
+    "problems": [
+      {"title": "Yellow leaves", "hint": "Overwatering or too little nitrogen."},
+      {"title": "Bolting (flowering)", "hint": "Heat or age: it's a biennial, resow periodically."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "coriandrum-sativum", "scientificName": "Coriandrum sativum",
+    "namesPt": ["coentro"], "namesEn": ["coriander", "cilantro"],
+    "waterEveryDays": 2, "water": "Keep the soil moist; it bolts when stressed.",
+    "sun": "PART_SUN", "sunHint": "Sun in mild weather, afternoon shade in hot weather.",
+    "fertilizeEveryDays": 30, "fertilizer": "Light organic fertilizer; too much nitrogen reduces flavour.",
+    "problems": [
+      {"title": "Quickly goes to seed", "hint": "Heat and dry soil: sow small batches every few weeks."}
+    ]
+  },
+  {
+    "id": "origanum-vulgare", "scientificName": "Origanum vulgare",
+    "namesPt": ["orégano", "orégão"], "namesEn": ["oregano"],
+    "waterEveryDays": 5, "water": "Let the soil dry between waterings.",
+    "sun": "FULL_SUN", "sunHint": "Full sun for the best flavour.",
+    "fertilizeEveryDays": 60, "fertilizer": "Little feeding needed: light organic fertilizer in spring.",
+    "problems": [
+      {"title": "Root rot", "hint": "Overwatering or heavy soil: use a well-draining mix."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "thymus-vulgaris", "scientificName": "Thymus vulgaris",
+    "namesPt": ["tomilho"], "namesEn": ["thyme"],
+    "waterEveryDays": 5, "water": "Let the soil dry between waterings; drought tolerant.",
+    "sun": "FULL_SUN", "sunHint": "Full sun.",
+    "fertilizeEveryDays": 60, "fertilizer": "Very little: a light organic feed in spring.",
+    "problems": [
+      {"title": "Woody, sparse plant", "hint": "Trim lightly after flowering to keep it compact."},
+      {"title": "Rotting", "hint": "Too much water."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "capsicum", "scientificName": "Capsicum (peppers)", "generic": true,
+    "namesPt": ["pimenta", "pimenteira", "pimenta-dedo-de-moça", "pimenta-malagueta"], "namesEn": ["chili pepper", "pepper"],
+    "waterEveryDays": 3, "water": "Keep the soil evenly moist; mulch helps in heat.",
+    "sun": "FULL_SUN", "sunHint": "Full sun, 6-8 hours.",
+    "fertilizeEveryDays": 15, "fertilizer": "Balanced fertilizer while growing, then one richer in potassium (e.g. NPK 4-14-8) when flowering and fruiting.",
+    "problems": [
+      {"title": "Flowers dropping", "hint": "Heat stress or irregular watering."},
+      {"title": "Aphids and whiteflies", "hint": "Check leaf undersides; soapy water or neem oil."}
+    ]
+  },
+  {
+    "id": "lavandula-angustifolia", "scientificName": "Lavandula angustifolia",
+    "namesPt": ["lavanda", "alfazema"], "namesEn": ["lavender", "english lavender"],
+    "waterEveryDays": 7, "water": "Let the soil dry out between waterings; very sensitive to wet roots.",
+    "sun": "FULL_SUN", "sunHint": "Full sun, at least 6-8 hours.",
+    "fertilizeEveryDays": 90, "fertilizer": "Little or no feeding; poor, well-drained soil suits it.",
+    "problems": [
+      {"title": "Grey, dying stems", "hint": "Root rot from humidity and wet soil: improve drainage."},
+      {"title": "Few flowers", "hint": "Not enough sun or too much fertilizer."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "rosa", "scientificName": "Rosa (roses)", "generic": true,
+    "namesPt": ["rosa", "roseira"], "namesEn": ["rose"],
+    "waterEveryDays": 3, "water": "Water deeply at the base, keeping leaves dry.",
+    "sun": "FULL_SUN", "sunHint": "At least 6 hours of sun.",
+    "fertilizeEveryDays": 30, "fertilizer": "Rose or flowering-plant fertilizer (e.g. NPK 4-14-8) during the growing season.",
+    "problems": [
+      {"title": "Black spot", "hint": "Fungal spots on leaves: remove them, water the soil only, improve airflow."},
+      {"title": "Aphids", "hint": "On buds: hose off or soapy water."},
+      {"title": "Powdery mildew", "hint": "White powder: more sun and airflow."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "hibiscus-rosa-sinensis", "scientificName": "Hibiscus rosa-sinensis",
+    "namesPt": ["hibisco", "mimo-de-vênus"], "namesEn": ["hibiscus", "chinese hibiscus"],
+    "waterEveryDays": 3, "water": "Keep the soil moist in heat and flowering; less in winter.",
+    "sun": "FULL_SUN", "sunHint": "Full sun for abundant flowers.",
+    "fertilizeEveryDays": 15, "fertilizer": "Fertilizer richer in potassium, lower in phosphorus, during flowering.",
+    "problems": [
+      {"title": "Buds dropping", "hint": "Irregular watering, heat stress or moving the plant."},
+      {"title": "Yellow leaves", "hint": "Over/underwatering or nutrient deficiency."},
+      {"title": "Whiteflies and aphids", "hint": "Treat with soapy water or neem oil."}
+    ],
+    "toxicToPets": false
+  },
+  {
+    "id": "bougainvillea", "scientificName": "Bougainvillea", "generic": true,
+    "namesPt": ["primavera", "buganvília", "três-marias"], "namesEn": ["bougainvillea"],
+    "waterEveryDays": 7, "water": "Water when dry; slightly dry conditions encourage flowering.",
+    "sun": "FULL_SUN", "sunHint": "Full sun; the more sun, the more colour.",
+    "fertilizeEveryDays": 30, "fertilizer": "Low-nitrogen, higher-potassium fertilizer; too much nitrogen gives leaves instead of flowers.",
+    "problems": [
+      {"title": "No flowers", "hint": "Too little sun, too much water or too much nitrogen."},
+      {"title": "Leaves dropping", "hint": "Sudden change or overwatering; usually recovers."}
+    ]
+  },
+  {
+    "id": "pelargonium-hortorum", "scientificName": "Pelargonium × hortorum",
+    "namesPt": ["gerânio", "malva"], "namesEn": ["geranium", "zonal geranium"],
+    "waterEveryDays": 5, "water": "Water when the top few cm are dry; avoid soggy soil.",
+    "sun": "FULL_SUN", "sunHint": "Full sun to bright light.",
+    "fertilizeEveryDays": 15, "fertilizer": "Balanced or bloom fertilizer at half strength during flowering.",
+    "problems": [
+      {"title": "Yellow leaves", "hint": "Overwatering."},
+      {"title": "Grey mould on flowers", "hint": "Remove spent flowers, improve airflow."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "plumeria-pudica", "scientificName": "Plumeria pudica",
+    "namesPt": ["jasmim-do-caribe", "plumeria-pudica", "buquê-de-noiva"], "namesEn": ["bridal bouquet", "white frangipani", "fiddle-leaf plumeria"],
+    "waterEveryDays": 5, "water": "Water when the top few cm are dry; drought tolerant once established. Much less in cool weather, when it may drop leaves.",
+    "sun": "FULL_SUN", "sunHint": "Full sun, at least 6 hours, for abundant flowers; tolerates light shade but flowers less.",
+    "fertilizeEveryDays": 30, "fertilizer": "Bloom fertilizer richer in phosphorus (e.g. NPK 10-30-10 or 4-14-8) in the warm season; none in winter.",
+    "problems": [
+      {"title": "Few or no flowers", "hint": "Not enough sun, or too much nitrogen: move to full sun and use a bloom fertilizer."},
+      {"title": "Leaves dropping in winter", "hint": "Normal in cooler months; reduce watering until new growth appears."},
+      {"title": "Rust (orange powder under leaves)", "hint": "Remove affected leaves and fallen debris; improve airflow."},
+      {"title": "Mealybugs and whiteflies", "hint": "Check leaf undersides; wipe off or treat with neem oil or soapy water."}
+    ]
+  },
+  {
+    "id": "lantana-camara", "scientificName": "Lantana camara",
+    "namesPt": ["lantana", "cambará", "camará", "chumbinho"], "namesEn": ["lantana", "shrub verbena"],
+    "waterEveryDays": 5, "water": "Water when the soil is dry a few cm down; drought tolerant in the ground, pots need more frequent watering.",
+    "sun": "FULL_SUN", "sunHint": "Full sun; in shade it flowers poorly and gets powdery mildew.",
+    "fertilizeEveryDays": 45, "fertilizer": "Light feeding with a balanced or bloom fertilizer in the growing season; too much fertilizer gives leaves instead of flowers.",
+    "problems": [
+      {"title": "Powdery mildew", "hint": "White powder on leaves: more sun and airflow, water at the base."},
+      {"title": "Whiteflies and lace bugs", "hint": "Pale speckled leaves: rinse undersides, use soapy water or neem oil."},
+      {"title": "Spreads by seed", "hint": "Its berries spread easily (it's invasive in many regions): remove spent flower heads. The berries are poisonous."}
+    ],
+    "toxicToPets": true
+  },
+  {
+    "id": "dracaena-sanderiana", "scientificName": "Dracaena sanderiana",
+    "namesPt": ["bambu-da-sorte", "dracena-bambu", "bambu-chinês"], "namesEn": ["lucky bamboo", "ribbon plant"],
+    "waterEveryDays": 7, "water": "In water: keep the roots covered and change the water every 1-2 weeks, using filtered or rain water. In soil: keep it lightly moist.",
+    "sun": "BRIGHT_INDIRECT", "sunHint": "Bright indirect light; tolerates low light. Direct sun yellows and scorches the leaves.",
+    "fertilizeEveryDays": 60, "fertilizer": "A drop of very diluted liquid fertilizer (made for lucky bamboo or houseplants) every 1-2 months; too much burns it.",
+    "problems": [
+      {"title": "Yellow leaves or stalks", "hint": "Too much sun, too much fertilizer, or chlorine/fluoride in tap water: use filtered water."},
+      {"title": "Green algae in the water", "hint": "Light reaching the water: use an opaque container and change the water more often."},
+      {"title": "Soft, rotting stalk", "hint": "Remove it so the rot doesn't spread; refresh the water and rinse the container."}
+    ],
+    "toxicToPets": true
+  }
+]

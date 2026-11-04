@@ -26,6 +26,10 @@ interface CareTaskDao {
     @Query("SELECT * FROM care_tasks WHERE plantId = :plantId ORDER BY nextDue, id")
     fun observeForPlant(plantId: Long): Flow<List<CareTask>>
 
+    /** Every task of every plant (for the plant list's next-care line). */
+    @Query("SELECT * FROM care_tasks")
+    fun observeAll(): Flow<List<CareTask>>
+
     @Insert
     suspend fun insert(task: CareTask): Long
 

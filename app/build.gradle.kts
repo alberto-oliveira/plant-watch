@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 // Build script for the single app module.
 plugins {
@@ -8,6 +9,24 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
 }
+
+/*
+ * Release signing settings, read from the git-ignored local.properties so the
+ * keystore path and passwords are never committed:
+ *   release.storeFile=/home/<you>/keystores/plant-watch-release.jks
+ *   release.storePassword=...
+ *   release.keyAlias=plantwatch
+ *   release.keyPassword=...
+ * Without them (e.g. on another machine) the release APK is simply unsigned.
+ *
+ * Kotlin notes: `Properties().apply { ... }` creates the object and configures it
+ * in one expression; `use { }` closes the file even if loading fails.
+ */
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+val releaseStoreFile: String? = localProperties.getProperty("release.storeFile")
 
 android {
     namespace = "com.alberto.plantwatch" // package for the generated R and BuildConfig classes
@@ -23,13 +42,32 @@ android {
         applicationId = "com.alberto.plantwatch" // unique ID of the installed app
         minSdk = 34
         targetSdk = 35                  // matches the phone (Android 15)
-        versionCode = 1
-        versionName = "0.1"
+        versionCode = 2                 // must increase with every APK you share (Android refuses "downgrades")
+        versionName = "1.0"
+    }
+
+    signingConfigs {
+        // Only defined when this machine has the keystore settings.
+        if (releaseStoreFile != null) {
+            create("release") {
+                storeFile = file(releaseStoreFile)
+                storePassword = localProperties.getProperty("release.storePassword")
+                keyAlias = localProperties.getProperty("release.keyAlias")
+                keyPassword = localProperties.getProperty("release.keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // R8 shrinks and optimizes the code and removes unused resources:
+            // a smaller, faster APK. Libraries ship their own keep rules; the app's
+            // own extra rules (if ever needed) go in proguard-rules.pro.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // `findByName` returns null when no signing config was created above.
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 
@@ -65,6 +103,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
 
     // platform(...) imports the BOM so the Compose libraries below need no versions.
     implementation(platform(libs.androidx.compose.bom))

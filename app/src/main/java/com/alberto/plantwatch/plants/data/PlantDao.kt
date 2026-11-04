@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -39,6 +40,23 @@ interface PlantDao {
     /** Inserts a plant and returns its generated id. */
     @Insert
     suspend fun insert(plant: Plant): Long
+
+    /** Saves changes to a plant (matched by id), e.g. its sun settings. */
+    @Update
+    suspend fun update(plant: Plant)
+
+    /**
+     * Plants with sun tracking on (window mode or custom hours), for the daily
+     * sun job (one-shot read).
+     */
+    @Query(
+        """
+        SELECT * FROM plants
+        WHERE (windowDirection IS NOT NULL AND windowDistance IS NOT NULL AND windowPlacement IS NOT NULL)
+           OR (sunExposurePercent IS NOT NULL AND sunStartHour IS NOT NULL AND sunEndHour IS NOT NULL)
+        """,
+    )
+    suspend fun getSunTracked(): List<Plant>
 
     /** Deletes the plant (matched by id); its tasks and logs go with it (CASCADE). */
     @Delete

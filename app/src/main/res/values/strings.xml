@@ -2,7 +2,19 @@
     <string name="app_name">Plant Watch</string>
 
     <!-- Plant list -->
-    <string name="plants_empty">No plants yet. Tap + to add one.</string>
+    <string name="plants_empty_title">No plants yet</string>
+    <string name="plants_empty_message">Tap + to add your first plant.</string>
+    <string name="plants_no_tasks">No care tasks</string>
+    <!-- Next-care line in the plant list. %1$s = task name, %2$d = days. -->
+    <string name="next_care_today">%1$s today</string>
+    <plurals name="next_care_in">
+        <item quantity="one">%1$s tomorrow</item>
+        <item quantity="other">%1$s in %2$d days</item>
+    </plurals>
+    <plurals name="next_care_overdue">
+        <item quantity="one">%1$s overdue by %2$d day</item>
+        <item quantity="other">%1$s overdue by %2$d days</item>
+    </plurals>
     <string name="plants_add">Add plant</string>
     <!-- %1$s = plant name. Read by screen readers for the trash icon. -->
     <string name="plants_delete_description">Delete %1$s</string>
@@ -10,6 +22,7 @@
     <!-- Add plant dialog -->
     <string name="add_plant_title">Add plant</string>
     <string name="add_plant_name_label">Name</string>
+    <string name="add_plant_species_hint">Is it one of these? (optional)</string>
     <string name="add_plant_confirm">Add</string>
 
     <!-- Delete plant dialog. %1$s = plant name. -->
@@ -25,7 +38,8 @@
     <!-- Plant detail: task list.
          <plurals>: Android picks the right form for the number
          ("one" = 1, "other" = everything else in English). -->
-    <string name="tasks_empty">No care tasks yet. Tap + to add one.</string>
+    <string name="tasks_empty_title">No care tasks yet</string>
+    <string name="tasks_empty_message">Tap + to add watering, fertilizing or anything else this plant needs.</string>
     <string name="tasks_add">Add care task</string>
     <plurals name="task_interval">
         <item quantity="one">Every day</item>
@@ -44,7 +58,51 @@
     <string name="task_last_done">Last done %1$s</string>
     <string name="task_never_done">Not done yet</string>
     <string name="task_done">Done</string>
+    <!-- %1$s = task name. Read by screen readers for the check-mark button. -->
+    <string name="task_mark_done_description">Mark %1$s done</string>
     <string name="history_title">History</string>
+
+    <!-- Plant detail: sun -->
+    <string name="sun_title">Sun</string>
+    <string name="sun_off">Tracking off · Tap to set up</string>
+    <!-- %1$s = yesterday's duration, %2$s = last 7 days, e.g. "Yesterday 2 h 15 min · Last 7 days 14 h" -->
+    <string name="sun_summary">Yesterday %1$s · Last 7 days %2$s</string>
+    <string name="sun_no_data">No data yet (needs a location in Settings and a network connection)</string>
+    <!-- %1$d = start hour, %2$d = end hour, %3$d = exposure percent -->
+    <string name="sun_window">%1$02d–%2$02d h at %3$d%%</string>
+    <string name="sun_duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="sun_duration_hours">%1$d h</string>
+    <string name="sun_duration_minutes">%1$d min</string>
+    <string name="sun_dialog_title">Sun tracking</string>
+    <string name="sun_dialog_hint">Exposure: how much of the outdoor sun the plant gets (100 outdoors, about 40 by a window). Hours: when the sun can reach it.</string>
+    <string name="sun_exposure_label">Exposure (%)</string>
+    <string name="sun_start_label">From hour (0–23)</string>
+    <string name="sun_end_label">To hour (1–24)</string>
+    <string name="sun_invalid">Exposure 0–100, and the start hour must be before the end hour</string>
+    <string name="sun_turn_off">Turn off</string>
+    <!-- Short: the two segments share the dialog's width equally. -->
+    <string name="sun_mode_window">Window</string>
+    <string name="sun_mode_hours">Hours</string>
+    <string name="sun_window_hint">Where does the plant\'s window face, and where is the plant? The app works out when the sun can shine in.</string>
+    <string name="sun_window_faces">Window faces</string>
+    <string name="sun_plant_distance">Plant distance from the window</string>
+    <string name="sun_plant_placement">Plant placement</string>
+    <!-- %1$s = direction, %2$s = distance, %3$s = placement, e.g. "North window · 1–2 m · in front" -->
+    <string name="sun_window_summary">%1$s window · %2$s · %3$s</string>
+    <string name="compass_n">North</string>
+    <string name="compass_ne">North-east</string>
+    <string name="compass_e">East</string>
+    <string name="compass_se">South-east</string>
+    <string name="compass_s">South</string>
+    <string name="compass_sw">South-west</string>
+    <string name="compass_w">West</string>
+    <string name="compass_nw">North-west</string>
+    <string name="distance_sill">On the sill</string>
+    <string name="distance_under_1m">Under 1 m</string>
+    <string name="distance_1_to_2m">1–2 m</string>
+    <string name="distance_over_2m">Over 2 m</string>
+    <string name="placement_in_front">In front</string>
+    <string name="placement_to_the_side">To the side</string>
     <!-- %1$s = task name, e.g. "Delete Water" -->
     <string name="task_delete_description">Delete %1$s</string>
 
@@ -82,6 +140,66 @@
     <string name="settings_battery_unrestricted">Unrestricted</string>
     <string name="settings_battery_optimized">Optimized: reminders may arrive late. In App info, set Battery to Unrestricted.</string>
     <string name="settings_open_system">Open settings</string>
+    <string name="settings_section_sunlight">Sunlight</string>
+    <string name="settings_location">Location</string>
+    <string name="settings_location_not_set">Not set</string>
+    <string name="location_dialog_title">Location for sunlight data</string>
+    <string name="location_latitude">Latitude</string>
+    <string name="location_longitude">Longitude</string>
+    <string name="location_hint">Only used to fetch sunshine data from Open-Meteo. To find it, long-press a spot in a map app.</string>
+    <string name="location_invalid">Latitude from -90 to 90, longitude from -180 to 180</string>
+
+    <!-- Care guide -->
+    <string name="guide_title">Care guide</string>
+    <string name="guide_not_linked">Link a species to see care hints</string>
+    <string name="guide_unknown_species">Unknown species: link it again</string>
+    <string name="guide_menu_description">Care guide options</string>
+    <string name="guide_change_species">Change species</string>
+    <string name="guide_unlink">Unlink species</string>
+    <plurals name="guide_water_every">
+        <item quantity="one">Water · about every day</item>
+        <item quantity="other">Water · about every %1$d days</item>
+    </plurals>
+    <plurals name="guide_fertilize_every">
+        <item quantity="one">Fertilizer · about every day</item>
+        <item quantity="other">Fertilizer · about every %1$d days</item>
+    </plurals>
+    <string name="guide_fertilize_rarely">Fertilizer · rarely needed</string>
+    <string name="guide_problems">Common problems</string>
+    <!-- %1$d = number of problems -->
+    <string name="guide_show_all">Show all (%1$d)</string>
+    <string name="guide_show_less">Show less</string>
+    <string name="guide_toxic">Toxic to cats and dogs</string>
+    <string name="guide_show_hints">Show care hints</string>
+    <string name="guide_hide_hints">Hide care hints</string>
+    <!-- Collapsed card summary, e.g. "Water ~7 days · Bright indirect light · Fertilize ~30 days" -->
+    <plurals name="guide_summary_water">
+        <item quantity="one">Water daily</item>
+        <item quantity="other">Water ~%1$d days</item>
+    </plurals>
+    <plurals name="guide_summary_fertilize">
+        <item quantity="one">Fertilize daily</item>
+        <item quantity="other">Fertilize ~%1$d days</item>
+    </plurals>
+    <string name="guide_summary_fertilize_rarely">Fertilize rarely</string>
+    <string name="sun_short_full_sun">Full sun</string>
+    <string name="sun_short_part_sun">Part sun</string>
+    <string name="sun_short_bright_indirect">Bright indirect light</string>
+    <string name="sun_short_low_light">Low light</string>
+    <string name="guide_add_suggested">Add suggested tasks</string>
+    <!-- %1$s = task name, %2$d = days, e.g. "Water every 7 days" -->
+    <plurals name="guide_suggested_task">
+        <item quantity="one">%1$s every day</item>
+        <item quantity="other">%1$s every %2$d days</item>
+    </plurals>
+    <string name="guide_generic_note">General guidance for this group: care varies by species.</string>
+    <string name="sun_need_full_sun">Sun · full sun</string>
+    <string name="sun_need_part_sun">Sun · part sun</string>
+    <string name="sun_need_bright_indirect">Sun · bright indirect light</string>
+    <string name="sun_need_low_light">Sun · low light</string>
+    <string name="species_picker_title">Which plant is it?</string>
+    <string name="species_picker_hint">Search in Portuguese or English</string>
+    <string name="species_picker_none">No match. Try another name, or the scientific name.</string>
 
     <!-- Shared -->
     <string name="cancel">Cancel</string>

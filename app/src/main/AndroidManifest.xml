@@ -7,6 +7,10 @@
     <!-- Needed to show the daily reminder (Android 13+ also asks the user at runtime). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- Needed to fetch sunshine data from Open-Meteo. A "normal" permission:
+         granted at install, no dialog. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- android:name: our Application subclass, created once at process start.
          Backup: no cloud backup of app data to the Google account (no cloud sync;
          backups will come from a JSON export instead).

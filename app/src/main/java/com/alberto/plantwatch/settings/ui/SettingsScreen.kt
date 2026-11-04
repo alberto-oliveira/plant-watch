@@ -1,5 +1,6 @@
 package com.alberto.plantwatch.settings.ui
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,11 +35,14 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alberto.plantwatch.R
+import com.alberto.plantwatch.settings.Location
 import com.alberto.plantwatch.settings.appDetailsIntent
 import com.alberto.plantwatch.settings.ignoresBatteryOptimizations
 import com.alberto.plantwatch.settings.notificationSettingsIntent
 import com.alberto.plantwatch.settings.notificationsEnabled
+import com.alberto.plantwatch.ui.IconBadge
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
+import com.alberto.plantwatch.weather.parseLocation
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -50,7 +54,13 @@ fun SettingsRoute(
     viewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory),
 ) {
     val reminderTime by viewModel.reminderTime.collectAsStateWithLifecycle()
+    val location by viewModel.location.collectAsStateWithLifecycle()
     var showTimePicker by rememberSaveable { mutableStateOf(false) }
+
+    // Location dialog: open or not, and the two texts being typed.
+    var showLocationDialog by rememberSaveable { mutableStateOf(false) }
+    var latitudeText by rememberSaveable { mutableStateOf("") }
+    var longitudeText by rememberSaveable { mutableStateOf("") }
 
     // System statuses: owned by Android, not by the app, so they're read here
     // (not stored in the ViewModel) and refreshed every time the screen resumes,
@@ -68,10 +78,17 @@ fun SettingsRoute(
 
     SettingsScreen(
         reminderTime = reminderTime,
+        location = location,
         notificationsOn = notificationsOn,
         batteryUnrestricted = batteryUnrestricted,
         onBack = onBack,
         onReminderTimeClick = { showTimePicker = true },
+        onLocationClick = {
+            // Prefill with the saved location (empty if none).
+            latitudeText = location?.latitude?.let(::formatCoordinate) ?: ""
+            longitudeText = location?.longitude?.let(::formatCoordinate) ?: ""
+            showLocationDialog = true
+        },
         // `startActivity` opens another app's screen (here, Android's Settings).
         onOpenNotificationSettings = { context.startActivity(notificationSettingsIntent(context)) },
         onOpenAppDetails = { context.startActivity(appDetailsIntent(context)) },
@@ -90,6 +107,23 @@ fun SettingsRoute(
             onDismiss = { showTimePicker = false },
         )
     }
+
+    if (showLocationDialog) {
+        LocationDialog(
+            latitude = latitudeText,
+            onLatitudeChange = { latitudeText = it },
+            longitude = longitudeText,
+            onLongitudeChange = { longitudeText = it },
+            onConfirm = {
+                // Save is only enabled for valid input, so this is never null here.
+                parseLocation(latitudeText, longitudeText)?.let { (lat, lon) ->
+                    viewModel.setLocation(Location(lat, lon))
+                }
+                showLocationDialog = false
+            },
+            onDismiss = { showLocationDialog = false },
+        )
+    }
 }
 
 /** The settings screen: a back arrow and the list of settings (stateless). */
@@ -97,10 +131,12 @@ fun SettingsRoute(
 @Composable
 fun SettingsScreen(
     reminderTime: LocalTime?,
+    location: Location?,
     notificationsOn: Boolean,
     batteryUnrestricted: Boolean,
     onBack: () -> Unit,
     onReminderTimeClick: () -> Unit,
+    onLocationClick: () -> Unit,
     onOpenNotificationSettings: () -> Unit,
     onOpenAppDetails: () -> Unit,
     modifier: Modifier = Modifier,
@@ -130,6 +166,7 @@ fun SettingsScreen(
             SectionTitle(stringResource(R.string.settings_section_reminders))
             ListItem(
                 modifier = Modifier.clickable(onClick = onReminderTimeClick),
+                leadingContent = { SettingIcon(R.drawable.ic_schedule) },
                 headlineContent = { Text(stringResource(R.string.settings_reminder_time)) },
                 trailingContent = {
                     Text(
@@ -139,6 +176,7 @@ fun SettingsScreen(
                 },
             )
             StatusRow(
+                icon = R.drawable.ic_notifications,
                 title = stringResource(R.string.settings_notifications),
                 status = stringResource(
                     if (notificationsOn) R.string.settings_notifications_on else R.string.settings_notifications_off,
@@ -147,12 +185,28 @@ fun SettingsScreen(
                 onOpenSettings = onOpenNotificationSettings,
             )
             StatusRow(
+                icon = R.drawable.ic_battery_full,
                 title = stringResource(R.string.settings_battery),
                 status = stringResource(
                     if (batteryUnrestricted) R.string.settings_battery_unrestricted else R.string.settings_battery_optimized,
                 ),
                 isProblem = !batteryUnrestricted,
                 onOpenSettings = onOpenAppDetails,
+            )
+
+            SectionTitle(stringResource(R.string.settings_section_sunlight))
+            ListItem(
+                modifier = Modifier.clickable(onClick = onLocationClick),
+                leadingContent = { SettingIcon(R.drawable.ic_location_on) },
+                headlineContent = { Text(stringResource(R.string.settings_location)) },
+                supportingContent = {
+                    Text(
+                        // Location is a data class, so `{ (lat, lon) -> }` destructures
+                        // it into its two properties, in declaration order.
+                        text = location?.let { (lat, lon) -> "${formatCoordinate(lat)}, ${formatCoordinate(lon)}" }
+                            ?: stringResource(R.string.settings_location_not_set),
+                    )
+                },
             )
         }
     }
@@ -164,12 +218,14 @@ fun SettingsScreen(
  */
 @Composable
 private fun StatusRow(
+    @DrawableRes icon: Int,
     title: String,
     status: String,
     isProblem: Boolean,
     onOpenSettings: () -> Unit,
 ) {
     ListItem(
+        leadingContent = { SettingIcon(icon) },
         headlineContent = { Text(title) },
         supportingContent = {
             Text(
@@ -182,6 +238,17 @@ private fun StatusRow(
                 Text(stringResource(R.string.settings_open_system))
             }
         },
+    )
+}
+
+/** The small round icon at the start of each settings row. */
+@Composable
+private fun SettingIcon(@DrawableRes icon: Int) {
+    IconBadge(
+        icon = icon,
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        size = 36.dp,
     )
 }
 
@@ -241,8 +308,10 @@ private fun formatTime(time: LocalTime): String =
 private fun SettingsScreenPreview() {
     PlantWatchTheme {
         SettingsScreen(
-            reminderTime = LocalTime.of(9, 0), notificationsOn = true, batteryUnrestricted = true,
-            onBack = {}, onReminderTimeClick = {}, onOpenNotificationSettings = {}, onOpenAppDetails = {},
+            reminderTime = LocalTime.of(9, 0), location = Location(-23.5505, -46.6333),
+            notificationsOn = true, batteryUnrestricted = true,
+            onBack = {}, onReminderTimeClick = {}, onLocationClick = {},
+            onOpenNotificationSettings = {}, onOpenAppDetails = {},
         )
     }
 }
@@ -252,8 +321,10 @@ private fun SettingsScreenPreview() {
 private fun SettingsScreenProblemsPreview() {
     PlantWatchTheme {
         SettingsScreen(
-            reminderTime = LocalTime.of(9, 0), notificationsOn = false, batteryUnrestricted = false,
-            onBack = {}, onReminderTimeClick = {}, onOpenNotificationSettings = {}, onOpenAppDetails = {},
+            reminderTime = LocalTime.of(9, 0), location = null,
+            notificationsOn = false, batteryUnrestricted = false,
+            onBack = {}, onReminderTimeClick = {}, onLocationClick = {},
+            onOpenNotificationSettings = {}, onOpenAppDetails = {},
         )
     }
 }
