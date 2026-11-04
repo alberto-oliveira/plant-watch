@@ -60,9 +60,9 @@
         <item quantity="many">Em %1$d dias</item>
     </plurals>
     <plurals name="task_habit" tools:ignore="ImpliedQuantity">
-        <item quantity="one">Ultimamente você faz isso todo dia</item>
-        <item quantity="other">Ultimamente você faz isso a cada %d dias</item>
-        <item quantity="many">Ultimamente você faz isso a cada %d dias</item>
+        <item quantity="one">Na prática: todo dia</item>
+        <item quantity="other">Na prática: a cada %d dias</item>
+        <item quantity="many">Na prática: a cada %d dias</item>
     </plurals>
     <string name="task_habit_use">Usar</string>
     <plurals name="task_overdue">
@@ -200,14 +200,14 @@
     <string name="guide_change_species">Trocar espécie</string>
     <string name="guide_unlink">Desvincular espécie</string>
     <plurals name="guide_water_every" tools:ignore="ImpliedQuantity">
-        <item quantity="one">Rega · cerca de todo dia</item>
-        <item quantity="other">Rega · cerca de a cada %1$d dias</item>
-        <item quantity="many">Rega · cerca de a cada %1$d dias</item>
+        <item quantity="one">Rega · aprox. todo dia</item>
+        <item quantity="other">Rega · aprox. a cada %1$d dias</item>
+        <item quantity="many">Rega · aprox. a cada %1$d dias</item>
     </plurals>
     <plurals name="guide_fertilize_every" tools:ignore="ImpliedQuantity">
-        <item quantity="one">Adubo · cerca de todo dia</item>
-        <item quantity="other">Adubo · cerca de a cada %1$d dias</item>
-        <item quantity="many">Adubo · cerca de a cada %1$d dias</item>
+        <item quantity="one">Adubo · aprox. todo dia</item>
+        <item quantity="other">Adubo · aprox. a cada %1$d dias</item>
+        <item quantity="many">Adubo · aprox. a cada %1$d dias</item>
     </plurals>
     <string name="guide_fertilize_rarely">Adubo · raramente necessário</string>
     <string name="guide_problems">Problemas comuns</string>

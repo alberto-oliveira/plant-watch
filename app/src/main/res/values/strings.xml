@@ -57,8 +57,8 @@
     </plurals>
     <!-- Under a task whose history differs from its interval; a button adopts it. -->
     <plurals name="task_habit">
-        <item quantity="one">Lately you do this every day</item>
-        <item quantity="other">Lately you do this every %d days</item>
+        <item quantity="one">Lately: every day</item>
+        <item quantity="other">Lately: every %d days</item>
     </plurals>
     <string name="task_habit_use">Use it</string>
     <plurals name="task_overdue">
