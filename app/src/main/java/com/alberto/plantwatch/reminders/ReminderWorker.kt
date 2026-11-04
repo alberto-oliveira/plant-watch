@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.alberto.plantwatch.PlantWatchApplication
+import kotlinx.coroutines.flow.first
 import java.time.LocalDate
+import java.time.LocalTime
 
 /**
  * The daily reminder job, run by WorkManager in the background (the app doesn't
@@ -34,6 +36,15 @@ class ReminderWorker(
             ReminderNotifications.cancel(applicationContext)
         } else {
             ReminderNotifications.show(applicationContext, due)
+        }
+
+        // If this run drifted far from the chosen time (slow drift, or a
+        // daylight-saving change), schedule the job again so tomorrow's run is
+        // back on time. This is the last thing done: re-scheduling cancels this
+        // run's work entry, and the notification has already been posted.
+        val target = app.container.settingsStore.reminderTime.first()
+        if (needsRealignment(LocalTime.now(), target)) {
+            scheduleDailyReminder(applicationContext, target, replace = true)
         }
         return Result.success()
     }

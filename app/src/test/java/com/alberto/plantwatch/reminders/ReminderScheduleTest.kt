@@ -3,6 +3,8 @@ package com.alberto.plantwatch.reminders
 import com.alberto.plantwatch.plants.data.DueTask
 import com.alberto.plantwatch.plants.data.TaskType
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.Duration
 import java.time.LocalDateTime
@@ -31,6 +33,14 @@ class ReminderScheduleTest {
         val now = LocalDateTime.of(2026, 11, 3, 9, 0)
 
         assertEquals(Duration.ofDays(1), delayUntilNextRun(now, nineAm))
+    }
+
+    @Test
+    fun `realignment only when the run drifted beyond the tolerance, around the clock`() {
+        assertFalse(needsRealignment(LocalTime.of(9, 30), nineAm)) // 30 min late: fine
+        assertTrue(needsRealignment(LocalTime.of(10, 0), nineAm)) // DST shift: 1 h
+        assertTrue(needsRealignment(LocalTime.of(8, 0), nineAm))
+        assertFalse(needsRealignment(LocalTime.of(0, 10), LocalTime.of(23, 50))) // 20 min across midnight
     }
 
     @Test
