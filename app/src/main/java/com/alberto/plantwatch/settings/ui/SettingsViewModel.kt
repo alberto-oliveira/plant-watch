@@ -17,6 +17,7 @@ import com.alberto.plantwatch.plants.data.RoomDao
 import com.alberto.plantwatch.settings.Location
 import com.alberto.plantwatch.settings.SettingsStore
 import com.alberto.plantwatch.weather.fetchSunNow
+import com.alberto.plantwatch.widget.refreshWidget
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -40,6 +41,7 @@ class SettingsViewModel(
     private val roomDao: RoomDao,
     private val backup: Backup,
     private val contentResolver: ContentResolver,
+    private val refreshWidget: suspend () -> Unit,
 ) : ViewModel() {
 
     /** The stored reminder time; null until DataStore has been read (a few ms). */
@@ -135,6 +137,7 @@ class SettingsViewModel(
             val reminder = backup.import(ready.contents)
             reschedule(reminder)
             fetchSun()
+            refreshWidget()
             BackupStatus.Imported
         }
     }
@@ -171,6 +174,7 @@ class SettingsViewModel(
                     roomDao = app.container.database.roomDao(),
                     backup = app.container.backup,
                     contentResolver = app.contentResolver,
+                    refreshWidget = { refreshWidget(app) },
                 )
             }
         }

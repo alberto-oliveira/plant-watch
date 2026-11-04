@@ -17,6 +17,7 @@ work = "2.12.0"                # WorkManager: background jobs (the daily reminde
 coil = "3.6.3"                 # Image loading for plant photos (Compose)
 retrofit = "3.0.0"             # HTTP client (brings OkHttp in transitively)
 serializationJson = "1.12.0"   # kotlinx.serialization JSON format (Open-Meteo responses)
+glance = "1.2.0"              # Glance: home-screen widgets written like Compose
 junit = "4.13.2"               # unit test framework (tests only, not shipped in the app)
 
 [libraries]
@@ -46,6 +47,9 @@ coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }
+androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
+# Lets the widget use the app's Material 3 colours (light and dark).
+androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }

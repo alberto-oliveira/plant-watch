@@ -107,6 +107,8 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.kotlinx.serialization)
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
 
     // platform(...) imports the BOM so the Compose libraries below need no versions.
     implementation(platform(libs.androidx.compose.bom))

@@ -85,21 +85,17 @@ interface CareTaskDao {
      * and finishes. `:today` is converted to an epoch day by the type converter,
      * so `nextDue <= :today` is an integer comparison.
      *
+     * The SQL is the constant [DUE_TASKS_SQL] below, shared with [observeDueTasks].
+     *
      * SQL: `CASE ... END` maps each type to a number, to sort in our own order
      * rather than alphabetically.
      */
-    @Query(
-        """
-        SELECT care_tasks.id AS taskId, plants.id AS plantId, plants.name AS plantName, care_tasks.type, care_tasks.customLabel
-        FROM care_tasks
-        JOIN plants ON care_tasks.plantId = plants.id
-        WHERE care_tasks.nextDue <= :today
-        ORDER BY CASE care_tasks.type WHEN 'WATER' THEN 0 WHEN 'FERTILIZE' THEN 1 ELSE 2 END,
-                 care_tasks.customLabel,
-                 plants.name COLLATE NOCASE
-        """,
-    )
+    @Query(DUE_TASKS_SQL)
     suspend fun getDueTasks(today: LocalDate): List<DueTask>
+
+    /** The same, observed: re-emits whenever tasks or plants change (for the widget). */
+    @Query(DUE_TASKS_SQL)
+    fun observeDueTasks(today: LocalDate): Flow<List<DueTask>>
 
     /**
      * The tasks with these ids (those still existing), read fresh from the
@@ -124,3 +120,17 @@ interface CareTaskDao {
         insertLog(log)
     }
 }
+
+/**
+ * The due-tasks query, shared by two DAO functions. Annotation arguments must
+ * be compile-time constants, hence `const val` (a top-level one, private to this file).
+ */
+private const val DUE_TASKS_SQL = """
+        SELECT care_tasks.id AS taskId, plants.id AS plantId, plants.name AS plantName, care_tasks.type, care_tasks.customLabel
+        FROM care_tasks
+        JOIN plants ON care_tasks.plantId = plants.id
+        WHERE care_tasks.nextDue <= :today
+        ORDER BY CASE care_tasks.type WHEN 'WATER' THEN 0 WHEN 'FERTILIZE' THEN 1 ELSE 2 END,
+                 care_tasks.customLabel,
+                 plants.name COLLATE NOCASE
+        """

@@ -7,6 +7,9 @@ import com.alberto.plantwatch.PlantWatchApplication
 import com.alberto.plantwatch.plants.data.DueTask
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.plants.fertilizingPausedUntil
+import com.alberto.plantwatch.widget.refreshWidget
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import java.time.LocalDate
 import java.time.LocalTime
@@ -41,6 +44,9 @@ class ReminderWorker(
             ReminderNotifications.show(applicationContext, due)
         }
 
+        // The home-screen widget shows the same list.
+        refreshWidget(applicationContext)
+
         // If this run drifted far from the chosen time (slow drift, or a
         // daylight-saving change), schedule the job again so tomorrow's run is
         // back on time. This is the last thing done: re-scheduling cancels this
@@ -55,16 +61,24 @@ class ReminderWorker(
 
 /**
  * The tasks the reminder shows today: those due, minus fertilizer tasks while
- * they're paused for winter. Shared by the daily job and the notification
- * buttons (which rebuild the reminders after acting).
+ * they're paused for winter. Observed (a Flow) by the widget; read once by the
+ * daily job and the notification buttons via [loadReminderTasks].
+ *
+ * Kotlin note: `combine` merges several Flows; the lambda runs again whenever
+ * any of them emits, so the result follows the database and the settings.
  */
-suspend fun loadReminderTasks(app: PlantWatchApplication, today: LocalDate): List<DueTask> {
+fun observeReminderTasks(app: PlantWatchApplication, today: LocalDate): Flow<List<DueTask>> {
     val settings = app.container.settingsStore
-    val paused = fertilizingPausedUntil(
-        today,
-        settings.location.first()?.latitude,
-        settings.pauseFertilizingInWinter.first(),
-    ) != null
-    return app.container.database.careTaskDao().getDueTasks(today)
-        .filterNot { paused && it.type == TaskType.FERTILIZE }
+    return combine(
+        app.container.database.careTaskDao().observeDueTasks(today),
+        settings.location,
+        settings.pauseFertilizingInWinter,
+    ) { due, location, pauseEnabled ->
+        val paused = fertilizingPausedUntil(today, location?.latitude, pauseEnabled) != null
+        due.filterNot { paused && it.type == TaskType.FERTILIZE }
+    }
 }
+
+/** The reminder's tasks right now (the first value of [observeReminderTasks]). */
+suspend fun loadReminderTasks(app: PlantWatchApplication, today: LocalDate): List<DueTask> =
+    observeReminderTasks(app, today).first()
