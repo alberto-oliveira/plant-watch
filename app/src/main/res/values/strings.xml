@@ -44,6 +44,7 @@
     <string name="task_last_done">Last done %1$s</string>
     <string name="task_never_done">Not done yet</string>
     <string name="task_done">Done</string>
+    <string name="history_title">History</string>
     <!-- %1$s = task name, e.g. "Delete Water" -->
     <string name="task_delete_description">Delete %1$s</string>
 

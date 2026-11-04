@@ -40,6 +40,27 @@ interface CareTaskDao {
     suspend fun insertLog(log: CareLog)
 
     /**
+     * The plant's care history, newest first (at most 30 entries).
+     *
+     * SQL notes:
+     * - `JOIN ... ON`: combines each log row with the task it belongs to, so we
+     *   get the task's type and label next to the log's date.
+     * - `AS logId` renames a column to match the property in [CareHistoryEntry].
+     * - The Flow re-emits when either table changes (Room tracks both).
+     */
+    @Query(
+        """
+        SELECT care_logs.id AS logId, care_logs.doneOn, care_tasks.type, care_tasks.customLabel
+        FROM care_logs
+        JOIN care_tasks ON care_logs.taskId = care_tasks.id
+        WHERE care_tasks.plantId = :plantId
+        ORDER BY care_logs.doneOn DESC, care_logs.id DESC
+        LIMIT 30
+        """,
+    )
+    fun observeHistoryForPlant(plantId: Long): Flow<List<CareHistoryEntry>>
+
+    /**
      * Saves a task that was just done and records it in the log, as one unit:
      * `@Transaction` makes both writes succeed together or not at all, so the
      * task can't be marked done without a log entry (or the other way round).

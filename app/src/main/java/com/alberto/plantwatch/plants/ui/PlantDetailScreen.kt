@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alberto.plantwatch.R
 import com.alberto.plantwatch.plants.daysUntilDue
+import com.alberto.plantwatch.plants.data.CareHistoryEntry
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.TaskType
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
@@ -49,6 +50,7 @@ fun PlantDetailRoute(
 ) {
     val plant by viewModel.plant.collectAsStateWithLifecycle()
     val tasks by viewModel.tasks.collectAsStateWithLifecycle()
+    val history by viewModel.history.collectAsStateWithLifecycle()
 
     // Which task is waiting for delete confirmation (null = none); same pattern
     // as the plant list.
@@ -85,6 +87,7 @@ fun PlantDetailRoute(
         // `?.name ?: ""`: the name if the plant is loaded, empty text otherwise.
         plantName = plant?.name ?: "",
         tasks = tasks,
+        history = history,
         // Read on every recomposition, e.g. after marking a task done.
         today = LocalDate.now(),
         onBack = onBack,
@@ -138,8 +141,9 @@ fun PlantDetailRoute(
 }
 
 /**
- * One plant's screen: top bar with a back arrow and the plant's name, and the
- * list of its care tasks (or a message when there are none).
+ * One plant's screen: top bar with a back arrow and the plant's name, the list
+ * of its care tasks (or a message when there are none), and below them the
+ * recent care history.
  *
  * Tapping a task opens it for editing.
  *
@@ -153,6 +157,7 @@ fun PlantDetailRoute(
 fun PlantDetailScreen(
     plantName: String,
     tasks: List<CareTask>,
+    history: List<CareHistoryEntry>,
     today: LocalDate,
     onBack: () -> Unit,
     onAddClick: () -> Unit,
@@ -202,7 +207,9 @@ fun PlantDetailScreen(
                     bottom = innerPadding.calculateBottomPadding() + 88.dp,
                 ),
             ) {
-                items(tasks, key = { it.id }) { task ->
+                // Keys must be unique across the whole list; tasks and log entries
+                // both have numeric ids, so each gets a prefix.
+                items(tasks, key = { "task-${it.id}" }) { task ->
                     TaskRow(
                         task = task,
                         today = today,
@@ -210,6 +217,21 @@ fun PlantDetailScreen(
                         onDoneClick = { onDoneClick(task) },
                         onDeleteClick = { onDeleteClick(task) },
                     )
+                }
+
+                if (history.isNotEmpty()) {
+                    // `item { }` adds a single element (here, the section title).
+                    item(key = "history-title") {
+                        Text(
+                            text = stringResource(R.string.history_title),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 4.dp),
+                        )
+                    }
+                    items(history, key = { "log-${it.logId}" }) { entry ->
+                        HistoryRow(entry)
+                    }
                 }
             }
         }
@@ -272,6 +294,15 @@ private fun TaskRow(
     )
 }
 
+/** One history line: the date, and what was done ("Water", "Mist leaves", ...). */
+@Composable
+private fun HistoryRow(entry: CareHistoryEntry) {
+    ListItem(
+        headlineContent = { Text(taskName(entry.type, entry.customLabel)) },
+        supportingContent = { Text(formatDate(entry.doneOn)) },
+    )
+}
+
 /**
  * The name shown for a task: the type's name, or the custom label for OTHER.
  * Kotlin notes: `when (x)` with a subject checks it against each value. In
@@ -280,9 +311,17 @@ private fun TaskRow(
  * until it's handled there).
  */
 @Composable
-fun taskName(task: CareTask): String = when (task.type) {
-    TaskType.OTHER -> task.customLabel ?: taskTypeName(TaskType.OTHER)
-    else -> taskTypeName(task.type)
+fun taskName(task: CareTask): String = taskName(task.type, task.customLabel)
+
+/**
+ * Same, from the type and label alone (used by history entries). Two functions
+ * with the same name but different parameters is *overloading*: Kotlin picks
+ * the one matching the arguments.
+ */
+@Composable
+fun taskName(type: TaskType, customLabel: String?): String = when (type) {
+    TaskType.OTHER -> customLabel ?: taskTypeName(TaskType.OTHER)
+    else -> taskTypeName(type)
 }
 
 /** The display name of a task type ("Water", "Fertilize", "Other"). */
@@ -310,12 +349,17 @@ private val sampleTasks = listOf(
         nextDue = previewToday),
 )
 
+private val sampleHistory = listOf(
+    CareHistoryEntry(logId = 2, doneOn = previewToday, type = TaskType.OTHER, customLabel = "Mist leaves"),
+    CareHistoryEntry(logId = 1, doneOn = previewToday.minusDays(9), type = TaskType.WATER, customLabel = null),
+)
+
 @Preview(showBackground = true)
 @Composable
 private fun PlantDetailScreenPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", tasks = sampleTasks, today = previewToday,
+            plantName = "Monstera", tasks = sampleTasks, history = sampleHistory, today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
     }
@@ -326,7 +370,7 @@ private fun PlantDetailScreenPreview() {
 private fun PlantDetailScreenEmptyPreview() {
     PlantWatchTheme {
         PlantDetailScreen(
-            plantName = "Monstera", tasks = emptyList(), today = previewToday,
+            plantName = "Monstera", tasks = emptyList(), history = emptyList(), today = previewToday,
             onBack = {}, onAddClick = {}, onTaskClick = {}, onDoneClick = {}, onDeleteClick = {},
         )
     }

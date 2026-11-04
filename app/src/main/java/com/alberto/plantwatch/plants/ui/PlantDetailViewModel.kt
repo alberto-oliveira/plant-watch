@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.toRoute
 import com.alberto.plantwatch.PlantDetail
 import com.alberto.plantwatch.PlantWatchApplication
+import com.alberto.plantwatch.plants.data.CareHistoryEntry
 import com.alberto.plantwatch.plants.data.CareLog
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.CareTaskDao
@@ -48,6 +49,10 @@ class PlantDetailViewModel(
 
     /** The plant's care tasks, most urgent first. */
     val tasks: StateFlow<List<CareTask>> = careTaskDao.observeForPlant(plantId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
+
+    /** Recent care history (newest first), updated whenever a task is done or deleted. */
+    val history: StateFlow<List<CareHistoryEntry>> = careTaskDao.observeHistoryForPlant(plantId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = emptyList())
 
     /**
