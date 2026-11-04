@@ -2,6 +2,10 @@ package com.alberto.plantwatch.plants.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.alberto.plantwatch.weather.Compass
+import com.alberto.plantwatch.weather.WindowDistance
+import com.alberto.plantwatch.weather.WindowPlacement
+import com.alberto.plantwatch.weather.WindowSettings
 
 /**
  * A plant I take care of. One row in the `plants` table.
@@ -32,11 +36,31 @@ data class Plant(
     val sunStartHour: Int? = null,
     val sunEndHour: Int? = null,
     val sunExposurePercent: Int? = null,
+    /*
+     * Window mode (added in schema v3): where the plant's window faces and where
+     * the plant stands. When set, these take precedence over the custom hours
+     * above. Enums are stored as their names ("N", "SILL", ...).
+     */
+    val windowDirection: Compass? = null,
+    val windowDistance: WindowDistance? = null,
+    val windowPlacement: WindowPlacement? = null,
 ) {
     /**
+     * The window settings, or null if the plant isn't in window mode.
      * A computed property (it has a getter, no stored value), so Room doesn't
      * turn it into a column.
      */
+    val windowSettings: WindowSettings?
+        get() {
+            // Local copies, so the compiler can smart-cast them to non-null.
+            val direction = windowDirection ?: return null
+            val distance = windowDistance ?: return null
+            val placement = windowPlacement ?: return null
+            return WindowSettings(direction, distance, placement)
+        }
+
+    /** True if sun is tracked in either mode (window, or custom hours). */
     val isSunTracked: Boolean
-        get() = sunStartHour != null && sunEndHour != null && sunExposurePercent != null
+        get() = windowSettings != null ||
+            (sunStartHour != null && sunEndHour != null && sunExposurePercent != null)
 }
