@@ -1,6 +1,8 @@
 package com.alberto.plantwatch.plants.data
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.alberto.plantwatch.weather.Compass
 import com.alberto.plantwatch.weather.WindowDistance
@@ -20,7 +22,21 @@ import com.alberto.plantwatch.weather.WindowSettings
  * - Annotations (`@Entity`, `@PrimaryKey`) are metadata read by Room's code
  *   generator at build time; they don't do anything at runtime by themselves.
  */
-@Entity(tableName = "plants")
+@Entity(
+    tableName = "plants",
+    // Schema v6: a plant may belong to a room. Deleting the room keeps the
+    // plant, just without a room (SET_NULL), unlike tasks, which go with their
+    // plant (CASCADE).
+    foreignKeys = [
+        ForeignKey(
+            entity = HomeRoom::class,
+            parentColumns = ["id"],
+            childColumns = ["roomId"],
+            onDelete = ForeignKey.SET_NULL,
+        ),
+    ],
+    indices = [Index("roomId")],
+)
 data class Plant(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
@@ -59,6 +75,8 @@ data class Plant(
      * it stays valid if Android moves the app's storage.
      */
     val photoFile: String? = null,
+    /** The room the plant stands in (schema v6), or null. */
+    val roomId: Long? = null,
 ) {
     /**
      * The window settings, or null if the plant isn't in window mode.
