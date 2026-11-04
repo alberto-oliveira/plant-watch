@@ -1,5 +1,7 @@
 package com.alberto.plantwatch.settings.ui
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -49,6 +51,7 @@ import com.alberto.plantwatch.settings.notificationsEnabled
 import com.alberto.plantwatch.ui.IconBadge
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
 import com.alberto.plantwatch.weather.parseLocation
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -64,6 +67,18 @@ fun SettingsRoute(
     val pauseFertilizing by viewModel.pauseFertilizingInWinter.collectAsStateWithLifecycle()
     val adjustWatering by viewModel.adjustWatering.collectAsStateWithLifecycle()
     val rooms by viewModel.rooms.collectAsStateWithLifecycle()
+    val backupStatus by viewModel.backupStatus.collectAsStateWithLifecycle()
+
+    // Android's own file screens, so the app needs no storage permission:
+    // "CreateDocument" lets the user choose where to save a new file,
+    // "OpenDocument" lets them pick an existing one. Each returns the chosen
+    // file's Uri to the lambda, or null if they backed out.
+    val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+        if (uri != null) viewModel.exportTo(uri)
+    }
+    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) viewModel.readImport(uri)
+    }
 
     // Room dialog: open or not, which room (0 = a new one) and the draft values.
     var showRoomDialog by rememberSaveable { mutableStateOf(false) }
@@ -122,7 +137,20 @@ fun SettingsRoute(
         // `startActivity` opens another app's screen (here, Android's Settings).
         onOpenNotificationSettings = { context.startActivity(notificationSettingsIntent(context)) },
         onOpenAppDetails = { context.startActivity(appDetailsIntent(context)) },
+        // The suggested file name; the user can change it.
+        onExport = { exportLauncher.launch("plant-watch-backup-${LocalDate.now()}.zip") },
+        // ZIP files are labelled differently by different apps, hence several types.
+        onImport = { importLauncher.launch(arrayOf("application/zip", "application/x-zip-compressed", "application/octet-stream")) },
     )
+
+    // `?.let`: only when there's a status to show.
+    backupStatus?.let { status ->
+        BackupStatusDialog(
+            status = status,
+            onConfirmImport = viewModel::confirmImport,
+            onDismiss = viewModel::dismissBackupStatus,
+        )
+    }
 
     // `val time = reminderTime` copies the property into a local value, so the
     // compiler can smart-cast it to non-null inside the `if`.
@@ -199,6 +227,8 @@ fun SettingsScreen(
     onLocationClick: () -> Unit,
     onOpenNotificationSettings: () -> Unit,
     onOpenAppDetails: () -> Unit,
+    onExport: () -> Unit,
+    onImport: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -332,6 +362,20 @@ fun SettingsScreen(
                     )
                 },
             )
+
+            SectionTitle(stringResource(R.string.settings_section_backup))
+            ListItem(
+                modifier = Modifier.clickable(onClick = onExport),
+                leadingContent = { SettingIcon(R.drawable.ic_upload) },
+                headlineContent = { Text(stringResource(R.string.settings_export)) },
+                supportingContent = { Text(stringResource(R.string.settings_export_hint)) },
+            )
+            ListItem(
+                modifier = Modifier.clickable(onClick = onImport),
+                leadingContent = { SettingIcon(R.drawable.ic_download) },
+                headlineContent = { Text(stringResource(R.string.settings_import)) },
+                supportingContent = { Text(stringResource(R.string.settings_import_hint)) },
+            )
         }
     }
 }
@@ -437,7 +481,7 @@ private fun SettingsScreenPreview() {
             rooms = listOf(HomeRoom(1, "Sala", Compass.N), HomeRoom(2, "Varanda")), onRoomClick = {},
             notificationsOn = true, batteryUnrestricted = true,
             onBack = {}, onReminderTimeClick = {}, onLocationClick = {},
-            onOpenNotificationSettings = {}, onOpenAppDetails = {},
+            onOpenNotificationSettings = {}, onOpenAppDetails = {}, onExport = {}, onImport = {},
         )
     }
 }
@@ -452,7 +496,7 @@ private fun SettingsScreenProblemsPreview() {
             rooms = emptyList(), onRoomClick = {},
             notificationsOn = false, batteryUnrestricted = false,
             onBack = {}, onReminderTimeClick = {}, onLocationClick = {},
-            onOpenNotificationSettings = {}, onOpenAppDetails = {},
+            onOpenNotificationSettings = {}, onOpenAppDetails = {}, onExport = {}, onImport = {},
         )
     }
 }

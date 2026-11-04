@@ -1,19 +1,26 @@
 package com.alberto.plantwatch.settings.ui
 
+import android.content.ContentResolver
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.alberto.plantwatch.PlantWatchApplication
+import com.alberto.plantwatch.backup.Backup
+import com.alberto.plantwatch.backup.BackupContents
+import com.alberto.plantwatch.backup.BackupFormatException
 import com.alberto.plantwatch.reminders.scheduleDailyReminder
 import com.alberto.plantwatch.plants.data.HomeRoom
 import com.alberto.plantwatch.plants.data.RoomDao
 import com.alberto.plantwatch.settings.Location
 import com.alberto.plantwatch.settings.SettingsStore
 import com.alberto.plantwatch.weather.fetchSunNow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalTime
@@ -31,6 +38,8 @@ class SettingsViewModel(
     private val reschedule: (LocalTime) -> Unit,
     private val fetchSun: () -> Unit,
     private val roomDao: RoomDao,
+    private val backup: Backup,
+    private val contentResolver: ContentResolver,
 ) : ViewModel() {
 
     /** The stored reminder time; null until DataStore has been read (a few ms). */
@@ -95,6 +104,62 @@ class SettingsViewModel(
         }
     }
 
+    /** Where an export or import stands; null when there's nothing to show. */
+    private val _backupStatus = MutableStateFlow<BackupStatus?>(null)
+    val backupStatus: StateFlow<BackupStatus?> = _backupStatus.asStateFlow()
+
+    /**
+     * Writes a backup to the file the user just created ([uri], from the
+     * system's "save as" screen). `openOutputStream` gives write access to it.
+     */
+    fun exportTo(uri: Uri) {
+        runBackupStep {
+            val out = contentResolver.openOutputStream(uri) ?: error("Can't open $uri")
+            out.use { backup.export(it) }
+            BackupStatus.Exported
+        }
+    }
+
+    /** Reads the picked backup file and asks for confirmation before importing it. */
+    fun readImport(uri: Uri) {
+        runBackupStep {
+            val input = contentResolver.openInputStream(uri) ?: error("Can't open $uri")
+            BackupStatus.ReadyToImport(input.use { backup.read(it) })
+        }
+    }
+
+    /** Replaces all data with the backup being confirmed, then reschedules the jobs. */
+    fun confirmImport() {
+        val ready = _backupStatus.value as? BackupStatus.ReadyToImport ?: return
+        runBackupStep {
+            val reminder = backup.import(ready.contents)
+            reschedule(reminder)
+            fetchSun()
+            BackupStatus.Imported
+        }
+    }
+
+    fun dismissBackupStatus() {
+        _backupStatus.value = null
+    }
+
+    /**
+     * Shows "Working…", runs [step] and shows its result, or an error.
+     * `suspend () -> BackupStatus` is a function type for a suspending lambda.
+     */
+    private fun runBackupStep(step: suspend () -> BackupStatus) {
+        _backupStatus.value = BackupStatus.Working
+        viewModelScope.launch {
+            _backupStatus.value = try {
+                step()
+            } catch (e: BackupFormatException) {
+                BackupStatus.Refused
+            } catch (e: Exception) {
+                BackupStatus.Failed
+            }
+        }
+    }
+
     companion object {
         val Factory = viewModelFactory {
             initializer {
@@ -104,8 +169,27 @@ class SettingsViewModel(
                     reschedule = { time -> scheduleDailyReminder(app, time, replace = true) },
                     fetchSun = { fetchSunNow(app) },
                     roomDao = app.container.database.roomDao(),
+                    backup = app.container.backup,
+                    contentResolver = app.contentResolver,
                 )
             }
         }
     }
+}
+
+/**
+ * The backup dialog's states.
+ *
+ * Kotlin note: a `sealed interface` has a fixed set of implementations, all in
+ * this module, so a `when` over it can list every case and needs no `else`.
+ * `data object` is a singleton with a readable toString().
+ */
+sealed interface BackupStatus {
+    data object Working : BackupStatus
+    data object Exported : BackupStatus
+    class ReadyToImport(val contents: BackupContents) : BackupStatus
+    data object Imported : BackupStatus
+    /** Not a backup, or from a newer app version. */
+    data object Refused : BackupStatus
+    data object Failed : BackupStatus
 }
