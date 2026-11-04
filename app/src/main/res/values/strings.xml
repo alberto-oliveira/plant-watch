@@ -2,7 +2,19 @@
     <string name="app_name">Plant Watch</string>
 
     <!-- Plant list -->
-    <string name="plants_empty">No plants yet. Tap + to add one.</string>
+    <string name="plants_empty_title">No plants yet</string>
+    <string name="plants_empty_message">Tap + to add your first plant.</string>
+    <string name="plants_no_tasks">No care tasks</string>
+    <!-- Next-care line in the plant list. %1$s = task name, %2$d = days. -->
+    <string name="next_care_today">%1$s today</string>
+    <plurals name="next_care_in">
+        <item quantity="one">%1$s tomorrow</item>
+        <item quantity="other">%1$s in %2$d days</item>
+    </plurals>
+    <plurals name="next_care_overdue">
+        <item quantity="one">%1$s overdue by %2$d day</item>
+        <item quantity="other">%1$s overdue by %2$d days</item>
+    </plurals>
     <string name="plants_add">Add plant</string>
     <!-- %1$s = plant name. Read by screen readers for the trash icon. -->
     <string name="plants_delete_description">Delete %1$s</string>

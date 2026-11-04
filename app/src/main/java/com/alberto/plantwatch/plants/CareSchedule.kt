@@ -55,3 +55,18 @@ fun daysUntilDue(task: CareTask, today: LocalDate): Long =
  */
 fun snoozed(task: CareTask, today: LocalDate): CareTask =
     task.copy(nextDue = today.plusDays(1))
+
+/**
+ * The most urgent tasks of one plant, for the one-line summary in the plant list
+ * ("Water today · Fertilize in 12 days"): the earliest-due task of each kind
+ * (type + label), most urgent first, at most [limit] of them.
+ *
+ * Kotlin notes: `groupBy` buckets tasks by kind; `minBy` picks the one with the
+ * smallest nextDue in each bucket; `sortedBy` + `take` keep the top [limit].
+ */
+fun mostUrgentTasks(tasks: List<CareTask>, limit: Int = 2): List<CareTask> =
+    tasks.groupBy { Pair(it.type, it.customLabel) }
+        .values
+        .map { sameKind -> sameKind.minBy { it.nextDue } }
+        .sortedBy { it.nextDue }
+        .take(limit)

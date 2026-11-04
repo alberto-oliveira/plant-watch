@@ -78,6 +78,18 @@ class CareScheduleTest {
     }
 
     @Test
+    fun `most urgent tasks keeps the earliest per kind, sorted, limited`() {
+        val water1 = task(nextDue = today.plusDays(3)).copy(id = 1)
+        val water2 = task(nextDue = today).copy(id = 2) // same kind, more urgent
+        val fertilize = task(nextDue = today.plusDays(12)).copy(id = 3, type = TaskType.FERTILIZE)
+        val mist = task(nextDue = today.plusDays(1)).copy(id = 4, type = TaskType.OTHER, customLabel = "Mist")
+
+        val result = mostUrgentTasks(listOf(water1, fertilize, water2, mist))
+
+        assertEquals(listOf(2L, 4L), result.map { it.id }) // water today, then mist tomorrow
+    }
+
+    @Test
     fun `daysUntilDue is negative when overdue, zero today, positive ahead`() {
         assertEquals(-2L, daysUntilDue(task(nextDue = today.minusDays(2)), today))
         assertEquals(0L, daysUntilDue(task(nextDue = today), today))
