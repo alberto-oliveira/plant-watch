@@ -54,7 +54,7 @@ class SunCalculationTest {
     }
 
     @Test
-    fun `Open-Meteo response is parsed into hours, missing values count as no sun`() {
+    fun `Open-Meteo response is parsed into hours starting one hour before the label, missing values count as no sun`() {
         // Shaped like a real response (trimmed), including fields we don't use.
         val json = """
             {"latitude":-23.5,"longitude":-46.625,"timezone":"America/Sao_Paulo",
@@ -65,12 +65,22 @@ class SunCalculationTest {
 
         val hours = OpenMeteoJson.decodeFromString<OpenMeteoResponse>(json).toHourlySun()
 
+        // "09:00" covers 08:00-09:00 and "10:00" covers 09:00-10:00.
         assertEquals(
             listOf(
-                HourlySun(LocalDateTime.of(2026, 11, 3, 9, 0), 3600.0),
-                HourlySun(LocalDateTime.of(2026, 11, 3, 10, 0), 0.0),
+                HourlySun(LocalDateTime.of(2026, 11, 3, 8, 0), 3600.0),
+                HourlySun(LocalDateTime.of(2026, 11, 3, 9, 0), 0.0),
             ),
             hours,
         )
+    }
+
+    @Test
+    fun `only past days with all 24 hours are complete`() {
+        val partialFirstDay = listOf(HourlySun(day.minusDays(1).atTime(23, 0), 0.0))
+        val fullDay = (0..23).map { HourlySun(day.atTime(it, 0), 0.0) }
+        val todayHours = (0..23).map { HourlySun(day.plusDays(1).atTime(it, 0), 0.0) }
+
+        assertEquals(listOf(day), completeDays(partialFirstDay + fullDay + todayHours, today = day.plusDays(1)))
     }
 }
