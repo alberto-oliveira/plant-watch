@@ -37,7 +37,8 @@
     <!-- Plant detail: task list.
          <plurals>: Android picks the right form for the number
          ("one" = 1, "other" = everything else in English). -->
-    <string name="tasks_empty">No care tasks yet. Tap + to add one.</string>
+    <string name="tasks_empty_title">No care tasks yet</string>
+    <string name="tasks_empty_message">Tap + to add watering, fertilizing or anything else this plant needs.</string>
     <string name="tasks_add">Add care task</string>
     <plurals name="task_interval">
         <item quantity="one">Every day</item>
@@ -56,6 +57,8 @@
     <string name="task_last_done">Last done %1$s</string>
     <string name="task_never_done">Not done yet</string>
     <string name="task_done">Done</string>
+    <!-- %1$s = task name. Read by screen readers for the check-mark button. -->
+    <string name="task_mark_done_description">Mark %1$s done</string>
     <string name="history_title">History</string>
 
     <!-- Plant detail: sun -->

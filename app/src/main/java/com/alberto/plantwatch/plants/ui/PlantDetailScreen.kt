@@ -1,20 +1,27 @@
 package com.alberto.plantwatch.plants.ui
 
-import androidx.compose.foundation.clickable
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -24,6 +31,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -36,6 +44,8 @@ import com.alberto.plantwatch.plants.daysUntilDue
 import com.alberto.plantwatch.plants.data.CareHistoryEntry
 import com.alberto.plantwatch.plants.data.CareTask
 import com.alberto.plantwatch.plants.data.TaskType
+import com.alberto.plantwatch.ui.EmptyState
+import com.alberto.plantwatch.ui.IconBadge
 import com.alberto.plantwatch.ui.theme.PlantWatchTheme
 import com.alberto.plantwatch.weather.SunSettings
 import com.alberto.plantwatch.weather.parseSunSettings
@@ -245,29 +255,34 @@ fun PlantDetailScreen(
             }
         },
     ) { innerPadding ->
-        // Extra bottom space so the last item can scroll out from under the "+".
+        // Side margins around the cards, and extra bottom space so the last item
+        // can scroll out from under the "+".
         LazyColumn(
             contentPadding = PaddingValues(
-                top = innerPadding.calculateTopPadding(),
+                start = 16.dp,
+                end = 16.dp,
+                top = innerPadding.calculateTopPadding() + 8.dp,
                 bottom = innerPadding.calculateBottomPadding() + 88.dp,
             ),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             item(key = "sun") {
-                SunRow(sunSettings, sunYesterday, sunLastWeek, onClick = onSunClick)
+                SunCard(sunSettings, sunYesterday, sunLastWeek, onClick = onSunClick)
             }
 
             if (tasks.isEmpty()) {
                 item(key = "tasks-empty") {
-                    Text(
-                        text = stringResource(R.string.tasks_empty),
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
+                    EmptyState(
+                        icon = R.drawable.ic_eco,
+                        title = stringResource(R.string.tasks_empty_title),
+                        message = stringResource(R.string.tasks_empty_message),
                     )
                 }
             } else {
                 // Keys must be unique across the whole list; tasks and log entries
                 // both have numeric ids, so each gets a prefix.
                 items(tasks, key = { "task-${it.id}" }) { task ->
-                    TaskRow(
+                    TaskCard(
                         task = task,
                         today = today,
                         onClick = { onTaskClick(task) },
@@ -283,7 +298,7 @@ fun PlantDetailScreen(
                             text = stringResource(R.string.history_title),
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 4.dp),
+                            modifier = Modifier.padding(start = 4.dp, top = 16.dp),
                         )
                     }
                     items(history, key = { "log-${it.logId}" }) { entry ->
@@ -296,14 +311,14 @@ fun PlantDetailScreen(
 }
 
 /**
- * The plant's sunlight, e.g.
- *   Sun
- *   Yesterday 2 h 15 min · Last 7 days 14 h 30 min
- *   08–18 h at 40%
+ * The plant's sunlight as a card, e.g.
+ *   (☀)  Sun
+ *        Yesterday 2 h 15 min · Last 7 days 14 h 30 min
+ *        08–18 h at 40%
  * or "Tracking off · Tap to set up". Tapping it opens the sun dialog.
  */
 @Composable
-private fun SunRow(
+private fun SunCard(
     settings: SunSettings?,
     yesterday: Double?,
     lastWeek: Double?,
@@ -324,11 +339,31 @@ private fun SunRow(
         }
         "$figures\n$window"
     }
-    ListItem(
-        modifier = Modifier.clickable(onClick = onClick),
-        headlineContent = { Text(stringResource(R.string.sun_title)) },
-        supportingContent = { Text(text) },
-    )
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            IconBadge(
+                icon = R.drawable.ic_sunny,
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            )
+            Column {
+                Text(stringResource(R.string.sun_title), style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
 }
 
 /**
@@ -347,13 +382,13 @@ private fun formatSunMinutes(minutes: Double): String {
 }
 
 /**
- * One task:
- *   Water                                   [Done] 🗑
- *   Every 7 days · Due in 3 days
- *   Last done 3 Nov 2026
+ * One task as a card:
+ *   (💧)  Water                         (✓)  🗑
+ *         [Due in 3 days]
+ *         Every 7 days · Last done 3 Nov 2026
  */
 @Composable
-private fun TaskRow(
+private fun TaskCard(
     task: CareTask,
     today: LocalDate,
     onClick: () -> Unit,
@@ -370,45 +405,115 @@ private fun TaskRow(
         days == 0L -> stringResource(R.string.task_due_today)
         else -> pluralStringResource(R.plurals.task_due_in, days.toInt(), days)
     }
+    // Chip colours by urgency: overdue = error, today = amber (tertiary),
+    // upcoming = neutral. `Pair(a, b)` / `to` hold the background and text colours.
+    val colors = MaterialTheme.colorScheme
+    val (chipBackground, chipText) = when {
+        days < 0 -> colors.errorContainer to colors.onErrorContainer
+        days == 0L -> colors.tertiaryContainer to colors.onTertiaryContainer
+        else -> colors.surfaceContainerHighest to colors.onSurfaceVariant
+    }
     val intervalText = pluralStringResource(R.plurals.task_interval, task.intervalDays, task.intervalDays)
     val lastDoneText = task.lastDone?.let { stringResource(R.string.task_last_done, formatDate(it)) }
         ?: stringResource(R.string.task_never_done)
+    val (badgeBackground, badgeIcon) = taskBadgeColors(task.type)
 
-    ListItem(
-        // Tapping the row (outside the buttons) edits the task.
-        modifier = Modifier.clickable(onClick = onClick),
-        headlineContent = { Text(name) },
-        supportingContent = {
-            Text(
-                text = "$intervalText · $dueText\n$lastDoneText",
-                // Overdue tasks get the theme's error color to stand out.
-                color = if (days < 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        },
-        trailingContent = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // Disabled once done today, so a double tap can't log it twice.
-                FilledTonalButton(onClick = onDoneClick, enabled = task.lastDone != today) {
-                    Text(stringResource(R.string.task_done))
-                }
-                IconButton(onClick = onDeleteClick) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_delete),
-                        contentDescription = stringResource(R.string.task_delete_description, name),
+    Card(
+        // Tapping the card (outside the buttons) edits the task.
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = colors.surfaceContainerLow),
+    ) {
+        Row(
+            modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp, end = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            IconBadge(icon = taskIcon(task.type), containerColor = badgeBackground, contentColor = badgeIcon)
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Text(name, style = MaterialTheme.typography.titleMedium)
+                // A small rounded "pill" with the due status.
+                Surface(shape = CircleShape, color = chipBackground) {
+                    Text(
+                        text = dueText,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = chipText,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp),
                     )
                 }
+                Text(
+                    text = "$intervalText · $lastDoneText",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = colors.onSurfaceVariant,
+                )
             }
-        },
-    )
+            // Disabled once done today, so a double tap can't log it twice.
+            FilledTonalIconButton(onClick = onDoneClick, enabled = task.lastDone != today) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_check),
+                    contentDescription = stringResource(R.string.task_mark_done_description, name),
+                )
+            }
+            IconButton(onClick = onDeleteClick) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_delete),
+                    contentDescription = stringResource(R.string.task_delete_description, name),
+                    tint = colors.onSurfaceVariant,
+                )
+            }
+        }
+    }
 }
 
-/** One history line: the date, and what was done ("Water", "Mist leaves", ...). */
+/** One history line: an icon, what was done ("Water", "Mist leaves", ...) and the date. */
 @Composable
 private fun HistoryRow(entry: CareHistoryEntry) {
-    ListItem(
-        headlineContent = { Text(taskName(entry.type, entry.customLabel)) },
-        supportingContent = { Text(formatDate(entry.doneOn)) },
-    )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Icon(
+            painter = painterResource(taskIcon(entry.type)),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(20.dp),
+        )
+        Text(
+            text = taskName(entry.type, entry.customLabel),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.weight(1f),
+        )
+        Text(
+            text = formatDate(entry.doneOn),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
+
+/** The icon for each task type. `@DrawableRes`: the Int is a drawable id. */
+@DrawableRes
+fun taskIcon(type: TaskType): Int = when (type) {
+    TaskType.WATER -> R.drawable.ic_water_drop
+    TaskType.FERTILIZE -> R.drawable.ic_compost
+    TaskType.OTHER -> R.drawable.ic_task_alt
+}
+
+/** Background and icon colour of a task type's badge (a `Pair`, unpacked by callers). */
+@Composable
+private fun taskBadgeColors(type: TaskType): Pair<Color, Color> {
+    val colors = MaterialTheme.colorScheme
+    return when (type) {
+        TaskType.WATER -> colors.primaryContainer to colors.onPrimaryContainer
+        TaskType.FERTILIZE -> colors.secondaryContainer to colors.onSecondaryContainer
+        TaskType.OTHER -> colors.tertiaryContainer to colors.onTertiaryContainer
+    }
 }
 
 /**
